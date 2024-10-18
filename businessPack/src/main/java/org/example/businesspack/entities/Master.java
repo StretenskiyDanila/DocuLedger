@@ -1,9 +1,16 @@
 package org.example.businesspack.entities;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.NoArgsConstructor;
+import lombok.RequiredArgsConstructor;
 
 @Entity
+@Builder
 @Table(name = "master")
+@RequiredArgsConstructor
+@AllArgsConstructor
 public class Master {
 
     @Id

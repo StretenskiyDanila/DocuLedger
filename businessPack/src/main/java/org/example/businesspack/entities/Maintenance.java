@@ -2,6 +2,8 @@ package org.example.businesspack.entities;
 
 import jakarta.persistence.*;
 
+import java.math.BigInteger;
+
 @Entity
 @Table(name = "maintenance")
 public class Maintenance {
@@ -13,7 +15,7 @@ public class Maintenance {
     @Column(name = "name")
     private String nameMaintenance;
 
-    @Column(name = "amount")
-    private String amountMaintenance;
+    @Column(name = "amount", precision = 10, scale = 2)
+    private BigInteger amountMaintenance;
 
 }

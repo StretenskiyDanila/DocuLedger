@@ -2,6 +2,9 @@ package org.example.businesspack.entities;
 
 import jakarta.persistence.*;
 
+import java.math.BigInteger;
+import java.sql.Timestamp;
+
 @Entity
 @Table(name = "journal_work")
 public class JournalWork {
@@ -16,6 +19,10 @@ public class JournalWork {
 
     private String client;
 
-    private String amountMaintenance;
+    @Column(name = "amount", precision = 10, scale = 2)
+    private BigInteger amountMaintenance;
+
+    @Column(name = "work_date")
+    private Timestamp workDate;
 
 }
