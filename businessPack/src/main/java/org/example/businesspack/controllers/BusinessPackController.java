@@ -3,6 +3,7 @@ package org.example.businesspack.controllers;
 import lombok.RequiredArgsConstructor;
 import org.example.businesspack.entities.Master;
 import org.example.businesspack.services.BusinessPackService;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -18,15 +19,15 @@ public class BusinessPackController {
     public String addMaster(@PathVariable(name = "name") String name) {
         Master master = Master.builder()
                 .name(name)
-                .position("Работник")
+                .post("Работник")
                 .build();
         Master addMasters = businessPackService.addMaster(master);
         return addMasters == null ? "No" : name;
     }
 
     @GetMapping("api/get")
-    public Master getMaster() {
-        return businessPackService.getMaster();
+    public ResponseEntity<Master> getMaster() {
+        return ResponseEntity.ok(businessPackService.getMaster());
     }
 
 }

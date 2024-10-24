@@ -1,6 +1,6 @@
 package org.example.businesspack.configurations;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.env.Environment;
@@ -10,10 +10,10 @@ import javax.sql.DataSource;
 import java.util.Objects;
 
 @Configuration
+@RequiredArgsConstructor
 public class ApplicationConfig {
 
-    @Autowired
-    Environment env;
+    private final Environment env;
 
     @Bean
     public DataSource dataSource() {

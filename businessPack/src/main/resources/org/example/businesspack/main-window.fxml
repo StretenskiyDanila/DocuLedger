@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.Pane?>
+
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="543.0" prefWidth="774.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.businesspack.window.MainWindow">
+   <children>
+      <TextField fx:id="textArea" layoutX="47.0" layoutY="55.0" onAction="#onText" />
+      <ComboBox fx:id="box" layoutX="255.0" layoutY="55.0" onAction="#onBox" prefWidth="150.0" />
+   </children>
+</Pane>

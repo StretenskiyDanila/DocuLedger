@@ -2,6 +2,7 @@ package org.example.businesspack.services.impl;
 
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
+import org.example.businesspack.dto.MasterDto;
 import org.example.businesspack.entities.Master;
 import org.example.businesspack.repositories.MasterRepository;
 import org.example.businesspack.services.BusinessPackService;
@@ -27,6 +28,8 @@ public class BusinessPackServiceImpl implements BusinessPackService {
 
     @Override
     public Master getMaster() {
+        Master master = masterRepository.findAll().get(0);
+        MasterDto masterDto = MasterDto.of(master);
         return masterRepository.findAll().get(0);
     }
 }

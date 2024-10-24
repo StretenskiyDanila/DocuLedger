@@ -3,13 +3,14 @@ package org.example.businesspack.entities;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.RequiredArgsConstructor;
 
 @Entity
 @Builder
+@Getter
 @Table(name = "master")
-@RequiredArgsConstructor
+@NoArgsConstructor
 @AllArgsConstructor
 public class Master {
 
@@ -17,10 +18,12 @@ public class Master {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "name")
     private String name;
 
-    @Column(name = "position")
-    private String position;
+    private String post;
+
+    @ManyToOne()
+    @JoinColumn(name = "master_id", referencedColumnName = "id")
+    private JournalWork journalWork;
 
 }
