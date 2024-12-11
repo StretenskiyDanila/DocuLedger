@@ -1,13 +1,13 @@
 package org.example.businesspack.services;
 
-import org.example.businesspack.entities.Master;
+import org.example.businesspack.entities.Person;
 
 public interface BusinessPackService {
 
-    Master addMaster(Master master);
+    Person addMaster(Person person);
 
-    Master getMaster(Long id);
+    Person getMaster(Long id);
 
-    Master getMaster();
+    Person getMaster();
 
 }

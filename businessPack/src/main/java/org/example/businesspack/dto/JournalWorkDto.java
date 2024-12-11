@@ -3,7 +3,6 @@ package org.example.businesspack.dto;
 import lombok.Builder;
 import lombok.Data;
 import org.example.businesspack.entities.JournalWork;
-import org.example.businesspack.entities.Maintenance;
 
 import java.math.BigInteger;
 import java.sql.Timestamp;
@@ -23,7 +22,7 @@ public class JournalWorkDto {
     public static JournalWorkDto of(JournalWork journalWork) {
         return JournalWorkDto.builder()
                 .id(journalWork.getId())
-                .master(journalWork.getMaster().stream().map(MasterDto::of).toList())
+                .master(journalWork.getPerson().stream().map(MasterDto::of).toList())
                 .maintenance(journalWork.getMaintenance().stream().map(MaintenanceDto::of).toList())
                 .client(journalWork.getClient())
                 .workDate(journalWork.getWorkDate())

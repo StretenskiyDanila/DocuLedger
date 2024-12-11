@@ -2,7 +2,7 @@ package org.example.businesspack.dto;
 
 import lombok.Builder;
 import lombok.Data;
-import org.example.businesspack.entities.Master;
+import org.example.businesspack.entities.Person;
 
 @Builder
 @Data
@@ -12,11 +12,11 @@ public class MasterDto {
     private String name;
     private String position;
 
-    public static MasterDto of(Master master) {
+    public static MasterDto of(Person person) {
         return MasterDto.builder()
-                .id(master.getId())
-                .name(master.getName())
-                .position(master.getPost())
+                .id(person.getId())
+                .name(person.getName())
+                .position(person.getPost())
                 .build();
     }
 
