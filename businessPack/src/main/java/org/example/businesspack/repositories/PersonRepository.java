@@ -5,18 +5,25 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 import org.example.businesspack.entities.Person;
+import org.example.businesspack.factory.EntityFactory;
+import org.example.businesspack.factory.PersonFactory;
 import org.example.businesspack.utils.StringQuery;
 
-public class PersonRepository implements TableRepository<Person> {
+public class PersonRepository extends TableRepository<Person> {
 
     @Override
-    public String getTableName() {
+    protected String getTableName() {
         return new Person().getTableName();
     }
 
     @Override
-    public String getQueryGet() {
+    protected String getQueryGet() {
         return StringQuery.QUERY_GET_PERSON_FOR_ROLE;
+    }
+
+    @Override
+    protected EntityFactory<Person> getEntityFactory() {
+        return new PersonFactory();
     }
 
     @Override
@@ -33,12 +40,14 @@ public class PersonRepository implements TableRepository<Person> {
 
     @Override
     public void delete(Person entity) throws SQLException {
-
+        try (PreparedStatement ps = da.getConnection().prepareStatement(StringQuery.QUERY_DELETE_PERSON)) {
+            ps.execute();
+        }
     }
 
     @Override
     public Long update(Person entityUpdate, Person entity) throws SQLException {
-        throw new UnsupportedOperationException();
+        throw new UnsupportedOperationException(); // TODO добавить обновление полей пользования
     }
 
     private void buildPs(Person entity, PreparedStatement ps, int count) throws SQLException {

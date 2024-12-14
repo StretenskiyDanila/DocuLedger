@@ -1,6 +1,8 @@
 package org.example.businesspack.repositories;
 
 import org.example.businesspack.entities.DataWork;
+import org.example.businesspack.factory.DataWorkFactory;
+import org.example.businesspack.factory.EntityFactory;
 import org.example.businesspack.utils.QueryUtils;
 import org.example.businesspack.utils.StringQuery;
 
@@ -8,16 +10,21 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-public class DataWorkRepository implements TableRepository<DataWork> {
+public class DataWorkRepository extends TableRepository<DataWork> {
 
     @Override
-    public String getTableName() {
+    protected String getTableName() {
         return new DataWork().getTableName();
     }
 
     @Override
-    public String getQueryGet() {
+    protected String getQueryGet() {
         return StringQuery.QUERY_GET_ALL;
+    }
+
+    @Override
+    protected EntityFactory<DataWork> getEntityFactory() {
+        return new DataWorkFactory();
     }
 
     @Override
@@ -48,8 +55,6 @@ public class DataWorkRepository implements TableRepository<DataWork> {
             buildPs(entity, ps, 8);
             ps.execute();
 
-//            ResultSet rs = ps.getGeneratedKeys();
-//            rs.next();
             return 1L;
         }
     }

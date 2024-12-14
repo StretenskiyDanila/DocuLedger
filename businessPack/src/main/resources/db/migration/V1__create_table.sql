@@ -1,12 +1,14 @@
 CREATE TABLE person(
     id          integer         primary key autoincrement               ,
-    "name"        varchar         not null                                ,
-    "role"        varchar         not null
+    name        varchar         not null                                ,
+    "role"      varchar         not null                                ,
+    last_used   timestamp       not null    default current_date        ,
+    usage_count integer         not null    default 1
 );
 
 CREATE TABLE maintenance(
     id          integer         primary key autoincrement               ,
-    "name"        varchar         not null    unique                      ,
+    name        varchar         not null    unique                      ,
     amount      numeric(10, 2)  not null
 );
 

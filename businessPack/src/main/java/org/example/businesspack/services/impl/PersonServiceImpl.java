@@ -47,12 +47,21 @@ public class PersonServiceImpl implements Service<PersonDto> {
 
     @Override
     public void delete(PersonDto entity) {
-        //@TODO: Добавить автоматическое удаление после определенного времени 
+        throw new UnsupportedOperationException();
     }
 
     @Override
     public Long update(PersonDto currentEntity, PersonDto updateEntity) {
         throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public void delete() {
+        try {
+            personRepository.delete(null);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        };
     }
 
 }
