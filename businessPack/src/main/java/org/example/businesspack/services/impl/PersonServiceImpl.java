@@ -47,7 +47,12 @@ public class PersonServiceImpl implements Service<PersonDto> {
 
     @Override
     public void delete(PersonDto entity) {
-        //@TODO: Добавить автоматическое удаление после определенного времени 
+        //Person person = PersonDto.to(entity);
+        try {
+            personRepository.delete(null);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override

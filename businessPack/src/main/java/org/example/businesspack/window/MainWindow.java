@@ -190,6 +190,8 @@ public class MainWindow {
 
         ComboBoxUtils.setComboBoxSearchProperty(producer, new DataWorkRepository());
         ComboBoxUtils.setComboBoxSearchProperty(consumer, new PersonRepository());
+
+        servicePerson.delete(null);
     }
 
     private DataWorkDto buildFromField() {

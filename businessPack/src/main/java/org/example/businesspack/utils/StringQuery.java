@@ -40,4 +40,19 @@ public class StringQuery {
     public final String QUERY_INSERT_PERSON =
             "INSERT INTO person(name, role) " +
                     "VALUES (?, ?);";
+
+    public final String QUERY_UPDATE_PERSON = 
+             "UPDATE person " +
+                    "SET last_used = ?, usage_count = ? " + 
+                    "WHERE name = ? AND role = ?;";
+
+    public final String QUERY_DELETE_PERSON =
+             "DELETE FROM person " +
+                    "WHERE last_used < DATE('now', '-1 month') AND usage_count = 1;";
+
+    public final String QUERY_UPDATE_MONTH_PERSON =
+             "UPDATE person " +
+                    "SET usage = 0 " + 
+                    "WHERE last_used < DATE('now', '-1 month');";
+
 }

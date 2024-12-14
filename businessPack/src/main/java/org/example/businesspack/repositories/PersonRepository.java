@@ -33,12 +33,14 @@ public class PersonRepository implements TableRepository<Person> {
 
     @Override
     public void delete(Person entity) throws SQLException {
-
+        try (PreparedStatement ps = da.getConnection().prepareStatement(StringQuery.QUERY_DELETE_PERSON)) {
+            ps.execute();
+        }
     }
 
     @Override
     public Long update(Person entityUpdate, Person entity) throws SQLException {
-        throw new UnsupportedOperationException();
+        throw new UnsupportedOperationException(); // TODO добавить обновление полей пользования
     }
 
     private void buildPs(Person entity, PreparedStatement ps, int count) throws SQLException {
