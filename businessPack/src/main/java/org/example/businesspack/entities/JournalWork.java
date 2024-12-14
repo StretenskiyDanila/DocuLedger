@@ -1,21 +1,23 @@
 package org.example.businesspack.entities;
 
-import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
-@Entity
-@Table(name = "journal_work")
+import java.sql.Timestamp;
+import java.util.List;
+
+@Builder
+@Getter
+@NoArgsConstructor
+@AllArgsConstructor
 public class JournalWork {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
-    private String master;
-
-    private String maintenance;
-
     private String client;
-
-    private String amountMaintenance;
+    private List<Person> person;
+    private List<Maintenance> maintenance;
+    private Timestamp workDate;
 
 }

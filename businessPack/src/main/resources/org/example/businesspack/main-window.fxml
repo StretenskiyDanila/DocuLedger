@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.DatePicker?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.control.Tab?>
+<?import javafx.scene.control.TabPane?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Text?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="570.0" prefWidth="1083.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.businesspack.window.MainWindow">
+   <children>
+       <TabPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="514.0" prefWidth="1081.0" tabClosingPolicy="UNAVAILABLE">
+           <tabs>
+               <Tab fx:id="account" text="Счет">
+                   <content>
+                       <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="520.0" prefWidth="1078.0">
+                           <children>
+                               <Label layoutX="49.0" layoutY="55.0" prefHeight="26.0" prefWidth="59.0" text="Продавец" />
+                               <ComboBox fx:id="producer" layoutX="111.0" layoutY="56.0" prefHeight="4.0" prefWidth="230.0" />
+                               <Label layoutX="410.0" layoutY="55.0" prefHeight="26.0" prefWidth="66.0" text="Покупатель" />
+                               <ComboBox fx:id="consumer" layoutX="479.0" layoutY="56.0" prefHeight="4.0" prefWidth="230.0" />
+                               <Label layoutX="65.0" layoutY="93.0" prefHeight="26.0" prefWidth="45.0" text="Счет №" />
+                               <TextField fx:id="labelNumber" layoutX="111.0" layoutY="94.0" prefHeight="0.0" prefWidth="77.0" />
+                               <Button fx:id="buttonIncrement" layoutX="157.0" layoutY="93.0" mnemonicParsing="false" onAction="#onIncrementNumber" prefHeight="26.0" prefWidth="31.0" text="+1" />
+                               <Label layoutX="195.0" layoutY="93.0" prefHeight="26.0" prefWidth="17.0" text="От" />
+                               <DatePicker fx:id="date" layoutX="213.0" layoutY="93.0" prefHeight="26.0" prefWidth="127.0" />
+                               <Label layoutX="402.0" layoutY="93.0" prefHeight="26.0" prefWidth="78.0" text="Примечание" />
+                               <Separator layoutY="120.0" prefHeight="11.0" prefWidth="720.0" />
+                               <TableView fx:id="tableAccount" editable="true" layoutY="126.0" onMouseClicked="#onSelectedItem" prefHeight="334.0" prefWidth="720.0">
+                                   <columns>
+                                       <TableColumn fx:id="name" prefWidth="143.999966442585" text="Наименование" />
+                                       <TableColumn fx:id="unitMeas" minWidth="0.0" prefWidth="83.19998168945312" text="Ед. изм." />
+                                       <TableColumn fx:id="count" prefWidth="64.00007629394531" text="Кол-во" />
+                                       <TableColumn fx:id="price" prefWidth="96.800048828125" text="Цена" />
+                                       <TableColumn fx:id="vat" prefWidth="85.5999755859375" text="НДС" />
+                                       <TableColumn fx:id="summa" prefWidth="99.20001220703125" text="Сумма" />
+                                       <TableColumn fx:id="group" prefWidth="144.0" text="Группа" />
+                                   </columns>
+                               </TableView>
+                               <TextField fx:id="nameText" layoutX="814.0" layoutY="137.0" prefHeight="26.0" prefWidth="250.0" />
+                               <Text layoutX="758.0" layoutY="155.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Наим." />
+                               <TextField fx:id="unitMeasText" layoutX="814.0" layoutY="180.0" prefHeight="26.0" prefWidth="250.0" />
+                               <Text layoutX="753.0" layoutY="198.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Ед. изм." />
+                               <TextField fx:id="countText" layoutX="814.0" layoutY="226.0" prefHeight="26.0" prefWidth="250.0" />
+                               <Text layoutX="763.0" layoutY="244.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Кол." />
+                               <TextField fx:id="priceText" layoutX="814.0" layoutY="269.0" prefHeight="26.0" prefWidth="250.0" />
+                               <Text layoutX="760.0" layoutY="287.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Цена" />
+                               <TextField fx:id="vatText" layoutX="814.0" layoutY="311.0" prefHeight="26.0" prefWidth="250.0" />
+                               <Text layoutX="762.0" layoutY="329.0" strokeType="OUTSIDE" strokeWidth="0.0" text="НДС" />
+                               <TextField fx:id="summaText" layoutX="814.0" layoutY="357.0" prefHeight="26.0" prefWidth="250.0" />
+                               <Text layoutX="756.0" layoutY="375.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Сумма" />
+                               <TextField fx:id="groupText" layoutX="814.0" layoutY="400.0" prefHeight="26.0" prefWidth="250.0" />
+                               <Text layoutX="755.0" layoutY="418.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Группа" />
+                               <Button fx:id="addTable" layoutX="750.0" layoutY="447.0" mnemonicParsing="false" onAction="#onAddTable" prefHeight="26.0" prefWidth="127.0" text="Занести в таблицу" />
+                        <Button fx:id="deleteRows" layoutX="998.0" layoutY="447.0" mnemonicParsing="false" onAction="#onDeleteRows" prefHeight="26.0" prefWidth="69.0" text="Удалить" />
+                        <Button fx:id="updateTable" layoutX="900.0" layoutY="447.0" mnemonicParsing="false" onAction="#onUpdateTable" prefHeight="26.0" prefWidth="78.0" text="Обновить" />
+                           </children>
+                       </AnchorPane>
+                   </content>
+               </Tab>
+               <Tab fx:id="actWorks" text="Акт выполненных работ">
+                   <content>
+                       <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                           <children>
+                               </children>
+                       </AnchorPane>
+                   </content>
+               </Tab>
+               <Tab fx:id="orderOutfit" text="Заказ-наряд">
+                   <content>
+                       <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+                   </content>
+               </Tab>
+           </tabs>
+       </TabPane>
+       <Button fx:id="print" layoutX="40.0" layoutY="529.0" mnemonicParsing="false" onAction="#onPrint" prefHeight="26.0" prefWidth="90.0" text="Печать" />
+       <Button fx:id="send" layoutX="212.0" layoutY="529.0" mnemonicParsing="false" onAction="#onSend" prefHeight="26.0" prefWidth="90.0" text="Отправить" />
+       <Button fx:id="export" layoutX="411.0" layoutY="529.0" mnemonicParsing="false" onAction="#onExport" prefHeight="26.0" prefWidth="90.0" text="Экспорт" />
+   </children>
+</AnchorPane>

@@ -1,19 +1,21 @@
 package org.example.businesspack.entities;
 
-import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
-@Entity
-@Table(name = "maintenance")
+import java.math.BigInteger;
+
+@Builder
+@Getter
+@NoArgsConstructor
+@AllArgsConstructor
 public class Maintenance {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
-    @Column(name = "name")
     private String nameMaintenance;
-
-    @Column(name = "amount")
-    private String amountMaintenance;
+    private BigInteger amountMaintenance;
+    private JournalWork journalWork;
 
 }
