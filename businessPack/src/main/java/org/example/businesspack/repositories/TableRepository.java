@@ -2,7 +2,6 @@ package org.example.businesspack.repositories;
 
 import org.example.businesspack.configs.DataAccessor;
 import org.example.businesspack.entities.Table;
-import org.example.businesspack.utils.StringQuery;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
