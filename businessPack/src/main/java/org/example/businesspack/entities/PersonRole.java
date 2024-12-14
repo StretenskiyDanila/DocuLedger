@@ -10,6 +10,6 @@ public enum PersonRole {
     PRODUCER("Producer"),
     CONSUMER("Consumer");
 
-    private final String role;
+    private final String name;
 
 }

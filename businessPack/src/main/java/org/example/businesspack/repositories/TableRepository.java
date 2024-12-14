@@ -12,14 +12,17 @@ import java.util.List;
 
 public interface TableRepository<T extends Table> {
 
+    DataAccessor da = DataAccessor.getDataAccessor();
+
     String getTableName();
+    String getQueryGet();
     Long save(T entity) throws SQLException;
     void delete(T entity) throws SQLException;
     Long update(T entityUpdate, T entity) throws SQLException;
 
     default List<T> getAll() throws SQLException {
         DataAccessor da = DataAccessor.getDataAccessor();
-        String query = String.format(StringQuery.QUERY_GET_ALL, getTableName());
+        String query = String.format(getQueryGet(), getTableName());
         try (PreparedStatement ps = da.getConnection().prepareStatement(query)) {
             ResultSet rs = ps.executeQuery();
 

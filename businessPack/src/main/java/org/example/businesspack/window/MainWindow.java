@@ -7,11 +7,13 @@ import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
-import org.example.businesspack.dto.AccountDto;
-import org.example.businesspack.repositories.AccountRepository;
-import org.example.businesspack.repositories.MasterRepository;
-import org.example.businesspack.services.AccountService;
-import org.example.businesspack.services.impl.AccountServiceImpl;
+import org.example.businesspack.dto.DataWorkDto;
+import org.example.businesspack.dto.PersonDto;
+import org.example.businesspack.repositories.DataWorkRepository;
+import org.example.businesspack.repositories.PersonRepository;
+import org.example.businesspack.services.Service;
+import org.example.businesspack.services.impl.DataWorkServiceImpl;
+import org.example.businesspack.services.impl.PersonServiceImpl;
 import org.example.businesspack.utils.ComboBoxUtils;
 
 import java.net.URL;
@@ -19,9 +21,11 @@ import java.util.ResourceBundle;
 
 public class MainWindow {
 
-    private final AccountService accountService = new AccountServiceImpl();
-    private ObservableList<AccountDto> items;
-    private AccountDto selectedAccount;
+    private final Service<DataWorkDto> serviceDataWork = new DataWorkServiceImpl();
+    private final Service<PersonDto> servicePerson = new PersonServiceImpl();
+
+    private ObservableList<DataWorkDto> items;
+    private DataWorkDto selectedDataWork;
 
     @FXML
     private ResourceBundle resources;
@@ -42,7 +46,7 @@ public class MainWindow {
     private Button buttonIncrement;
 
     @FXML
-    private TableColumn<AccountDto, String> count;
+    private TableColumn<DataWorkDto, String> count;
 
     @FXML
     private ComboBox<String> consumer;
@@ -63,16 +67,16 @@ public class MainWindow {
     private Button deleteRows;
 
     @FXML
-    private TableColumn<AccountDto, String> group;
+    private TableColumn<DataWorkDto, String> group;
 
     @FXML
     private TextField labelNumber;
 
     @FXML
-    private TableColumn<AccountDto, String> name;
+    private TableColumn<DataWorkDto, String> name;
 
     @FXML
-    private TableColumn<AccountDto, String> price;
+    private TableColumn<DataWorkDto, String> price;
 
     @FXML
     private Button print;
@@ -84,16 +88,16 @@ public class MainWindow {
     private Button send;
 
     @FXML
-    private TableColumn<AccountDto, String> summa;
+    private TableColumn<DataWorkDto, String> summa;
 
     @FXML
-    private TableView<AccountDto> tableAccount;
+    private TableView<DataWorkDto> tableAccount;
 
     @FXML
-    private TableColumn<AccountDto, String> unitMeas;
+    private TableColumn<DataWorkDto, String> unitMeas;
 
     @FXML
-    private TableColumn<AccountDto, String> vat;
+    private TableColumn<DataWorkDto, String> vat;
 
     @FXML
     private TextField summaText;
@@ -118,35 +122,35 @@ public class MainWindow {
 
     @FXML
     void onAddTable(ActionEvent event) {
-        AccountDto accountDto = buildFromField();
-        items.add(accountDto);
-        accountService.saveAccount(accountDto);
+        DataWorkDto dataWorkDto = buildFromField();
+        items.add(dataWorkDto);
+        serviceDataWork.save(dataWorkDto);
         tableAccount.setItems(items);
     }
 
     @FXML
     void onDeleteRows(ActionEvent event) {
-        if (selectedAccount != null) {
-            accountService.deleteAccount(selectedAccount);
-            items = FXCollections.observableList(accountService.getAccounts());
+        if (selectedDataWork != null) {
+            serviceDataWork.delete(selectedDataWork);
+            items = FXCollections.observableList(serviceDataWork.get());
             tableAccount.setItems(items);
         }
     }
 
     @FXML
     void onUpdateTable(ActionEvent event) {
-        if (selectedAccount != null) {
-            AccountDto accountUpdate = buildFromField();
-            accountService.updateAccount(selectedAccount, accountUpdate);
-            items = FXCollections.observableList(accountService.getAccounts());
+        if (selectedDataWork != null) {
+            DataWorkDto accountUpdate = buildFromField();
+            serviceDataWork.update(selectedDataWork, accountUpdate);
+            items = FXCollections.observableList(serviceDataWork.get());
             tableAccount.setItems(items);
         }
     }
 
     @FXML
     void onSelectedItem(MouseEvent event) {
-        selectedAccount = tableAccount.getSelectionModel().getSelectedItem();
-        setField(selectedAccount);
+        selectedDataWork = tableAccount.getSelectionModel().getSelectedItem();
+        setField(selectedDataWork);
     }
 
     @FXML
@@ -171,7 +175,7 @@ public class MainWindow {
 
     @FXML
     void initialize() {
-        items = FXCollections.observableList(accountService.getAccounts());
+        items = FXCollections.observableList(serviceDataWork.get());
 
         count.setCellValueFactory(new PropertyValueFactory<>("count"));
         price.setCellValueFactory(new PropertyValueFactory<>("price"));
@@ -184,11 +188,11 @@ public class MainWindow {
         tableAccount.setItems(items);
         tableAccount.setEditable(true);
 
-        ComboBoxUtils.setComboBoxSearchProperty(producer, new AccountRepository());
-        ComboBoxUtils.setComboBoxSearchProperty(consumer, new MasterRepository());
+        ComboBoxUtils.setComboBoxSearchProperty(producer, new DataWorkRepository());
+        ComboBoxUtils.setComboBoxSearchProperty(consumer, new PersonRepository());
     }
 
-    private AccountDto buildFromField() {
+    private DataWorkDto buildFromField() {
         String name = nameText.getText();
         String count = countText.getText();
         String vat = vatText.getText();
@@ -197,7 +201,7 @@ public class MainWindow {
         String summa = summaText.getText();
         String unitMeas = unitMeasText.getText();
 
-        return AccountDto.builder()
+        return DataWorkDto.builder()
                 .count(count)
                 .group(group)
                 .summa(summa)
@@ -208,7 +212,7 @@ public class MainWindow {
                 .build();
     }
 
-    private void setField(AccountDto account) {
+    private void setField(DataWorkDto account) {
         nameText.setText(account.getName());
         countText.setText(account.getCount());
         vatText.setText(account.getVat());

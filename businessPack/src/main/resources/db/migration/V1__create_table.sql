@@ -1,13 +1,12 @@
 CREATE TABLE person(
     id          integer         primary key autoincrement               ,
-    name        varchar         not null                                ,
-    post        varchar         not null                                ,
-    role        varchar         not null                                
+    "name"        varchar         not null                                ,
+    "role"        varchar         not null
 );
 
 CREATE TABLE maintenance(
     id          integer         primary key autoincrement               ,
-    name        varchar         not null    unique                      ,
+    "name"        varchar         not null    unique                      ,
     amount      numeric(10, 2)  not null
 );
 

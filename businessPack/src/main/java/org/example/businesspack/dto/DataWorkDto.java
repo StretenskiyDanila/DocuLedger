@@ -7,7 +7,7 @@ import org.example.businesspack.entities.DataWork;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class AccountDto {
+public class DataWorkDto {
 
     private String group;
     private String count;
@@ -17,8 +17,8 @@ public class AccountDto {
     private String unitMeas;
     private String vat;
 
-    public static AccountDto of(DataWork account) {
-        return AccountDto.builder()
+    public static DataWorkDto of(DataWork account) {
+        return DataWorkDto.builder()
                 .count(account.getCount())
                 .group(account.getGroup())
                 .summa(account.getSumma())
@@ -29,15 +29,15 @@ public class AccountDto {
                 .build();
     }
 
-    public static DataWork to(AccountDto accountDto) {
+    public static DataWork to(DataWorkDto dataWorkDto) {
         return DataWork.builder()
-                .unitMeas(accountDto.getUnitMeas())
-                .group(accountDto.getGroup())
-                .count(accountDto.getCount())
-                .price(accountDto.getPrice())
-                .name(accountDto.getName())
-                .vat(accountDto.getVat())
-                .summa(accountDto.getSumma())
+                .unitMeas(dataWorkDto.getUnitMeas())
+                .group(dataWorkDto.getGroup())
+                .count(dataWorkDto.getCount())
+                .price(dataWorkDto.getPrice())
+                .name(dataWorkDto.getName())
+                .vat(dataWorkDto.getVat())
+                .summa(dataWorkDto.getSumma())
                 .build();
     }
 

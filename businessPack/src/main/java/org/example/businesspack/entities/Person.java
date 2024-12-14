@@ -13,7 +13,6 @@ public class Person extends Table{
 
     private Long id;
     private String name;
-    private String post;
     private PersonRole role;
 
     @Override

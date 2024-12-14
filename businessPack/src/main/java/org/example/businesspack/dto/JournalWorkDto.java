@@ -13,7 +13,7 @@ import java.util.List;
 public class JournalWorkDto {
 
     private Long id;
-    private List<MasterDto> master;
+    private List<PersonDto> master;
     private List<MaintenanceDto> maintenance;
     private String client;
     private BigInteger amountMaintenance;
@@ -22,7 +22,7 @@ public class JournalWorkDto {
     public static JournalWorkDto of(JournalWork journalWork) {
         return JournalWorkDto.builder()
                 .id(journalWork.getId())
-                .master(journalWork.getPerson().stream().map(MasterDto::of).toList())
+                .master(journalWork.getPerson().stream().map(PersonDto::of).toList())
                 .maintenance(journalWork.getMaintenance().stream().map(MaintenanceDto::of).toList())
                 .client(journalWork.getClient())
                 .workDate(journalWork.getWorkDate())

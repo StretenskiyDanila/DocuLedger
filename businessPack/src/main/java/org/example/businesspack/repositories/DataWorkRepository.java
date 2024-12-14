@@ -1,6 +1,5 @@
 package org.example.businesspack.repositories;
 
-import org.example.businesspack.configs.DataAccessor;
 import org.example.businesspack.entities.DataWork;
 import org.example.businesspack.utils.QueryUtils;
 import org.example.businesspack.utils.StringQuery;
@@ -9,13 +8,16 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-public class AccountRepository implements TableRepository<DataWork> {
-
-    private final DataAccessor da = DataAccessor.getDataAccessor();
+public class DataWorkRepository implements TableRepository<DataWork> {
 
     @Override
     public String getTableName() {
         return new DataWork().getTableName();
+    }
+
+    @Override
+    public String getQueryGet() {
+        return StringQuery.QUERY_GET_ALL;
     }
 
     @Override
