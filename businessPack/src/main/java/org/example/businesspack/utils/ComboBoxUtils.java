@@ -35,7 +35,8 @@ public class ComboBoxUtils {
             }
         });
 
-        ObservableList<String> options = FXCollections.observableArrayList("Иванов", "Петров", "Сидоров", "Смирнов", "Соколов", "Соловьев", "Семенов", "Соловьева", "Соловьев", "Соловьев");
+        ObservableList<String> options = FXCollections.observableArrayList("Иванов", "Петров", "Сидоров", "Смирнов",
+                "Соколов", "Соловьев", "Семенов", "Соловьева", "Соловьев", "Соловьев");
         comboBox.setItems(options);
 
         comboBox.getEditor().textProperty().addListener((observable, oldValue, newValue) -> {

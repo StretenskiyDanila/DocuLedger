@@ -1,6 +1,8 @@
 package org.example.businesspack.repositories;
 
 import org.example.businesspack.entities.DataWork;
+import org.example.businesspack.factory.DataWorkFactory;
+import org.example.businesspack.factory.EntityFactory;
 import org.example.businesspack.utils.QueryUtils;
 import org.example.businesspack.utils.StringQuery;
 
@@ -18,6 +20,11 @@ public class DataWorkRepository implements TableRepository<DataWork> {
     @Override
     public String getQueryGet() {
         return StringQuery.QUERY_GET_ALL;
+    }
+
+    @Override
+    public EntityFactory<DataWork> getEntityFactory() {
+        return new DataWorkFactory();
     }
 
     @Override
@@ -48,8 +55,6 @@ public class DataWorkRepository implements TableRepository<DataWork> {
             buildPs(entity, ps, 8);
             ps.execute();
 
-//            ResultSet rs = ps.getGeneratedKeys();
-//            rs.next();
             return 1L;
         }
     }

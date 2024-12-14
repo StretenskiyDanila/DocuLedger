@@ -2,6 +2,7 @@ package org.example.businesspack.repositories;
 
 import org.example.businesspack.configs.DataAccessor;
 import org.example.businesspack.entities.Table;
+import org.example.businesspack.factory.EntityFactory;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -15,6 +16,8 @@ public interface TableRepository<T extends Table> {
 
     String getTableName();
     String getQueryGet();
+    EntityFactory<T> getEntityFactory();
+
     Long save(T entity) throws SQLException;
     void delete(T entity) throws SQLException;
     Long update(T entityUpdate, T entity) throws SQLException;
@@ -26,8 +29,9 @@ public interface TableRepository<T extends Table> {
             ResultSet rs = ps.executeQuery();
 
             List<T> entities = new ArrayList<>();
+            EntityFactory<T> entityFactory = getEntityFactory();
             while (rs.next()) {
-                entities.add((T) Converter.makeEntity(rs, getTableName()));
+                entities.add(entityFactory.create(rs));
             }
             return entities;
         }

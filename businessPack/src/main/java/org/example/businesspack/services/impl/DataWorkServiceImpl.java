@@ -70,4 +70,9 @@ public class DataWorkServiceImpl implements Service<DataWorkDto> {
         return id;
     }
 
+    @Override
+    public void delete() {
+        throw new UnsupportedOperationException("Unimplemented method 'delete'");
+    }
+
 }

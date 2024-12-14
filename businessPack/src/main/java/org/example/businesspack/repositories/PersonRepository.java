@@ -5,6 +5,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 import org.example.businesspack.entities.Person;
+import org.example.businesspack.factory.EntityFactory;
+import org.example.businesspack.factory.PersonFactory;
 import org.example.businesspack.utils.StringQuery;
 
 public class PersonRepository implements TableRepository<Person> {
@@ -17,6 +19,11 @@ public class PersonRepository implements TableRepository<Person> {
     @Override
     public String getQueryGet() {
         return StringQuery.QUERY_GET_PERSON_FOR_ROLE;
+    }
+
+    @Override
+    public EntityFactory<Person> getEntityFactory() {
+        return new PersonFactory();
     }
 
     @Override
