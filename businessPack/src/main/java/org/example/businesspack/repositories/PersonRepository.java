@@ -9,20 +9,20 @@ import org.example.businesspack.factory.EntityFactory;
 import org.example.businesspack.factory.PersonFactory;
 import org.example.businesspack.utils.StringQuery;
 
-public class PersonRepository implements TableRepository<Person> {
+public class PersonRepository extends TableRepository<Person> {
 
     @Override
-    public String getTableName() {
+    protected String getTableName() {
         return new Person().getTableName();
     }
 
     @Override
-    public String getQueryGet() {
+    protected String getQueryGet() {
         return StringQuery.QUERY_GET_PERSON_FOR_ROLE;
     }
 
     @Override
-    public EntityFactory<Person> getEntityFactory() {
+    protected EntityFactory<Person> getEntityFactory() {
         return new PersonFactory();
     }
 

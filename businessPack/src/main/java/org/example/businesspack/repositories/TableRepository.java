@@ -10,19 +10,19 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-public interface TableRepository<T extends Table> {
+public abstract class TableRepository<T extends Table> {
 
-    DataAccessor da = DataAccessor.getDataAccessor();
+    protected final DataAccessor da = DataAccessor.getDataAccessor();
 
-    String getTableName();
-    String getQueryGet();
-    EntityFactory<T> getEntityFactory();
+    protected abstract String getTableName();
+    protected abstract String getQueryGet();
+    protected abstract EntityFactory<T> getEntityFactory();
 
-    Long save(T entity) throws SQLException;
-    void delete(T entity) throws SQLException;
-    Long update(T entityUpdate, T entity) throws SQLException;
+    public abstract Long save(T entity) throws SQLException;
+    public abstract void delete(T entity) throws SQLException;
+    public abstract Long update(T entityUpdate, T entity) throws SQLException;
 
-    default List<T> getAll() throws SQLException {
+    public List<T> getAll() throws SQLException {
         DataAccessor da = DataAccessor.getDataAccessor();
         String query = String.format(getQueryGet(), getTableName());
         try (PreparedStatement ps = da.getConnection().prepareStatement(query)) {

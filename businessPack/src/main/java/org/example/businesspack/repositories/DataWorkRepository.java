@@ -10,20 +10,20 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-public class DataWorkRepository implements TableRepository<DataWork> {
+public class DataWorkRepository extends TableRepository<DataWork> {
 
     @Override
-    public String getTableName() {
+    protected String getTableName() {
         return new DataWork().getTableName();
     }
 
     @Override
-    public String getQueryGet() {
+    protected String getQueryGet() {
         return StringQuery.QUERY_GET_ALL;
     }
 
     @Override
-    public EntityFactory<DataWork> getEntityFactory() {
+    protected EntityFactory<DataWork> getEntityFactory() {
         return new DataWorkFactory();
     }
 
