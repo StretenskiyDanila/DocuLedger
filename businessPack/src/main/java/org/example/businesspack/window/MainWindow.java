@@ -9,9 +9,9 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
 import org.example.businesspack.dto.DataWorkDto;
 import org.example.businesspack.dto.PersonDto;
-import org.example.businesspack.repositories.DataWorkRepository;
-import org.example.businesspack.repositories.PersonRepository;
-import org.example.businesspack.services.Service;
+import org.example.businesspack.entities.PersonRole;
+import org.example.businesspack.services.DataWorkService;
+import org.example.businesspack.services.PersonService;
 import org.example.businesspack.services.impl.DataWorkServiceImpl;
 import org.example.businesspack.services.impl.PersonServiceImpl;
 import org.example.businesspack.utils.ComboBoxUtils;
@@ -21,8 +21,8 @@ import java.util.ResourceBundle;
 
 public class MainWindow {
 
-    private final Service<DataWorkDto> serviceDataWork = new DataWorkServiceImpl();
-    private final Service<PersonDto> servicePerson = new PersonServiceImpl();
+    private final DataWorkService serviceDataWork = new DataWorkServiceImpl();
+    private final PersonService servicePerson = new PersonServiceImpl();
 
     private ObservableList<DataWorkDto> items;
     private DataWorkDto selectedDataWork;
@@ -122,7 +122,8 @@ public class MainWindow {
 
     @FXML
     void onAddTable(ActionEvent event) {
-        DataWorkDto dataWorkDto = buildFromField();
+        DataWorkDto dataWorkDto = new DataWorkDto();
+        buildFromField(dataWorkDto);
         items.add(dataWorkDto);
         serviceDataWork.save(dataWorkDto);
         tableAccount.setItems(items);
@@ -140,8 +141,8 @@ public class MainWindow {
     @FXML
     void onUpdateTable(ActionEvent event) {
         if (selectedDataWork != null) {
-            DataWorkDto accountUpdate = buildFromField();
-            serviceDataWork.update(selectedDataWork, accountUpdate);
+            buildFromField(selectedDataWork);
+            serviceDataWork.update(selectedDataWork);
             items = FXCollections.observableList(serviceDataWork.get());
             tableAccount.setItems(items);
         }
@@ -165,7 +166,21 @@ public class MainWindow {
 
     @FXML
     void onPrint(ActionEvent event) {
+        String selectedNameP = producer.getSelectionModel().getSelectedItem();
+        PersonDto personDtoP = PersonDto.builder()
+                .name(selectedNameP)
+                .role(PersonRole.PRODUCER)
+                .build();
+        servicePerson.update(personDtoP);
 
+        String selectedNameC = consumer.getSelectionModel().getSelectedItem();
+        PersonDto personDtoC = PersonDto.builder()
+                .name(selectedNameC)
+                .role(PersonRole.CONSUMER)
+                .build();
+        servicePerson.update(personDtoC);
+
+        System.out.println("Успешное обновление данных");
     }
 
     @FXML
@@ -188,30 +203,20 @@ public class MainWindow {
         tableAccount.setItems(items);
         tableAccount.setEditable(true);
 
-        ComboBoxUtils.setComboBoxSearchProperty(producer, new DataWorkRepository());
-        ComboBoxUtils.setComboBoxSearchProperty(consumer, new PersonRepository());
+        ComboBoxUtils.setComboBoxSearchProperty(producer, PersonRole.PRODUCER);
+        ComboBoxUtils.setComboBoxSearchProperty(consumer, PersonRole.CONSUMER);
 
         servicePerson.delete();
     }
 
-    private DataWorkDto buildFromField() {
-        String name = nameText.getText();
-        String count = countText.getText();
-        String vat = vatText.getText();
-        String group = groupText.getText();
-        String price = priceText.getText();
-        String summa = summaText.getText();
-        String unitMeas = unitMeasText.getText();
-
-        return DataWorkDto.builder()
-                .count(count)
-                .group(group)
-                .summa(summa)
-                .vat(vat)
-                .price(price)
-                .unitMeas(unitMeas)
-                .name(name)
-                .build();
+    private void buildFromField(DataWorkDto dataWorkDto) {
+        dataWorkDto.setName(nameText.getText());
+        dataWorkDto.setCount(countText.getText());
+        dataWorkDto.setVat(vatText.getText());
+        dataWorkDto.setGroup(groupText.getText());
+        dataWorkDto.setPrice(priceText.getText());
+        dataWorkDto.setSumma(summaText.getText());
+        dataWorkDto.setUnitMeas(unitMeasText.getText());
     }
 
     private void setField(DataWorkDto account) {

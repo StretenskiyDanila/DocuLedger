@@ -3,9 +3,9 @@ package org.example.businesspack.services.impl;
 import lombok.RequiredArgsConstructor;
 import org.example.businesspack.dto.DataWorkDto;
 import org.example.businesspack.entities.DataWork;
-import org.example.businesspack.repositories.DataWorkRepository;
 import org.example.businesspack.repositories.TableRepository;
-import org.example.businesspack.services.Service;
+import org.example.businesspack.repositories.impl.DataWorkRepositoryImpl;
+import org.example.businesspack.services.DataWorkService;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -13,9 +13,9 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
-public class DataWorkServiceImpl implements Service<DataWorkDto> {
+public class DataWorkServiceImpl implements DataWorkService {
 
-    private final TableRepository<DataWork> accountRepository = new DataWorkRepository();
+    private final TableRepository<DataWork> accountRepository = new DataWorkRepositoryImpl();
 
     @Override
     public Long save(DataWorkDto entity) {
@@ -33,7 +33,7 @@ public class DataWorkServiceImpl implements Service<DataWorkDto> {
     public List<DataWorkDto> get() {
         List<DataWorkDto> models = new ArrayList<>();
         try {
-            List<DataWork> accounts = accountRepository.getAll();
+            List<DataWork> accounts = accountRepository.get();
             if (accounts != null) {
                 models = accounts.stream()
                         .map(DataWorkDto::of)
@@ -58,21 +58,15 @@ public class DataWorkServiceImpl implements Service<DataWorkDto> {
     }
 
     @Override
-    public Long update(DataWorkDto currentEntity, DataWorkDto updateEntity) {
-        DataWork accountUpdate = DataWorkDto.to(updateEntity);
-        DataWork accountCurrent = DataWorkDto.to(currentEntity);
+    public Long update(DataWorkDto entity) {
+        DataWork accountUpdate = DataWorkDto.to(entity);
         Long id = null;
         try {
-            id = accountRepository.update(accountUpdate, accountCurrent);
+            id = accountRepository.update(accountUpdate);
         } catch (SQLException exception) {
             exception.printStackTrace();
         }
         return id;
-    }
-
-    @Override
-    public void delete() {
-        throw new UnsupportedOperationException("Unimplemented method 'delete'");
     }
 
 }

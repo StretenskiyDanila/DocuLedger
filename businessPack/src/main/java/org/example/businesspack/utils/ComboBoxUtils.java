@@ -5,12 +5,17 @@ import javafx.collections.ObservableList;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.ListCell;
 import lombok.experimental.UtilityClass;
-import org.example.businesspack.repositories.TableRepository;
+
+import org.example.businesspack.entities.PersonRole;
+import org.example.businesspack.services.PersonService;
+import org.example.businesspack.services.impl.PersonServiceImpl;
 
 @UtilityClass
 public class ComboBoxUtils {
 
-    public void setComboBoxSearchProperty(ComboBox<String> comboBox, TableRepository<?> repository) {
+    private final PersonService service = new PersonServiceImpl();
+
+    public void setComboBoxSearchProperty(ComboBox<String> comboBox, PersonRole role) {
         comboBox.setEditable(true);
         comboBox.setButtonCell(new ListCell<>() {
             @Override
@@ -35,8 +40,9 @@ public class ComboBoxUtils {
             }
         });
 
-        ObservableList<String> options = FXCollections.observableArrayList("Иванов", "Петров", "Сидоров", "Смирнов",
-                "Соколов", "Соловьев", "Семенов", "Соловьева", "Соловьев", "Соловьев");
+        ObservableList<String> options = FXCollections.observableArrayList(service.get(role).stream()
+                .map(entity -> entity.getName())
+                .toList());
         comboBox.setItems(options);
 
         comboBox.getEditor().textProperty().addListener((observable, oldValue, newValue) -> {

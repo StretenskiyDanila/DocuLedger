@@ -2,18 +2,19 @@ package org.example.businesspack.services.impl;
 
 import org.example.businesspack.dto.PersonDto;
 import org.example.businesspack.entities.Person;
+import org.example.businesspack.entities.PersonRole;
 import org.example.businesspack.repositories.PersonRepository;
-import org.example.businesspack.repositories.TableRepository;
-import org.example.businesspack.services.Service;
+import org.example.businesspack.repositories.impl.PersonRepositoryImpl;
+import org.example.businesspack.services.PersonService;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class PersonServiceImpl implements Service<PersonDto> {
+public class PersonServiceImpl implements PersonService {
 
-    private final TableRepository<Person> personRepository = new PersonRepository();
+    private final PersonRepository personRepository = new PersonRepositoryImpl();
 
     @Override
     public Long save(PersonDto entity) {
@@ -28,10 +29,10 @@ public class PersonServiceImpl implements Service<PersonDto> {
     }
 
     @Override
-    public List<PersonDto> get() {
+    public List<PersonDto> get(PersonRole role) {
         List<PersonDto> models = new ArrayList<>();
         try {
-            List<Person> accounts = personRepository.getAll();
+            List<Person> accounts = personRepository.get(role);
             if (accounts != null) {
                 models = accounts.stream()
                         .map(PersonDto::of)
@@ -46,19 +47,26 @@ public class PersonServiceImpl implements Service<PersonDto> {
     }
 
     @Override
-    public void delete(PersonDto entity) {
-        throw new UnsupportedOperationException();
-    }
-
-    @Override
-    public Long update(PersonDto currentEntity, PersonDto updateEntity) {
-        throw new UnsupportedOperationException();
+    public Long update(PersonDto entity) {
+        Person personUpdate = PersonDto.to(entity);
+        Long id = null;
+        
+        try {
+            if (personRepository.checkEntity(personUpdate)) { 
+                id = personRepository.update(personUpdate);
+            } else {
+                id = personRepository.save(personUpdate);
+            }
+        } catch (SQLException exception) {
+            exception.printStackTrace();
+        }
+        return id;
     }
 
     @Override
     public void delete() {
         try {
-            personRepository.delete(null);
+            personRepository.delete();
         } catch (SQLException e) {
             e.printStackTrace();
         };

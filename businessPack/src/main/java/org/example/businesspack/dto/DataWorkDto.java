@@ -9,6 +9,7 @@ import org.example.businesspack.entities.DataWork;
 @AllArgsConstructor
 public class DataWorkDto {
 
+    private Long id;
     private String group;
     private String count;
     private String name;
@@ -19,6 +20,7 @@ public class DataWorkDto {
 
     public static DataWorkDto of(DataWork account) {
         return DataWorkDto.builder()
+                .id(account.getId())
                 .count(account.getCount())
                 .group(account.getGroup())
                 .summa(account.getSumma())
@@ -31,6 +33,7 @@ public class DataWorkDto {
 
     public static DataWork to(DataWorkDto dataWorkDto) {
         return DataWork.builder()
+                .id(dataWorkDto.getId())
                 .unitMeas(dataWorkDto.getUnitMeas())
                 .group(dataWorkDto.getGroup())
                 .count(dataWorkDto.getCount())

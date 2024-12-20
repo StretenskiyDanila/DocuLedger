@@ -1,59 +1,33 @@
 package org.example.businesspack.repositories;
 
 import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.List;
 
 import org.example.businesspack.entities.Person;
-import org.example.businesspack.factory.EntityFactory;
-import org.example.businesspack.factory.PersonFactory;
-import org.example.businesspack.utils.StringQuery;
+import org.example.businesspack.entities.PersonRole;
 
-public class PersonRepository extends TableRepository<Person> {
+public abstract class PersonRepository extends TableRepository<Person> {
 
     @Override
-    protected String getTableName() {
-        return new Person().getTableName();
-    }
-
-    @Override
-    protected String getQueryGet() {
-        return StringQuery.QUERY_GET_PERSON_FOR_ROLE;
-    }
-
-    @Override
-    protected EntityFactory<Person> getEntityFactory() {
-        return new PersonFactory();
-    }
-
-    @Override
-    public Long save(Person entity) throws SQLException {
-        try (PreparedStatement ps = da.getConnection().prepareStatement(StringQuery.QUERY_INSERT_PERSON)) {
-            buildPs(entity, ps, 1);
-            ps.executeUpdate();
-
-            ResultSet rs = ps.getGeneratedKeys();
-            rs.next();
-            return rs.getLong(1);
-        }
+    public List<Person> get() throws SQLException {
+        throw new UnsupportedOperationException("Not supported yet.");
     }
 
     @Override
     public void delete(Person entity) throws SQLException {
-        try (PreparedStatement ps = da.getConnection().prepareStatement(StringQuery.QUERY_DELETE_PERSON)) {
-            ps.execute();
-        }
+        throw new UnsupportedOperationException("Not supported yet.");
     }
 
-    @Override
-    public Long update(Person entityUpdate, Person entity) throws SQLException {
-        throw new UnsupportedOperationException(); // TODO добавить обновление полей пользования
-    }
+    public abstract List<Person> get(PersonRole role) throws SQLException;
+    public abstract boolean checkEntity(Person entity) throws SQLException;
+    public abstract void delete() throws SQLException;
 
-    private void buildPs(Person entity, PreparedStatement ps, int count) throws SQLException {
+    protected void buildPs(Person entity, PreparedStatement ps, int count) throws SQLException {
         ps.setString(count++, entity.getName());
         ps.setString(count, entity.getRole().getName());
     }
 
-}
 
+
+}
