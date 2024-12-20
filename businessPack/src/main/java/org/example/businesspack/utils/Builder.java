@@ -1,14 +1,17 @@
-package org.example.businesspack.factory;
+package org.example.businesspack.utils;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
 import org.example.businesspack.entities.DataWork;
+import org.example.businesspack.entities.Person;
 
-public class DataWorkFactory implements EntityFactory<DataWork> {
+import lombok.experimental.UtilityClass;
 
-    @Override
-    public DataWork create(ResultSet resultSet) throws SQLException {
+@UtilityClass
+public class Builder {
+
+    public DataWork buildDataWork(ResultSet resultSet) throws SQLException {
         return DataWork.builder()
                 .count(resultSet.getString("count"))
                 .summa(resultSet.getString("summa"))
@@ -17,6 +20,12 @@ public class DataWorkFactory implements EntityFactory<DataWork> {
                 .name(resultSet.getString("name"))
                 .group(resultSet.getString("group"))
                 .unitMeas(resultSet.getString("unit_meas"))
+                .build();
+    }
+
+    public Person buildPerson(ResultSet resultSet) throws SQLException {
+        return Person.builder()
+                .name(resultSet.getString("name"))
                 .build();
     }
 
