@@ -18,11 +18,8 @@ public class PersonRepositoryImpl extends PersonRepository {
     public Long save(Person entity) throws SQLException {
         try (PreparedStatement ps = da.getConnection().prepareStatement(StringQuery.QUERY_INSERT_PERSON)) {
             buildPs(entity, ps, 1);
-            ps.executeUpdate();
-
-            ResultSet rs = ps.getGeneratedKeys();
-            rs.next();
-            return rs.getLong(1);
+            
+            return getIdExecute(ps);
         }
     }
 
@@ -37,13 +34,9 @@ public class PersonRepositoryImpl extends PersonRepository {
     public Long update(Person entity) throws SQLException {
         try (PreparedStatement ps = da.getConnection().prepareStatement(StringQuery.QUERY_UPDATE_PERSON)) {
             int count = 1;
-            ps.setString(count++, entity.getName());
-            ps.setString(count++, entity.getName());
-            ps.setString(count++, entity.getRole().getName());
+            ps.setLong(count++, entity.getId());
 
-            ps.execute();
-
-            return 1L;
+            return getIdExecute(ps);
         }
     }
 
@@ -62,12 +55,9 @@ public class PersonRepositoryImpl extends PersonRepository {
     }
 
     @Override
-    public boolean checkEntity(Person entity) throws SQLException {
-        try (PreparedStatement ps = da.getConnection().prepareStatement(StringQuery.QUERY_GET_PERSON_FOR_NAME)) {
-            ps.setString(1, entity.getName());
-            ps.setString(2, entity.getRole().getName());
-            ResultSet rs = ps.executeQuery();
-            return rs.next();        
+    public void update() throws SQLException {
+        try (PreparedStatement ps = da.getConnection().prepareStatement(StringQuery.QUERY_UPDATE_MONTH_PERSON)) {
+            ps.execute();
         }
     }
 

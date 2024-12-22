@@ -13,6 +13,7 @@ public class Builder {
 
     public DataWork buildDataWork(ResultSet resultSet) throws SQLException {
         return DataWork.builder()
+                .id(resultSet.getLong("id"))
                 .count(resultSet.getString("count"))
                 .summa(resultSet.getString("summa"))
                 .vat(resultSet.getString("vat"))

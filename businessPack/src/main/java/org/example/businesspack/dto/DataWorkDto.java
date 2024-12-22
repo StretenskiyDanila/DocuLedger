@@ -5,7 +5,6 @@ import org.example.businesspack.entities.DataWork;
 
 @Data
 @Builder
-@NoArgsConstructor
 @AllArgsConstructor
 public class DataWorkDto {
 
@@ -17,6 +16,16 @@ public class DataWorkDto {
     private String summa;
     private String unitMeas;
     private String vat;
+
+    public DataWorkDto() {
+        group = "Не задано";
+        count = "Не задано";
+        name = "Не задано";
+        price = "Не задано";
+        summa = "Не задано";
+        unitMeas = "Не задано";
+        vat = "Не задано";
+    }
 
     public static DataWorkDto of(DataWork account) {
         return DataWorkDto.builder()

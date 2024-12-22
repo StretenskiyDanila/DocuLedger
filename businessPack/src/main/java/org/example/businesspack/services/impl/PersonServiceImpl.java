@@ -52,7 +52,7 @@ public class PersonServiceImpl implements PersonService {
         Long id = null;
         
         try {
-            if (personRepository.checkEntity(personUpdate)) { 
+            if (personUpdate.getId() != null) { 
                 id = personRepository.update(personUpdate);
             } else {
                 id = personRepository.save(personUpdate);
@@ -67,6 +67,7 @@ public class PersonServiceImpl implements PersonService {
     public void delete() {
         try {
             personRepository.delete();
+            //personRepository.update();
         } catch (SQLException e) {
             e.printStackTrace();
         };
