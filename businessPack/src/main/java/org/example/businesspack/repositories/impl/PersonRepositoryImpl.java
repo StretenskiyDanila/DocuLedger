@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.example.businesspack.entities.Person;
-import org.example.businesspack.entities.PersonRole;
+import org.example.businesspack.entities.enums.PersonRole;
 import org.example.businesspack.repositories.PersonRepository;
 import org.example.businesspack.utils.Builder;
 import org.example.businesspack.utils.StringQuery;
@@ -34,6 +34,7 @@ public class PersonRepositoryImpl extends PersonRepository {
     public Long update(Person entity) throws SQLException {
         try (PreparedStatement ps = da.getConnection().prepareStatement(StringQuery.QUERY_UPDATE_PERSON)) {
             int count = 1;
+            ps.setLong(count++, entity.getId());
             ps.setLong(count++, entity.getId());
 
             return getIdExecute(ps);

@@ -35,13 +35,13 @@ public class StringQuery {
                         "RETURNING id;";
 
         public final String QUERY_UPDATE_PERSON = "UPDATE person " +
-                        "SET last_used = current_date, usage_count = (SELECT usage_count FROM person WHERE name = ?) + 1 "
+                        "SET last_used = current_date, usage_count = (SELECT usage_count FROM person WHERE id = ?) + 1 "
                         +
                         "WHERE id = ? " +
                         "RETURNING id;";
 
         public final String QUERY_DELETE_PERSON = "DELETE FROM person " +
-                        "WHERE last_used < DATE('now', '-1 month') AND usage_count = 1;";
+                        "WHERE last_used < DATE('now', '-1 day') AND usage_count = 1;";
 
         public final String QUERY_UPDATE_MONTH_PERSON = "UPDATE person " +
                         "SET usage = 0 " +

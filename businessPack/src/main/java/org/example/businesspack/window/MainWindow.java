@@ -5,10 +5,10 @@ import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import org.example.businesspack.dto.DataWorkDto;
 import org.example.businesspack.dto.PersonDto;
-import org.example.businesspack.entities.PersonRole;
+import org.example.businesspack.entities.enums.PersonRole;
 import org.example.businesspack.services.PersonService;
 import org.example.businesspack.services.impl.PersonServiceImpl;
-import org.example.businesspack.window.models.ComboBoxManager;
+import org.example.businesspack.window.models.ComboBoxPersonManager;
 import org.example.businesspack.window.models.TableManager;
 
 import java.net.URL;
@@ -86,8 +86,8 @@ public class MainWindow {
         tableManager = new TableManager(tableAccount);
         initializeTable();
 
-        ComboBoxManager.configureComboBox(producer, PersonRole.PRODUCER, new PersonServiceImpl());
-        ComboBoxManager.configureComboBox(consumer, PersonRole.CONSUMER, new PersonServiceImpl());
+        ComboBoxPersonManager.configureComboBox(producer, PersonRole.PRODUCER, new PersonServiceImpl());
+        ComboBoxPersonManager.configureComboBox(consumer, PersonRole.CONSUMER, new PersonServiceImpl());
     }
 
     private void initializeTable() {

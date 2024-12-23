@@ -3,7 +3,7 @@ package org.example.businesspack.services;
 import java.util.List;
 
 import org.example.businesspack.dto.PersonDto;
-import org.example.businesspack.entities.PersonRole;;
+import org.example.businesspack.entities.enums.PersonRole;;
 
 public interface PersonService {
 

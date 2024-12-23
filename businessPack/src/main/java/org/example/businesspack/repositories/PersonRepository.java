@@ -5,7 +5,7 @@ import java.sql.SQLException;
 import java.util.List;
 
 import org.example.businesspack.entities.Person;
-import org.example.businesspack.entities.PersonRole;
+import org.example.businesspack.entities.enums.PersonRole;
 
 public abstract class PersonRepository extends TableRepository<Person> {
 

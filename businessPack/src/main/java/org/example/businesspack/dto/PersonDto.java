@@ -6,7 +6,7 @@ import lombok.Data;
 import java.time.LocalDate;
 
 import org.example.businesspack.entities.Person;
-import org.example.businesspack.entities.PersonRole;
+import org.example.businesspack.entities.enums.PersonRole;
 
 @Builder
 @Data

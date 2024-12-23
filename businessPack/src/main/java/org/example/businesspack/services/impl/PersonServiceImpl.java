@@ -2,7 +2,7 @@ package org.example.businesspack.services.impl;
 
 import org.example.businesspack.dto.PersonDto;
 import org.example.businesspack.entities.Person;
-import org.example.businesspack.entities.PersonRole;
+import org.example.businesspack.entities.enums.PersonRole;
 import org.example.businesspack.repositories.PersonRepository;
 import org.example.businesspack.repositories.impl.PersonRepositoryImpl;
 import org.example.businesspack.services.PersonService;

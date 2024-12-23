@@ -2,6 +2,8 @@ package org.example.businesspack.entities;
 
 import java.time.LocalDate;
 
+import org.example.businesspack.entities.enums.PersonRole;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
