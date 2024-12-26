@@ -41,10 +41,10 @@ public class StringQuery {
                         "RETURNING id;";
 
         public final String QUERY_DELETE_PERSON = "DELETE FROM person " +
-                        "WHERE last_used < DATE('now', '-1 day') AND usage_count = 1;";
+                        "WHERE CURRENT_DATE = DATE(CURRENT_DATE, 'start of month') AND usage_count <= 1;";
 
         public final String QUERY_UPDATE_MONTH_PERSON = "UPDATE person " +
-                        "SET usage = 0 " +
-                        "WHERE last_used < DATE('now', '-1 month');";
+                        "SET usage = 0, last_usage = CURRENT_DATE " +
+                        "WHERE CURRENT_DATE = DATE(CURRENT_DATE, 'start of month')";
 
 }

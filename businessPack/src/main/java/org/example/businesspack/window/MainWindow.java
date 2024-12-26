@@ -81,7 +81,7 @@ public class MainWindow {
 
     @FXML
     void initialize() {
-        servicePerson.delete();
+        servicePerson.clearMonth();
 
         tableManager = new TableManager(tableAccount);
         initializeTable();

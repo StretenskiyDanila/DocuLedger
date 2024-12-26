@@ -79,7 +79,7 @@ public class TableManager {
                     System.out.println("No selected row"); //TODO: заменить на обработку
                 });
             }
-            if (event.getCode() == KeyCode.ESCAPE) { //TODO: возможно убрать его
+            if (event.getCode() == KeyCode.ESCAPE) {
                 clearSelectedItem();
             }
         });

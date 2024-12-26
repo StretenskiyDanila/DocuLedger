@@ -64,10 +64,10 @@ public class PersonServiceImpl implements PersonService {
     }
 
     @Override
-    public void delete() {
+    public void clearMonth() {
         try {
             personRepository.delete();
-            //personRepository.update();
+            personRepository.update();
         } catch (SQLException e) {
             e.printStackTrace();
         };

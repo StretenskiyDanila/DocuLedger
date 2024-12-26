@@ -9,7 +9,7 @@ public interface PersonService {
 
     Long save(PersonDto entity);
     List<PersonDto> get(PersonRole role);
-    void delete();
+    void clearMonth();
     Long update(PersonDto updateEntity);
 
 }
