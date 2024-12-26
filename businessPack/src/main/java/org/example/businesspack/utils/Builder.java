@@ -1,10 +1,12 @@
 package org.example.businesspack.utils;
 
+import java.sql.Date;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
 import org.example.businesspack.entities.DataWork;
 import org.example.businesspack.entities.Person;
+import org.example.businesspack.entities.enums.PersonRole;
 
 import lombok.experimental.UtilityClass;
 
@@ -13,6 +15,7 @@ public class Builder {
 
     public DataWork buildDataWork(ResultSet resultSet) throws SQLException {
         return DataWork.builder()
+                .id(resultSet.getLong("id"))
                 .count(resultSet.getString("count"))
                 .summa(resultSet.getString("summa"))
                 .vat(resultSet.getString("vat"))
@@ -25,7 +28,10 @@ public class Builder {
 
     public Person buildPerson(ResultSet resultSet) throws SQLException {
         return Person.builder()
+                .id(resultSet.getLong("id"))
                 .name(resultSet.getString("name"))
+                .role(PersonRole.valueOf(resultSet.getString("role").toUpperCase()))
+                .lastUsed(Date.valueOf(resultSet.getString("last_used")).toLocalDate())
                 .build();
     }
 

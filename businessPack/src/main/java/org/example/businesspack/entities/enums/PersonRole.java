@@ -1,4 +1,4 @@
-package org.example.businesspack.entities;
+package org.example.businesspack.entities.enums;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;

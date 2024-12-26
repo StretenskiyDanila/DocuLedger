@@ -17,19 +17,15 @@ public class DataWorkRepositoryImpl extends DataWorkRepository {
     public Long save(DataWork entity) throws SQLException {
         try (PreparedStatement ps = da.getConnection().prepareStatement(StringQuery.QUERY_INSERT_DATA_WORK)) {
             buildPs(entity, ps, 1);
-            ps.executeUpdate();
-
-            ResultSet rs = ps.getGeneratedKeys();
-            rs.next();
-            return rs.getLong(1);
-
+            
+            return getIdExecute(ps);
         }
     }
 
     @Override
     public void delete(DataWork entity) throws SQLException {
         try (PreparedStatement ps = da.getConnection().prepareStatement(StringQuery.QUERY_DELETE_DATA_WORK)){
-            buildPs(entity, ps, 1);
+            ps.setLong(1, entity.getId());
             ps.execute();
         }
     }
@@ -37,11 +33,11 @@ public class DataWorkRepositoryImpl extends DataWorkRepository {
     @Override
     public Long update(DataWork entity) throws SQLException {
         try (PreparedStatement ps = da.getConnection().prepareStatement(StringQuery.QUERY_UPDATE_DATA_WORK)){
-            buildPs(entity, ps, 1);
+            int count = 1;
+            buildPs(entity, ps, count);
             ps.setLong(8, entity.getId());
-            ps.execute();
 
-            return 1L;
+            return getIdExecute(ps);
         }
     }
 

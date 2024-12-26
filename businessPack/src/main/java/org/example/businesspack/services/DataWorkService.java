@@ -9,6 +9,6 @@ public interface DataWorkService {
     Long save(DataWorkDto entity);
     List<DataWorkDto> get();
     void delete(DataWorkDto entity);
-    Long update(DataWorkDto updateEntity);
+    Long update(DataWorkDto entity);
 
 }

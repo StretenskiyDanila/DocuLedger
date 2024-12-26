@@ -62,7 +62,11 @@ public class DataWorkServiceImpl implements DataWorkService {
         DataWork accountUpdate = DataWorkDto.to(entity);
         Long id = null;
         try {
-            id = accountRepository.update(accountUpdate);
+            if (entity.getId() != null) {
+                id = accountRepository.update(accountUpdate);
+            } else {
+                id = accountRepository.save(accountUpdate);
+            }
         } catch (SQLException exception) {
             exception.printStackTrace();
         }
