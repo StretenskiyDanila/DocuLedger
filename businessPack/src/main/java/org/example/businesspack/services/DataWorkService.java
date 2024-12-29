@@ -2,13 +2,11 @@ package org.example.businesspack.services;
 
 import java.util.List;
 
-import org.example.businesspack.dto.DataWorkDto;
+public interface DataWorkService<T> {
 
-public interface DataWorkService {
-
-    Long save(DataWorkDto entity);
-    List<DataWorkDto> get();
-    void delete(DataWorkDto entity);
-    Long update(DataWorkDto entity);
+    Long save(T entity);
+    List<T> get();
+    void delete(T entity);
+    Long update(T entity);
 
 }
