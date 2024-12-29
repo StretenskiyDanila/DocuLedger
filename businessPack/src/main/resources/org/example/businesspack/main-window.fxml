@@ -48,9 +48,31 @@
                </Tab>
                <Tab fx:id="actWorks" text="Акт выполненных работ">
                    <content>
-                       <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                       <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="486.0" prefWidth="1014.0">
                            <children>
-                               </children>
+                               <Label layoutX="49.0" layoutY="55.0" prefHeight="26.0" prefWidth="59.0" text="Продавец" />
+                               <ComboBox fx:id="producer" editable="true" layoutX="111.0" layoutY="56.0" prefHeight="4.0" prefWidth="230.0" />
+                               <Label layoutX="410.0" layoutY="55.0" prefHeight="26.0" prefWidth="66.0" text="Покупатель" />
+                               <ComboBox fx:id="consumer" editable="true" layoutX="479.0" layoutY="56.0" prefHeight="4.0" prefWidth="230.0" />
+                               <Label layoutX="65.0" layoutY="93.0" prefHeight="26.0" prefWidth="45.0" text="Счет №" />
+                               <TextField fx:id="labelNumber" layoutX="111.0" layoutY="94.0" prefHeight="0.0" prefWidth="77.0" />
+                               <Button fx:id="buttonIncrement" layoutX="157.0" layoutY="93.0" mnemonicParsing="false" onAction="#onIncrementNumber" prefHeight="26.0" prefWidth="31.0" text="+1" />
+                               <Label layoutX="195.0" layoutY="93.0" prefHeight="26.0" prefWidth="17.0" text="От" />
+                               <DatePicker fx:id="date" layoutX="213.0" layoutY="93.0" prefHeight="26.0" prefWidth="127.0" />
+                               <Label layoutX="402.0" layoutY="93.0" prefHeight="26.0" prefWidth="78.0" text="Примечание" />
+                               <Separator layoutY="120.0" prefHeight="11.0" prefWidth="720.0" />
+                               <TableView fx:id="tableActWorks" editable="true" layoutY="126.0" prefHeight="334.0" prefWidth="720.0">
+                                   <columns>
+                                       <TableColumn fx:id="name" prefWidth="143.999966442585" text="Наименование" />
+                                       <TableColumn fx:id="unitMeas" minWidth="0.0" prefWidth="83.19998168945312" text="Ед. изм." />
+                                       <TableColumn fx:id="count" prefWidth="64.00007629394531" text="Кол-во" />
+                                       <TableColumn fx:id="price" prefWidth="96.800048828125" text="Цена" />
+                                       <TableColumn fx:id="vat" prefWidth="85.5999755859375" text="НДС" />
+                                       <TableColumn fx:id="summa" prefWidth="99.20001220703125" text="Сумма" />
+                                       <TableColumn fx:id="group" prefWidth="144.0" text="Группа" />
+                                   </columns>
+                               </TableView>
+                           </children>
                        </AnchorPane>
                    </content>
                </Tab>

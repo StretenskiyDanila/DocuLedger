@@ -1,11 +1,8 @@
-package org.example.businesspack.window.models;
+package org.example.businesspack.window.models.table;
 
 import java.util.Optional;
 
-import org.example.businesspack.dto.DataWorkDto;
 import org.example.businesspack.services.DataWorkService;
-import org.example.businesspack.services.impl.DataWorkServiceImpl;
-
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.control.TableColumn;
@@ -14,31 +11,30 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.scene.input.KeyCode;
 
-public class TableManager {
+public abstract class TableManager<T> {
 
-    private final TableView<DataWorkDto> table;
-    private final DataWorkService service = new DataWorkServiceImpl();
+    private final TableView<T> table;
+    protected final DataWorkService<T> service;
 
-    private ObservableList<DataWorkDto> items;
-    private Optional<DataWorkDto> selectedDataWork;
+    private ObservableList<T> items;
+    private Optional<T> selectedDataWork;
 
-    public TableManager(TableView<DataWorkDto> tableAccount) {
+    public TableManager(TableView<T> tableAccount, DataWorkService<T> service) {
         this.table = tableAccount;
         this.selectedDataWork = Optional.empty();
+        this.service = service;
         initializeTable();
     }
 
     private void initializeTable() {
-        items = FXCollections.observableList(service.get());
+        items = FXCollections.observableList(service.get()); //TODO: перенести на 2 класса и добавить в таблицу колонку accounts/actWorks 
 
         table.setItems(items);
         table.setEditable(true);
         table.setOnMouseClicked(event -> {
             if (event.getClickCount() == 1) {
                 if (table.getSelectionModel() == null || table.getSelectionModel().getSelectedItem() == null) {
-                    DataWorkDto item = new DataWorkDto();
-                    item.setId(service.update(item));
-                    items.add(item);
+                    onMouseClicked(items);
                     table.setItems(items);
                     clearSelectedItem();
                 }
@@ -49,26 +45,19 @@ public class TableManager {
         setupKeyboardEvents();
     }
 
-    public void configureColumn(TableColumn<DataWorkDto, String> column, String property) {
+    public void configureColumn(TableColumn<T, String> column, String property) {
         column.setCellValueFactory(new PropertyValueFactory<>(property));
         column.setCellFactory(TextFieldTableCell.forTableColumn());
         column.setOnEditCommit(event -> {
-            DataWorkDto item = event.getRowValue();
-            if (item == null)
-                item = new DataWorkDto();
-            switch (property) {
-                case "name" -> item.setName(event.getNewValue());
-                case "count" -> item.setCount(event.getNewValue());
-                case "vat" -> item.setVat(event.getNewValue());
-                case "group" -> item.setGroup(event.getNewValue());
-                case "price" -> item.setPrice(event.getNewValue());
-                case "summa" -> item.setSumma(event.getNewValue());
-                case "unitMeas" -> item.setUnitMeas(event.getNewValue());
-            }
+            T item = event.getRowValue();
+            onColumnEdit(item, property, event.getNewValue());
             service.update(item);
             clearSelectedItem();
         });
     }
+
+    protected abstract void onMouseClicked(ObservableList<T> items);
+    protected abstract void onColumnEdit(T item, String property, String newValue);
 
     private void setupKeyboardEvents() {
         table.setOnKeyPressed(event -> {
@@ -79,13 +68,13 @@ public class TableManager {
                     System.out.println("No selected row"); //TODO: заменить на обработку
                 });
             }
-            if (event.getCode() == KeyCode.ESCAPE) {
+            if (event.getCode() == KeyCode.ESCAPE) { 
                 clearSelectedItem();
             }
         });
     }
 
-    private void deleteSelectedRow(DataWorkDto item) {
+    private void deleteSelectedRow(T item) {
         items.remove(item);
         service.delete(item);
         table.setItems(items);

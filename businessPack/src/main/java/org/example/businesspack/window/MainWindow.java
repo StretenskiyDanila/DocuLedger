@@ -9,7 +9,8 @@ import org.example.businesspack.entities.enums.PersonRole;
 import org.example.businesspack.services.PersonService;
 import org.example.businesspack.services.impl.PersonServiceImpl;
 import org.example.businesspack.window.models.ComboBoxPersonManager;
-import org.example.businesspack.window.models.TableManager;
+import org.example.businesspack.window.models.tab.DataWorkTab;
+import org.example.businesspack.window.models.tab.TabManager;
 
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -18,7 +19,8 @@ public class MainWindow {
 
     private final PersonService servicePerson = new PersonServiceImpl();
 
-    private TableManager tableManager;
+    private TabManager<DataWorkDto> dataWorkManager; 
+    private TabManager<DataWorkDto> actWorksManager; 
 
     @FXML
     private ResourceBundle resources;
@@ -27,16 +29,10 @@ public class MainWindow {
     private URL location;
 
     @FXML
-    private Tab account;
+    private Tab account, actWorks, orderOutfit;
 
     @FXML
-    private Tab actWorks;
-
-    @FXML
-    private Tab orderOutfit;
-
-    @FXML
-    private TableView<DataWorkDto> tableAccount;
+    private TableView<DataWorkDto> tableAccount, tableActWorks;
 
     @FXML
     private TableColumn<DataWorkDto, String> count, group, name, price, summa, vat, unitMeas;
@@ -83,22 +79,11 @@ public class MainWindow {
     void initialize() {
         servicePerson.clearMonth();
 
-        tableManager = new TableManager(tableAccount);
-        initializeTable();
+        dataWorkManager = new DataWorkTab(account, tableAccount);
+        actWorksManager = new DataWorkTab(actWorks, tableActWorks);
 
         ComboBoxPersonManager.configureComboBox(producer, PersonRole.PRODUCER, new PersonServiceImpl());
         ComboBoxPersonManager.configureComboBox(consumer, PersonRole.CONSUMER, new PersonServiceImpl());
-    }
-
-    private void initializeTable() {
-        tableManager.configureColumn(count, "count");
-        tableManager.configureColumn(vat, "vat");
-        tableManager.configureColumn(group, "group");
-        tableManager.configureColumn(price, "price");
-        tableManager.configureColumn(summa, "summa");
-        tableManager.configureColumn(unitMeas, "unitMeas");
-        tableManager.configureColumn(name, "name");
-
     }
 
 }

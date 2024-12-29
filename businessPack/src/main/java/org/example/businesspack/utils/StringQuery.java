@@ -44,7 +44,7 @@ public class StringQuery {
                         "WHERE CURRENT_DATE = DATE(CURRENT_DATE, 'start of month') AND usage_count <= 1;";
 
         public final String QUERY_UPDATE_MONTH_PERSON = "UPDATE person " +
-                        "SET usage = 0, last_usage = CURRENT_DATE " +
+                        "SET usage_count = 0, last_used = CURRENT_DATE " +
                         "WHERE CURRENT_DATE = DATE(CURRENT_DATE, 'start of month')";
 
 }

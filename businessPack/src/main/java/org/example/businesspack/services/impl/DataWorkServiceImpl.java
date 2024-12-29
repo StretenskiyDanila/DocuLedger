@@ -13,7 +13,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
-public class DataWorkServiceImpl implements DataWorkService {
+public class DataWorkServiceImpl implements DataWorkService<DataWorkDto> {
 
     private final TableRepository<DataWork> accountRepository = new DataWorkRepositoryImpl();
 
