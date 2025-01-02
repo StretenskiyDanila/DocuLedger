@@ -1,20 +1,21 @@
 package org.example.businesspack.window.models.table;
 
+import java.util.List;
+
 import org.example.businesspack.dto.DataWorkDto;
 import org.example.businesspack.services.impl.DataWorkServiceImpl;
 
-import javafx.collections.ObservableList;
 import javafx.scene.control.TableView;
 
 public class DataWorkTable extends TableManager<DataWorkDto> {
 
-    public DataWorkTable(TableView<DataWorkDto> tableAccount) {
-        super(tableAccount, new DataWorkServiceImpl());
+    public DataWorkTable(TableView<DataWorkDto> tableAccount, String tabName) {
+        super(tableAccount, new DataWorkServiceImpl(), tabName);
     }
 
     @Override
-    protected void onMouseClicked(ObservableList<DataWorkDto> items) {
-        DataWorkDto item = new DataWorkDto();
+    protected void onMouseClicked() {
+        DataWorkDto item = new DataWorkDto(tabName);
         item.setId(service.update(item));
         items.add(item);
     }
@@ -22,7 +23,7 @@ public class DataWorkTable extends TableManager<DataWorkDto> {
     @Override
     protected void onColumnEdit(DataWorkDto item, String property, String newValue) {
         if (item == null) {
-            item = new DataWorkDto();
+            item = new DataWorkDto(tabName);
         }
         switch (property) {
             case "name" -> item.setName(newValue);
@@ -33,6 +34,11 @@ public class DataWorkTable extends TableManager<DataWorkDto> {
             case "summa" -> item.setSumma(newValue);
             case "unitMeas" -> item.setUnitMeas(newValue);
         }
+    }
+
+    @Override
+    protected List<DataWorkDto> get() {
+        return service.get(tabName);
     }
 
 }

@@ -8,7 +8,9 @@ import lombok.RequiredArgsConstructor;
 public enum PersonRole {
 
     PRODUCER("Producer"),
-    CONSUMER("Consumer");
+    CONSUMER("Consumer"),
+    PASSED("Passed"),
+    ACCEPTED("Accepted");
 
     private final String name;
 

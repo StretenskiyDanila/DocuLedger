@@ -16,8 +16,9 @@ public class DataWorkDto {
     private String summa;
     private String unitMeas;
     private String vat;
+    private String tab;
 
-    public DataWorkDto() {
+    public DataWorkDto(String tab) {
         group = "Не задано";
         count = "Не задано";
         name = "Не задано";
@@ -25,6 +26,7 @@ public class DataWorkDto {
         summa = "Не задано";
         unitMeas = "Не задано";
         vat = "Не задано";
+        this.tab = tab;
     }
 
     public static DataWorkDto of(DataWork account) {
@@ -37,6 +39,7 @@ public class DataWorkDto {
                 .price(account.getPrice())
                 .unitMeas(account.getUnitMeas())
                 .name(account.getName())
+                .tab(account.getTab())
                 .build();
     }
 
@@ -50,6 +53,7 @@ public class DataWorkDto {
                 .name(dataWorkDto.getName())
                 .vat(dataWorkDto.getVat())
                 .summa(dataWorkDto.getSumma())
+                .tab(dataWorkDto.getTab())
                 .build();
     }
 

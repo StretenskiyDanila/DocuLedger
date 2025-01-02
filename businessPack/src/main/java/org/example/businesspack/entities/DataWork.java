@@ -19,6 +19,7 @@ public class DataWork extends Table {
     private String summa;
     private String unitMeas;
     private String vat;
+    private String tab;
 
     @Override
     public String getTableName() {

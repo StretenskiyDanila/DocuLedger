@@ -1,8 +1,10 @@
 package org.example.businesspack.window.models.table;
 
+import java.util.List;
 import java.util.Optional;
 
-import org.example.businesspack.services.DataWorkService;
+import org.example.businesspack.services.Service;
+
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.control.TableColumn;
@@ -14,27 +16,30 @@ import javafx.scene.input.KeyCode;
 public abstract class TableManager<T> {
 
     private final TableView<T> table;
-    protected final DataWorkService<T> service;
+    protected final Service<T> service;
 
-    private ObservableList<T> items;
+    protected ObservableList<T> items;
     private Optional<T> selectedDataWork;
 
-    public TableManager(TableView<T> tableAccount, DataWorkService<T> service) {
+    protected final String tabName;
+
+    public TableManager(TableView<T> tableAccount, Service<T> service, String tabName) {
         this.table = tableAccount;
         this.selectedDataWork = Optional.empty();
         this.service = service;
+        this.tabName = tabName;
         initializeTable();
     }
 
     private void initializeTable() {
-        items = FXCollections.observableList(service.get()); //TODO: перенести на 2 класса и добавить в таблицу колонку accounts/actWorks 
+        items = FXCollections.observableList(get());
 
         table.setItems(items);
         table.setEditable(true);
         table.setOnMouseClicked(event -> {
             if (event.getClickCount() == 1) {
                 if (table.getSelectionModel() == null || table.getSelectionModel().getSelectedItem() == null) {
-                    onMouseClicked(items);
+                    onMouseClicked();
                     table.setItems(items);
                     clearSelectedItem();
                 }
@@ -56,7 +61,8 @@ public abstract class TableManager<T> {
         });
     }
 
-    protected abstract void onMouseClicked(ObservableList<T> items);
+    protected abstract List<T> get();
+    protected abstract void onMouseClicked();
     protected abstract void onColumnEdit(T item, String property, String newValue);
 
     private void setupKeyboardEvents() {

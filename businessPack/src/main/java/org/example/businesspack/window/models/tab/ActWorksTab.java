@@ -7,10 +7,10 @@ import javafx.scene.control.Tab;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 
-public class DataWorkTab extends TabManager<DataWorkDto> {
-    
-    public DataWorkTab(Tab tab, TableView<DataWorkDto> tableView) {
-        super(tab, tableView, new DataWorkTable(tableView));
+public class ActWorksTab extends TabManager<DataWorkDto> {
+
+   public ActWorksTab(Tab tab, TableView<DataWorkDto> tableView) {
+        super(tab, tableView, new DataWorkTable(tableView, tab.getId()));
     }
 
     @Override

@@ -6,10 +6,12 @@ import javafx.scene.control.*;
 import org.example.businesspack.dto.DataWorkDto;
 import org.example.businesspack.dto.PersonDto;
 import org.example.businesspack.entities.enums.PersonRole;
-import org.example.businesspack.services.PersonService;
+import org.example.businesspack.services.Service;
 import org.example.businesspack.services.impl.PersonServiceImpl;
-import org.example.businesspack.window.models.ComboBoxPersonManager;
-import org.example.businesspack.window.models.tab.DataWorkTab;
+import org.example.businesspack.window.models.combo_box.ComboBoxManager;
+import org.example.businesspack.window.models.combo_box.PersonComboBox;
+import org.example.businesspack.window.models.tab.AccountTab;
+import org.example.businesspack.window.models.tab.ActWorksTab;
 import org.example.businesspack.window.models.tab.TabManager;
 
 import java.net.URL;
@@ -17,10 +19,17 @@ import java.util.ResourceBundle;
 
 public class MainWindow {
 
-    private final PersonService servicePerson = new PersonServiceImpl();
+    private final Service<PersonDto> servicePerson = new PersonServiceImpl();
 
-    private TabManager<DataWorkDto> dataWorkManager; 
-    private TabManager<DataWorkDto> actWorksManager; 
+    private TabManager<DataWorkDto> dataWorkManager;
+    private TabManager<DataWorkDto> actWorksManager;
+
+    private ComboBoxManager<PersonDto> producerAccComboBox;
+    private ComboBoxManager<PersonDto> consumerAccComboBox;
+    private ComboBoxManager<PersonDto> producerActComboBox;
+    private ComboBoxManager<PersonDto> consumerActComboBox;
+    private ComboBoxManager<PersonDto> passedActComboBox;
+    private ComboBoxManager<PersonDto> acceptedActComboBox;
 
     @FXML
     private ResourceBundle resources;
@@ -32,22 +41,22 @@ public class MainWindow {
     private Tab account, actWorks, orderOutfit;
 
     @FXML
-    private TableView<DataWorkDto> tableAccount, tableActWorks;
+    private TableView<DataWorkDto> tableAcc, tableAct;
 
     @FXML
     private TableColumn<DataWorkDto, String> count, group, name, price, summa, vat, unitMeas;
 
     @FXML
-    private DatePicker date;
+    private DatePicker dateAcc, dateAct;
 
     @FXML
-    private Button export, print, send, buttonIncrement;
+    private Button export, print, send, buttonIncrementAcc, buttonIncrementAct;
 
     @FXML
     private TextField labelNumber;
 
     @FXML
-    private ComboBox<PersonDto> producer, consumer;
+    private ComboBox<PersonDto> producerAcc, consumerAcc, producerAct, consumerAct, passedAct, acceptedAcc;
 
     @FXML
     void onExport(ActionEvent event) {
@@ -61,11 +70,8 @@ public class MainWindow {
 
     @FXML
     void onPrint(ActionEvent event) {
-        PersonDto selectedNameP = producer.getSelectionModel().getSelectedItem();///?????????
-        servicePerson.update(selectedNameP);
-
-        PersonDto selectedNameC = consumer.getSelectionModel().getSelectedItem();
-        servicePerson.update(selectedNameC);
+        producerAccComboBox.updateSelectedItem();
+        consumerAccComboBox.updateSelectedItem();
 
         System.out.println("Успешное обновление данных");
     }
@@ -77,13 +83,36 @@ public class MainWindow {
 
     @FXML
     void initialize() {
-        servicePerson.clearMonth();
+        servicePerson.delete();
 
-        dataWorkManager = new DataWorkTab(account, tableAccount);
-        actWorksManager = new DataWorkTab(actWorks, tableActWorks);
+        // Инициализация таба Счета
+        dataWorkManager = new AccountTab(account, tableAcc);        
+        initializeComboBoxProdCons(producerAccComboBox, consumerAccComboBox, producerAcc, consumerAcc);
 
-        ComboBoxPersonManager.configureComboBox(producer, PersonRole.PRODUCER, new PersonServiceImpl());
-        ComboBoxPersonManager.configureComboBox(consumer, PersonRole.CONSUMER, new PersonServiceImpl());
+        // Инициализация таба Акты
+        actWorksManager = new ActWorksTab(actWorks, tableAct);
+        initializeComboBoxProdCons(producerActComboBox, consumerActComboBox, producerAct, consumerAct);
+        initializeComboBoxPassedAccepted(passedActComboBox, acceptedActComboBox, passedAct, acceptedAcc);
+    }
+
+    private void initializeComboBoxProdCons(ComboBoxManager<PersonDto> prodManager,
+            ComboBoxManager<PersonDto> consManager,
+            ComboBox<PersonDto> producer,
+            ComboBox<PersonDto> consumer) {
+        prodManager = new PersonComboBox(producer, new PersonServiceImpl(), PersonRole.PRODUCER);
+        prodManager.configureComboBox();
+        consManager = new PersonComboBox(consumer, new PersonServiceImpl(), PersonRole.CONSUMER);
+        consManager.configureComboBox();
+    }
+
+    private void initializeComboBoxPassedAccepted(ComboBoxManager<PersonDto> passedManager,
+            ComboBoxManager<PersonDto> acceptedManager,
+            ComboBox<PersonDto> passed,
+            ComboBox<PersonDto> accepted) {
+        passedManager = new PersonComboBox(passed, new PersonServiceImpl(), PersonRole.PASSED);
+        passedManager.configureComboBox();
+        acceptedManager = new PersonComboBox(accepted, new PersonServiceImpl(), PersonRole.ACCEPTED);
+        acceptedManager.configureComboBox();
     }
 
 }

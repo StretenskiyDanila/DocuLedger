@@ -3,7 +3,8 @@ CREATE TABLE person(
     name        varchar         not null                                ,
     "role"      varchar         not null                                ,
     last_used   timestamp       not null    default current_date        ,
-    usage_count integer         not null    default 1
+    usage_count integer         not null    default 1                   ,
+    tab         varchar         not null
 );
 
 CREATE TABLE maintenance(
@@ -28,5 +29,6 @@ CREATE TABLE data_work(
     "group"     varchar                                                 ,
     vat         varchar                                                 ,
     unit_meas   varchar                                                 ,
-    summa       varchar
+    summa       varchar                                                 ,
+    tab         varchar         not null
 );

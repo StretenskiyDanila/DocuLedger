@@ -23,6 +23,7 @@ public class Builder {
                 .name(resultSet.getString("name"))
                 .group(resultSet.getString("group"))
                 .unitMeas(resultSet.getString("unit_meas"))
+                .tab(resultSet.getString("tab"))
                 .build();
     }
 

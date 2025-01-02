@@ -7,7 +7,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.example.businesspack.entities.Person;
-import org.example.businesspack.entities.enums.PersonRole;
 import org.example.businesspack.repositories.PersonRepository;
 import org.example.businesspack.utils.Builder;
 import org.example.businesspack.utils.StringQuery;
@@ -42,9 +41,10 @@ public class PersonRepositoryImpl extends PersonRepository {
     }
 
     @Override
-    public List<Person> get(PersonRole role) throws SQLException {
+    public List<Person> get(String role, String tab) throws SQLException {
         try (PreparedStatement ps = da.getConnection().prepareStatement(StringQuery.QUERY_GET_PERSON_FOR_ROLE)) {
-            ps.setString(1, role.getName());
+            ps.setString(1, role);
+            ps.setString(2, tab);
             ResultSet rs = ps.executeQuery();
 
             List<Person> entities = new ArrayList<>();

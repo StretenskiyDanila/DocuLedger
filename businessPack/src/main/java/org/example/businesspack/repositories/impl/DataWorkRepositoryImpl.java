@@ -42,8 +42,9 @@ public class DataWorkRepositoryImpl extends DataWorkRepository {
     }
 
     @Override
-    public List<DataWork> get() throws SQLException {
-        try (PreparedStatement ps = da.getConnection().prepareStatement(StringQuery.QUERY_GET_DATA_WORK)) {
+    public List<DataWork> get(String tab) throws SQLException {
+        try (PreparedStatement ps = da.getConnection().prepareStatement(StringQuery.QUERY_GET_DATA_WORK_FOR_TAB)) {
+            ps.setString(1, tab);
             ResultSet rs = ps.executeQuery();
 
             List<DataWork> entities = new ArrayList<>();

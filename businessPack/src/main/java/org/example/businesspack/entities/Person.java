@@ -20,6 +20,7 @@ public class Person extends Table{
     private PersonRole role;
     private LocalDate lastUsed;
     private Integer usageCount;
+    private String tab;
 
     @Override
     public String getTableName() {
