@@ -41,10 +41,10 @@ public class PersonRepositoryImpl extends PersonRepository {
     }
 
     @Override
-    public List<Person> get(String role, String tab) throws SQLException {
+    public List<Person> get(String... param) throws SQLException {
         try (PreparedStatement ps = da.getConnection().prepareStatement(StringQuery.QUERY_GET_PERSON_FOR_ROLE)) {
-            ps.setString(1, role);
-            ps.setString(2, tab);
+            ps.setString(1, param[0]);
+            ps.setString(2, param[1]);
             ResultSet rs = ps.executeQuery();
 
             List<Person> entities = new ArrayList<>();

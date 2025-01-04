@@ -28,7 +28,7 @@ public class PersonServiceImpl implements Service<PersonDto> {
     }
 
     @Override
-    public List<PersonDto> get(String parameter) {
+    public List<PersonDto> get(String... parameter) {
         List<PersonDto> models = new ArrayList<>();
         try {
             List<Person> accounts = personRepository.get(parameter);

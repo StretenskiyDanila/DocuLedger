@@ -1,16 +1,20 @@
 package org.example.businesspack.window.models.tab;
 
+import java.util.List;
+
 import org.example.businesspack.dto.DataWorkDto;
+import org.example.businesspack.dto.PersonDto;
 import org.example.businesspack.window.models.table.DataWorkTable;
 
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 
 public class ActWorksTab extends TabManager<DataWorkDto> {
 
-   public ActWorksTab(Tab tab, TableView<DataWorkDto> tableView) {
-        super(tab, tableView, new DataWorkTable(tableView, tab.getId()));
+   public ActWorksTab(Tab tab, TableView<DataWorkDto> tableView, List<ComboBox<PersonDto>> comboBoxs) {
+        super(tab, tableView, new DataWorkTable(tableView, tab.getId()), comboBoxs);
     }
 
     @Override

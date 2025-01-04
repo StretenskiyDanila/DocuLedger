@@ -15,8 +15,8 @@ public class PersonComboBox extends ComboBoxManager<PersonDto> {
 
     private final PersonRole role;
 
-    public PersonComboBox(ComboBox<PersonDto> comboBox, Service<PersonDto> service, PersonRole role) {
-        super(comboBox, service);
+    public PersonComboBox(ComboBox<PersonDto> comboBox, Service<PersonDto> service, PersonRole role, String tabName) {
+        super(comboBox, service, tabName);
         this.role = role;
         // setConfigurationComboBox();
     }
@@ -44,16 +44,17 @@ public class PersonComboBox extends ComboBoxManager<PersonDto> {
 
     @Override
     protected List<PersonDto> get() {
-        return service.get(role.getName());
+        return service.get(role.getName(), tabName);
     }
 
     @Override
     protected void updateEnterItem() {
         PersonDto item = selectedItem.orElse(PersonDto.builder()
                 .name(comboBox.getEditor().getText())
+                .tab(tabName)
                 .role(role)
                 .build());
-
+        System.out.println(tabName);
         item.setId(service.update(item));
         items.add(item);
     }

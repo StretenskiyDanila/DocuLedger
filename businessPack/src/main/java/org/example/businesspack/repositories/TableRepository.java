@@ -18,7 +18,7 @@ public abstract class TableRepository<T extends Table> {
 
     public abstract Long update(T entity) throws SQLException;
 
-    public abstract List<T> get(String parameter) throws SQLException;
+    public abstract List<T> get(String... parameter) throws SQLException;
 
     protected abstract void buildPs(T entity, PreparedStatement ps, int count) throws SQLException;
 

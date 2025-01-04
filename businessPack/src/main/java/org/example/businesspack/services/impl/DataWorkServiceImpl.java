@@ -30,10 +30,10 @@ public class DataWorkServiceImpl implements Service<DataWorkDto> {
     }
 
     @Override
-    public List<DataWorkDto> get(String parameter) {
+    public List<DataWorkDto> get(String... param) {
         List<DataWorkDto> models = new ArrayList<>();
         try {
-            List<DataWork> accounts = accountRepository.get(parameter);
+            List<DataWork> accounts = accountRepository.get(param);
             if (accounts != null) {
                 models = accounts.stream()
                         .map(DataWorkDto::of)
