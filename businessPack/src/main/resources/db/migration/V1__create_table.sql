@@ -23,12 +23,12 @@ CREATE TABLE journal_work(
 
 CREATE TABLE data_work(
     id          integer         primary key autoincrement               ,
-    count       varchar                                                 ,
     name        varchar                                                 ,
-    price       varchar                                                 ,
+    unit_meas   varchar(10)                                             ,
+    count       integer         default 0                               ,
+    price       numeric(10,2)                                           ,
+    vat         numeric(3,2)                                            ,
+    summa       numeric(10,2)                                           ,
     "group"     varchar                                                 ,
-    vat         varchar                                                 ,
-    unit_meas   varchar                                                 ,
-    summa       varchar                                                 ,
     tab         varchar         not null
 );
