@@ -11,14 +11,11 @@ import javafx.util.StringConverter;
 
 public class PersonComboBox extends ComboBoxManager<PersonDto> {
 
-    // TODO Не работает занос новых имен в таблицу !!!
-
     private final PersonRole role;
 
     public PersonComboBox(ComboBox<PersonDto> comboBox, Service<PersonDto> service, PersonRole role, String tabName) {
         super(comboBox, service, tabName);
         this.role = role;
-        // setConfigurationComboBox();
     }
 
     @Override
@@ -37,6 +34,7 @@ public class PersonComboBox extends ComboBoxManager<PersonDto> {
                         .orElse(PersonDto.builder()
                                 .name(name)
                                 .role(role)
+                                .tab(tabName)
                                 .build());
             }
         };
@@ -51,10 +49,8 @@ public class PersonComboBox extends ComboBoxManager<PersonDto> {
     protected void updateEnterItem() {
         PersonDto item = selectedItem.orElse(PersonDto.builder()
                 .name(comboBox.getEditor().getText())
-                .tab(tabName)
                 .role(role)
                 .build());
-        System.out.println(tabName);
         item.setId(service.update(item));
         items.add(item);
     }
@@ -63,31 +59,5 @@ public class PersonComboBox extends ComboBoxManager<PersonDto> {
     protected boolean filteredItem(PersonDto item, String newValue) {
         return item.getName().toLowerCase().contains(newValue.toLowerCase());
     }
-
-    // private void setConfigurationComboBox() {
-    //     comboBox.setButtonCell(new ListCell<>() {
-    //         @Override
-    //         protected void updateItem(PersonDto item, boolean empty) {
-    //             super.updateItem(item, empty);
-    //             if (empty || item == null) {
-    //                 setText(null);
-    //             } else {
-    //                 setText(item.getName());
-    //             }
-    //         }
-    //     });
-
-    //     comboBox.setCellFactory(param -> new ListCell<>() {
-    //         @Override
-    //         protected void updateItem(PersonDto item, boolean empty) {
-    //             super.updateItem(item, empty);
-    //             if (empty || item == null) {
-    //                 setText(null);
-    //             } else {
-    //                 setText(item.getName());
-    //             }
-    //         }
-    //     });
-    // }
 
 }
