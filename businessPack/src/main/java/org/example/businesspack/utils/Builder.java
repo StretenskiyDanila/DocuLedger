@@ -16,13 +16,14 @@ public class Builder {
     public DataWork buildDataWork(ResultSet resultSet) throws SQLException {
         return DataWork.builder()
                 .id(resultSet.getLong("id"))
-                .count(resultSet.getString("count"))
-                .summa(resultSet.getString("summa"))
-                .vat(resultSet.getString("vat"))
-                .price(resultSet.getString("price"))
+                .count(resultSet.getInt("count"))
+                .summa(resultSet.getBigDecimal("summa"))
+                .vat(resultSet.getBigDecimal("vat"))
+                .price(resultSet.getBigDecimal("price"))
                 .name(resultSet.getString("name"))
                 .group(resultSet.getString("group"))
                 .unitMeas(resultSet.getString("unit_meas"))
+                .tab(resultSet.getString("tab"))
                 .build();
     }
 

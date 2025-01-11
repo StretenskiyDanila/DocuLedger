@@ -11,9 +11,11 @@ public class StringQuery {
 
         public final String QUERY_GET_DATA_WORK = "SELECT * FROM data_work;";
 
-        public final String QUERY_INSERT_DATA_WORK = "INSERT INTO data_work(\"group\", count, name, price, summa, unit_meas, vat) "
+        public final String QUERY_GET_DATA_WORK_FOR_TAB = "SELECT * FROM data_work WHERE tab = ?;";
+
+        public final String QUERY_INSERT_DATA_WORK = "INSERT INTO data_work(\"group\", count, name, price, summa, unit_meas, vat, tab) "
                         +
-                        "VALUES (?, ?, ?, ?, ?, ?, ?) " +
+                        "VALUES (?, ?, ?, ?, ?, ?, ?, ?) " +
                         "RETURNING id;";
 
         public final String QUERY_DELETE_DATA_WORK = "DELETE FROM data_work " +
@@ -28,10 +30,10 @@ public class StringQuery {
          * Запросы с физ.лицами
          */
 
-        public final String QUERY_GET_PERSON_FOR_ROLE = "SELECT * FROM person WHERE role = ?;";
+        public final String QUERY_GET_PERSON_FOR_ROLE = "SELECT * FROM person WHERE role = ? AND tab = ?;";
 
-        public final String QUERY_INSERT_PERSON = "INSERT INTO person(name, role) " +
-                        "VALUES (?, ?) " +
+        public final String QUERY_INSERT_PERSON = "INSERT INTO person(name, role, tab) " +
+                        "VALUES (?, ?, ?) " +
                         "RETURNING id;";
 
         public final String QUERY_UPDATE_PERSON = "UPDATE person " +

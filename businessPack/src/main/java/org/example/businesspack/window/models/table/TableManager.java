@@ -1,40 +1,53 @@
 package org.example.businesspack.window.models.table;
 
+import java.util.List;
 import java.util.Optional;
+import java.util.function.BiConsumer;
+import java.util.function.Function;
 
-import org.example.businesspack.services.DataWorkService;
+import org.example.businesspack.services.Service;
+
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
-import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
+import javafx.scene.control.skin.TableColumnHeader;
 import javafx.scene.input.KeyCode;
+import javafx.util.StringConverter;
 
 public abstract class TableManager<T> {
 
     private final TableView<T> table;
-    protected final DataWorkService<T> service;
+    protected final Service<T> service;
 
-    private ObservableList<T> items;
+    protected ObservableList<T> items;
     private Optional<T> selectedDataWork;
 
-    public TableManager(TableView<T> tableAccount, DataWorkService<T> service) {
+    protected final String tabName;
+
+    public TableManager(TableView<T> tableAccount, Service<T> service, String tabName) {
         this.table = tableAccount;
         this.selectedDataWork = Optional.empty();
         this.service = service;
+        this.tabName = tabName;
         initializeTable();
     }
 
     private void initializeTable() {
-        items = FXCollections.observableList(service.get()); //TODO: перенести на 2 класса и добавить в таблицу колонку accounts/actWorks 
+        items = FXCollections.observableList(get());
 
         table.setItems(items);
         table.setEditable(true);
         table.setOnMouseClicked(event -> {
             if (event.getClickCount() == 1) {
+                if (event.getTarget() instanceof TableColumnHeader) {
+                    return;
+                }
+
                 if (table.getSelectionModel() == null || table.getSelectionModel().getSelectedItem() == null) {
-                    onMouseClicked(items);
+                    onMouseClicked();
                     table.setItems(items);
                     clearSelectedItem();
                 }
@@ -45,19 +58,23 @@ public abstract class TableManager<T> {
         setupKeyboardEvents();
     }
 
-    public void configureColumn(TableColumn<T, String> column, String property) {
-        column.setCellValueFactory(new PropertyValueFactory<>(property));
-        column.setCellFactory(TextFieldTableCell.forTableColumn());
-        column.setOnEditCommit(event -> {
-            T item = event.getRowValue();
-            onColumnEdit(item, property, event.getNewValue());
-            service.update(item);
-            clearSelectedItem();
-        });
+    public <P> void configureColumn(TableColumn<T, P> column, Function<T, ObservableValue<P>> property,
+            boolean editable, StringConverter<P> converter, BiConsumer<T, P> onEditCommit) {
+        column.setCellValueFactory(cellData -> property.apply(cellData.getValue()));
+        if (editable) {
+            column.setCellFactory(TextFieldTableCell.forTableColumn(converter));
+            column.setOnEditCommit(event -> {
+                T item = event.getRowValue();
+                onEditCommit.accept(item, event.getNewValue());
+                service.update(item);
+                clearSelectedItem();
+            });
+        }
     }
 
-    protected abstract void onMouseClicked(ObservableList<T> items);
-    protected abstract void onColumnEdit(T item, String property, String newValue);
+    protected abstract List<T> get();
+
+    protected abstract void onMouseClicked();
 
     private void setupKeyboardEvents() {
         table.setOnKeyPressed(event -> {
@@ -65,10 +82,10 @@ public abstract class TableManager<T> {
                 selectedDataWork.ifPresentOrElse(item -> {
                     deleteSelectedRow(item);
                 }, () -> {
-                    System.out.println("No selected row"); //TODO: заменить на обработку
+                    System.out.println("No selected row"); // TODO: заменить на обработку
                 });
             }
-            if (event.getCode() == KeyCode.ESCAPE) { 
+            if (event.getCode() == KeyCode.ESCAPE) {
                 clearSelectedItem();
             }
         });

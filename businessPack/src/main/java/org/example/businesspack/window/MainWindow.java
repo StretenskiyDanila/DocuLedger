@@ -5,22 +5,23 @@ import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import org.example.businesspack.dto.DataWorkDto;
 import org.example.businesspack.dto.PersonDto;
-import org.example.businesspack.entities.enums.PersonRole;
-import org.example.businesspack.services.PersonService;
+import org.example.businesspack.services.Service;
 import org.example.businesspack.services.impl.PersonServiceImpl;
-import org.example.businesspack.window.models.ComboBoxPersonManager;
-import org.example.businesspack.window.models.tab.DataWorkTab;
+import org.example.businesspack.window.models.tab.AccountTab;
+import org.example.businesspack.window.models.tab.ActWorksTab;
 import org.example.businesspack.window.models.tab.TabManager;
 
+import java.math.BigDecimal;
 import java.net.URL;
+import java.util.List;
 import java.util.ResourceBundle;
 
 public class MainWindow {
 
-    private final PersonService servicePerson = new PersonServiceImpl();
+    private final Service<PersonDto> servicePerson = new PersonServiceImpl();
 
-    private TabManager<DataWorkDto> dataWorkManager; 
-    private TabManager<DataWorkDto> actWorksManager; 
+    private TabManager<DataWorkDto> dataWorkManager;
+    private TabManager<DataWorkDto> actWorksManager;
 
     @FXML
     private ResourceBundle resources;
@@ -32,22 +33,28 @@ public class MainWindow {
     private Tab account, actWorks, orderOutfit;
 
     @FXML
-    private TableView<DataWorkDto> tableAccount, tableActWorks;
+    private TableView<DataWorkDto> tableAcc, tableAct;
 
     @FXML
-    private TableColumn<DataWorkDto, String> count, group, name, price, summa, vat, unitMeas;
+    private TableColumn<DataWorkDto, String> group, name, unitMeas;
+    
+    @FXML
+    private TableColumn<DataWorkDto, Integer> count;
+    
+    @FXML
+    private TableColumn<DataWorkDto, BigDecimal> price, summa, vat;
 
     @FXML
-    private DatePicker date;
+    private DatePicker dateAcc, dateAct;
 
     @FXML
-    private Button export, print, send, buttonIncrement;
+    private Button export, print, send, buttonIncrementAcc, buttonIncrementAct;
 
     @FXML
     private TextField labelNumber;
 
     @FXML
-    private ComboBox<PersonDto> producer, consumer;
+    private ComboBox<PersonDto> producerAcc, consumerAcc, producerAct, consumerAct, passedAct, acceptedAct;
 
     @FXML
     void onExport(ActionEvent event) {
@@ -61,11 +68,15 @@ public class MainWindow {
 
     @FXML
     void onPrint(ActionEvent event) {
-        PersonDto selectedNameP = producer.getSelectionModel().getSelectedItem();///?????????
-        servicePerson.update(selectedNameP);
+        if (account.isSelected()) {
+            dataWorkManager.updateSelectedItem();
+        }
+        else if (actWorks.isSelected()) {
+            actWorksManager.updateSelectedItem();
+        }
+        else {
 
-        PersonDto selectedNameC = consumer.getSelectionModel().getSelectedItem();
-        servicePerson.update(selectedNameC);
+        }
 
         System.out.println("Успешное обновление данных");
     }
@@ -77,13 +88,14 @@ public class MainWindow {
 
     @FXML
     void initialize() {
-        servicePerson.clearMonth();
+        servicePerson.delete();
 
-        dataWorkManager = new DataWorkTab(account, tableAccount);
-        actWorksManager = new DataWorkTab(actWorks, tableActWorks);
+        // Инициализация таба Счета
+        dataWorkManager = new AccountTab(account, tableAcc, List.of(producerAcc, consumerAcc));        
 
-        ComboBoxPersonManager.configureComboBox(producer, PersonRole.PRODUCER, new PersonServiceImpl());
-        ComboBoxPersonManager.configureComboBox(consumer, PersonRole.CONSUMER, new PersonServiceImpl());
+        // Инициализация таба Акты
+        actWorksManager = new ActWorksTab(actWorks, tableAct, List.of(producerAct, consumerAct, passedAct, acceptedAct));
     }
+
 
 }

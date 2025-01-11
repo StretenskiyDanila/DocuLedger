@@ -3,7 +3,8 @@ CREATE TABLE person(
     name        varchar         not null                                ,
     "role"      varchar         not null                                ,
     last_used   timestamp       not null    default current_date        ,
-    usage_count integer         not null    default 1
+    usage_count integer         not null    default 1                   ,
+    tab         varchar         not null
 );
 
 CREATE TABLE maintenance(
@@ -22,11 +23,12 @@ CREATE TABLE journal_work(
 
 CREATE TABLE data_work(
     id          integer         primary key autoincrement               ,
-    count       varchar                                                 ,
     name        varchar                                                 ,
-    price       varchar                                                 ,
+    unit_meas   varchar(10)                                             ,
+    count       integer         default 0                               ,
+    price       numeric(10,2)                                           ,
+    vat         numeric(3,2)                                            ,
+    summa       numeric(10,2)                                           ,
     "group"     varchar                                                 ,
-    vat         varchar                                                 ,
-    unit_meas   varchar                                                 ,
-    summa       varchar
+    tab         varchar         not null
 );

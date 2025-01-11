@@ -3,9 +3,9 @@ package org.example.businesspack.services.impl;
 import lombok.RequiredArgsConstructor;
 import org.example.businesspack.dto.DataWorkDto;
 import org.example.businesspack.entities.DataWork;
-import org.example.businesspack.repositories.TableRepository;
+import org.example.businesspack.repositories.DataWorkRepository;
 import org.example.businesspack.repositories.impl.DataWorkRepositoryImpl;
-import org.example.businesspack.services.DataWorkService;
+import org.example.businesspack.services.Service;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -13,9 +13,9 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
-public class DataWorkServiceImpl implements DataWorkService<DataWorkDto> {
+public class DataWorkServiceImpl implements Service<DataWorkDto> {
 
-    private final TableRepository<DataWork> accountRepository = new DataWorkRepositoryImpl();
+    private final DataWorkRepository accountRepository = new DataWorkRepositoryImpl();
 
     @Override
     public Long save(DataWorkDto entity) {
@@ -30,10 +30,10 @@ public class DataWorkServiceImpl implements DataWorkService<DataWorkDto> {
     }
 
     @Override
-    public List<DataWorkDto> get() {
+    public List<DataWorkDto> get(String... param) {
         List<DataWorkDto> models = new ArrayList<>();
         try {
-            List<DataWork> accounts = accountRepository.get();
+            List<DataWork> accounts = accountRepository.get(param);
             if (accounts != null) {
                 models = accounts.stream()
                         .map(DataWorkDto::of)
@@ -71,6 +71,11 @@ public class DataWorkServiceImpl implements DataWorkService<DataWorkDto> {
             exception.printStackTrace();
         }
         return id;
+    }
+
+    @Override
+    public void delete() {
+       throw new UnsupportedOperationException("Not support operation");   
     }
 
 }

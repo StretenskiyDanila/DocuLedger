@@ -2,17 +2,16 @@ package org.example.businesspack.services.impl;
 
 import org.example.businesspack.dto.PersonDto;
 import org.example.businesspack.entities.Person;
-import org.example.businesspack.entities.enums.PersonRole;
 import org.example.businesspack.repositories.PersonRepository;
 import org.example.businesspack.repositories.impl.PersonRepositoryImpl;
-import org.example.businesspack.services.PersonService;
+import org.example.businesspack.services.Service;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class PersonServiceImpl implements PersonService {
+public class PersonServiceImpl implements Service<PersonDto> {
 
     private final PersonRepository personRepository = new PersonRepositoryImpl();
 
@@ -29,10 +28,10 @@ public class PersonServiceImpl implements PersonService {
     }
 
     @Override
-    public List<PersonDto> get(PersonRole role) {
+    public List<PersonDto> get(String... parameter) {
         List<PersonDto> models = new ArrayList<>();
         try {
-            List<Person> accounts = personRepository.get(role);
+            List<Person> accounts = personRepository.get(parameter);
             if (accounts != null) {
                 models = accounts.stream()
                         .map(PersonDto::of)
@@ -64,7 +63,7 @@ public class PersonServiceImpl implements PersonService {
     }
 
     @Override
-    public void clearMonth() {
+    public void delete() {
         try {
             personRepository.delete();
             personRepository.update();
@@ -72,5 +71,11 @@ public class PersonServiceImpl implements PersonService {
             e.printStackTrace();
         };
     }
+
+    @Override
+    public void delete(PersonDto entity) {
+       throw new UnsupportedOperationException("Not support operation");   
+    }
+
 
 }

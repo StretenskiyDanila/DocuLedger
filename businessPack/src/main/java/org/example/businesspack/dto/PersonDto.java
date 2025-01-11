@@ -17,6 +17,7 @@ public class PersonDto {
     private PersonRole role;
     private LocalDate lastUsed;
     private Integer usageCount;
+    private String tab;
 
     public static PersonDto of(Person person) {
         return PersonDto.builder()
@@ -25,6 +26,7 @@ public class PersonDto {
                 .role(person.getRole())
                 .lastUsed(person.getLastUsed())
                 .usageCount(person.getUsageCount())
+                .tab(person.getTab())
                 .build();
     }
 
@@ -35,6 +37,7 @@ public class PersonDto {
                 .role(personDto.getRole())
                 .lastUsed(personDto.getLastUsed())
                 .usageCount(personDto.getUsageCount())
+                .tab(personDto.getTab())
                 .build();
     }
 
