@@ -21,22 +21,6 @@ public class DataWorkTable extends TableManager<DataWorkDto> {
     }
 
     @Override
-    protected void onColumnEdit(DataWorkDto item, String property, String newValue) {
-        if (item == null) {
-            item = new DataWorkDto(tabName);
-        }
-        switch (property) {
-            case "name" -> item.setName(newValue);
-            case "count" -> item.setCount(newValue);
-            case "vat" -> item.setVat(newValue);
-            case "group" -> item.setGroup(newValue);
-            case "price" -> item.setPrice(newValue);
-            case "summa" -> item.setSumma(newValue);
-            case "unitMeas" -> item.setUnitMeas(newValue);
-        }
-    }
-
-    @Override
     protected List<DataWorkDto> get() {
         return service.get(tabName);
     }

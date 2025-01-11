@@ -1,5 +1,7 @@
 package org.example.businesspack.entities;
 
+import java.math.BigDecimal;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -13,12 +15,12 @@ public class DataWork extends Table {
 
     private Long id;
     private String group;
-    private String count;
+    private Integer count;
     private String name;
-    private String price;
-    private String summa;
+    private BigDecimal price;
+    private BigDecimal summa;
     private String unitMeas;
-    private String vat;
+    private BigDecimal vat;
     private String tab;
 
     @Override

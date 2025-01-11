@@ -11,6 +11,7 @@ import org.example.businesspack.window.models.tab.AccountTab;
 import org.example.businesspack.window.models.tab.ActWorksTab;
 import org.example.businesspack.window.models.tab.TabManager;
 
+import java.math.BigDecimal;
 import java.net.URL;
 import java.util.List;
 import java.util.ResourceBundle;
@@ -35,7 +36,13 @@ public class MainWindow {
     private TableView<DataWorkDto> tableAcc, tableAct;
 
     @FXML
-    private TableColumn<DataWorkDto, String> count, group, name, price, summa, vat, unitMeas;
+    private TableColumn<DataWorkDto, String> group, name, unitMeas;
+    
+    @FXML
+    private TableColumn<DataWorkDto, Integer> count;
+    
+    @FXML
+    private TableColumn<DataWorkDto, BigDecimal> price, summa, vat;
 
     @FXML
     private DatePicker dateAcc, dateAct;
