@@ -17,8 +17,8 @@ CREATE TABLE journal_work(
     id          integer         primary key autoincrement               ,
     client      varchar         not null    unique                      ,
     work_date   timestamp       not null    default current_date        ,
-    maintenance varchar         not null    references maintenance(id)  ,
-    person      varchar         not null    references person(id)
+    maintenance integer         not null    references maintenance(id)  ,
+    person      integer         not null    references person(id)
 );
 
 CREATE TABLE data_work(

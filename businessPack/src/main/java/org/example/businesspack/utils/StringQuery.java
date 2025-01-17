@@ -1,5 +1,9 @@
 package org.example.businesspack.utils;
 
+import org.example.businesspack.configs.InitializeDatabase;
+
+import org.example.businesspack.Tables;
+
 import lombok.experimental.UtilityClass;
 
 @UtilityClass
@@ -8,6 +12,11 @@ public class StringQuery {
         /*
          * Запросы с таблицей выполненных работ
          */
+
+        public void s() {
+                var dsl = InitializeDatabase.dslContext;
+                dsl.select(Tables)
+        }
 
         public final String QUERY_GET_DATA_WORK = "SELECT * FROM data_work;";
 

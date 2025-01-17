@@ -3,6 +3,7 @@ package org.example.businesspack.repositories.impl;
 import org.example.businesspack.entities.DataWork;
 import org.example.businesspack.repositories.DataWorkRepository;
 import org.example.businesspack.utils.Builder;
+import org.example.businesspack.utils.ConnectionUtils;
 import org.example.businesspack.utils.StringQuery;
 
 import java.sql.PreparedStatement;
@@ -15,7 +16,7 @@ public class DataWorkRepositoryImpl extends DataWorkRepository {
 
     @Override
     public Long save(DataWork entity) throws SQLException {
-        try (PreparedStatement ps = da.getConnection().prepareStatement(StringQuery.QUERY_INSERT_DATA_WORK)) {
+        try (PreparedStatement ps = ConnectionUtils.getConnection().prepareStatement(StringQuery.QUERY_INSERT_DATA_WORK)) {
             buildPs(entity, ps, 1);
             
             return getIdExecute(ps);
@@ -24,7 +25,7 @@ public class DataWorkRepositoryImpl extends DataWorkRepository {
 
     @Override
     public void delete(DataWork entity) throws SQLException {
-        try (PreparedStatement ps = da.getConnection().prepareStatement(StringQuery.QUERY_DELETE_DATA_WORK)){
+        try (PreparedStatement ps = ConnectionUtils.getConnection().prepareStatement(StringQuery.QUERY_DELETE_DATA_WORK)){
             ps.setLong(1, entity.getId());
             ps.execute();
         }
@@ -32,7 +33,7 @@ public class DataWorkRepositoryImpl extends DataWorkRepository {
 
     @Override
     public Long update(DataWork entity) throws SQLException {
-        try (PreparedStatement ps = da.getConnection().prepareStatement(StringQuery.QUERY_UPDATE_DATA_WORK)){
+        try (PreparedStatement ps = ConnectionUtils.getConnection().prepareStatement(StringQuery.QUERY_UPDATE_DATA_WORK)){
             int count = 1;
             buildPs(entity, ps, count);
             ps.setLong(8, entity.getId());
@@ -43,7 +44,7 @@ public class DataWorkRepositoryImpl extends DataWorkRepository {
 
     @Override
     public List<DataWork> get(String... param) throws SQLException {
-        try (PreparedStatement ps = da.getConnection().prepareStatement(StringQuery.QUERY_GET_DATA_WORK_FOR_TAB)) {
+        try (PreparedStatement ps = ConnectionUtils.getConnection().prepareStatement(StringQuery.QUERY_GET_DATA_WORK_FOR_TAB)) {
             ps.setString(1, param[0]);
             ResultSet rs = ps.executeQuery();
 

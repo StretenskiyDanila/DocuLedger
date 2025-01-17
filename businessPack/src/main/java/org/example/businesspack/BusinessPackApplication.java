@@ -7,9 +7,12 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 
+import org.example.businesspack.configs.InitializeDatabase;
+
 public class BusinessPackApplication extends Application {
 
 	public static void main(String[] args) {
+		InitializeDatabase.initialize();
 		launch();
 	}
 
