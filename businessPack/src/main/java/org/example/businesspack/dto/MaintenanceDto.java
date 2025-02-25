@@ -1,25 +1,21 @@
 package org.example.businesspack.dto;
 
+import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.Data;
-import org.example.businesspack.entities.Maintenance;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import java.math.BigInteger;
 
 @Builder
-@Data
+@Getter
+@NoArgsConstructor
+@AllArgsConstructor
 public class MaintenanceDto {
 
     private Long id;
     private String nameMaintenance;
     private BigInteger amountMaintenance;
-
-    public static MaintenanceDto of(Maintenance maintenance) {
-        return MaintenanceDto.builder()
-                .id(maintenance.getId())
-                .nameMaintenance(maintenance.getNameMaintenance())
-                .amountMaintenance(maintenance.getAmountMaintenance())
-                .build();
-    }
+    private JournalWorkDto journalWork;
 
 }

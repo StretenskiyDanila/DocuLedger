@@ -5,7 +5,8 @@ import java.util.Optional;
 import java.util.function.BiConsumer;
 import java.util.function.Function;
 
-import org.example.businesspack.services.Service;
+import org.example.businesspack.dto.DataWorkDto;
+import org.example.businesspack.services.DataWorkService;
 
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
@@ -20,14 +21,14 @@ import javafx.util.StringConverter;
 public abstract class TableManager<T> {
 
     private final TableView<T> table;
-    protected final Service<T> service;
+    protected final DataWorkService service;
 
     protected ObservableList<T> items;
     private Optional<T> selectedDataWork;
 
     protected final String tabName;
 
-    public TableManager(TableView<T> tableAccount, Service<T> service, String tabName) {
+    public TableManager(TableView<T> tableAccount, DataWorkService service, String tabName) {
         this.table = tableAccount;
         this.selectedDataWork = Optional.empty();
         this.service = service;
@@ -66,7 +67,7 @@ public abstract class TableManager<T> {
             column.setOnEditCommit(event -> {
                 T item = event.getRowValue();
                 onEditCommit.accept(item, event.getNewValue());
-                service.update(item);
+                service.update((DataWorkDto) item);
                 clearSelectedItem();
             });
         }
@@ -93,7 +94,7 @@ public abstract class TableManager<T> {
 
     private void deleteSelectedRow(T item) {
         items.remove(item);
-        service.delete(item);
+        service.delete((DataWorkDto) item);
         table.setItems(items);
     }
 

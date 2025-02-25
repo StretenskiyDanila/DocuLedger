@@ -1,26 +1,29 @@
 package org.example.businesspack.repositories;
 
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
+import java.util.Collection;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 
-import org.example.businesspack.entities.Person;
+import org.example.businesspack.dto.PersonDto;
+import org.jooq.Condition;
+import org.jooq.DSLContext;
+import org.jooq.Field;
+import org.jooq.Name;
+import org.jooq.Record;
 
-public abstract class PersonRepository extends TableRepository<Person> {
+public interface PersonRepository {
 
-    @Override
-    public void delete(Person entity) throws SQLException {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
+    public abstract Integer save(DSLContext dsl, Collection<? extends Field<?>> columns, Record record);
 
-    public abstract void delete() throws SQLException;
-    public abstract void update() throws SQLException;
+    public abstract void delete(DSLContext dsl, Condition condition);
 
-    protected void buildPs(Person entity, PreparedStatement ps, int count) throws SQLException {
-        ps.setString(count++, entity.getName());
-        ps.setString(count++, entity.getRole().getName());
-        ps.setString(count, entity.getTab());
-    }
+    public abstract Integer update(DSLContext dsl, Map<Name, ?> entity, Condition condition);
 
+    public abstract List<PersonDto> get(DSLContext dsl, Condition condition);
 
+    public abstract Optional<PersonDto> getEntity(DSLContext dsl, Condition condition);
+
+    public Integer getUsageCount(DSLContext dsl, Condition condition);
 
 }

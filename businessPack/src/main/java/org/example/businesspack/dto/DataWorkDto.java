@@ -1,22 +1,22 @@
 package org.example.businesspack.dto;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-
 import java.math.BigDecimal;
 
-import org.example.businesspack.entities.DataWork;
-
 import javafx.beans.property.SimpleIntegerProperty;
-import javafx.beans.property.SimpleLongProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.Setter;
 
 @Builder
+@Getter
+@Setter
 @AllArgsConstructor
 public class DataWorkDto {
-
-    private SimpleLongProperty id;
+    
+    private SimpleIntegerProperty id;
     private SimpleStringProperty group;
     private SimpleIntegerProperty count;
     private SimpleStringProperty name;
@@ -36,149 +36,83 @@ public class DataWorkDto {
         summa = new SimpleObjectProperty<>();
         this.tab = tab;
 
+        addProperty();
+    }
+
+    public void addProperty() {
         count.addListener((obs, oldVal, newVal) -> updateTotal());
         price.addListener((obs, oldVal, newVal) -> updateTotal());
         vat.addListener((obs, oldVal, newVal) -> updateTotal());
         updateTotal();
     }
 
-    public static DataWorkDto of(DataWork account) {
-        return DataWorkDto.builder()
-                .id(new SimpleLongProperty(account.getId()))
-                .count(new SimpleIntegerProperty(account.getCount()))
-                .group(new SimpleStringProperty(account.getGroup()))
-                .summa(new SimpleObjectProperty<>(account.getSumma()))
-                .vat(new SimpleObjectProperty<>(account.getVat()))
-                .price(new SimpleObjectProperty<>(account.getPrice()))
-                .unitMeas(new SimpleStringProperty(account.getUnitMeas()))
-                .name(new SimpleStringProperty(account.getName()))
-                .tab(account.getTab())
-                .build();
-    }
-
-    public static DataWork to(DataWorkDto dataWorkDto) {
-        return DataWork.builder()
-                .id(dataWorkDto.getId())
-                .unitMeas(dataWorkDto.getUnitMeas())
-                .group(dataWorkDto.getGroup())
-                .count(dataWorkDto.getCount())
-                .price(dataWorkDto.getPrice())
-                .name(dataWorkDto.getName())
-                .vat(dataWorkDto.getVat())
-                .summa(dataWorkDto.getSumma())
-                .tab(dataWorkDto.getTab())
-                .build();
-    }
-
-    public Long getId() {
+    public Integer getIdParameter() {
         return id == null ? null : id.get();
     }
 
-    public void setId(Long id) {
-        if (this.id == null) this.id = new SimpleLongProperty();
+    public void setIdParameter(Integer id) {
+        if (this.id == null) this.id = new SimpleIntegerProperty();
         this.id.set(id);
     }
 
-    public SimpleLongProperty idProperty() {
-        return id;
-    }
-
-    public String getGroup() {
+    public String getGroupParameter() {
         return group.get();
     }
 
-    public void setGroup(String group) {
+    public void setGroupParameter(String group) {
         this.group.set(group);
     }
-    
-    public SimpleStringProperty groupProperty() {
-        return group;
-    }
 
-    public Integer getCount() {
+    public Integer getCountParameter() {
         return count.get();
     }
     
-    public void setCount(Integer count) {
+    public void setCountParameter(Integer count) {
         this.count.set(count);
     }
 
-    public SimpleIntegerProperty countProperty() {
-        return count;
-    }
-
-    public String getName() {
+    public String getNameParameter() {
         return name.get();
     }
 
-    public void setName(String name) {
+    public void setNameParameter(String name) {
         this.name.set(name);
     }
 
-    public SimpleStringProperty nameProperty() {
-        return name;
-    }
-
-    public BigDecimal getPrice() {
+    public BigDecimal getPriceParameter() {
         return price.get();
     }
 
-    public void setPrice(BigDecimal price) {
+    public void setPriceParameter(BigDecimal price) {
         this.price.set(price);
     }
 
-    public SimpleObjectProperty<BigDecimal> priceProperty() {
-        return price;
-    }
-
-    public BigDecimal getSumma() {
+    public BigDecimal getSummaParameter() {
         return summa.get();
     }
 
-    public void setSumma(BigDecimal summa) {
+    public void setSummaParameter(BigDecimal summa) {
         this.summa.set(summa);
     }
 
-    public SimpleObjectProperty<BigDecimal> summaProperty() {
-        return summa;
-    }
-
-    public String getUnitMeas() {
+    public String getUnitMeasParameter() {
         return unitMeas.get();
     }
 
-    public void setUnitMeas(String unitMeas) {
+    public void setUnitMeasParameter(String unitMeas) {
         this.unitMeas.set(unitMeas);
     }
 
-    public SimpleStringProperty unitMeasProperty() {
-        return unitMeas;
-    }
-
-    public BigDecimal getVat() {
+    public BigDecimal getVatParameter() {
         return vat.get();
     }
 
-    public void setVat(BigDecimal vat) {
+    public void setVatParameter(BigDecimal vat) {
         this.vat.set(vat);
-    }
-
-    public SimpleObjectProperty<BigDecimal> vatProperty() {
-        return vat;
-    }
-
-    public String getTab() {
-        return tab;
-    }
-
-    public void setTab(String tab) {
-        this.tab = tab;
     }
 
     private void updateTotal() {
         BigDecimal ostSumma = BigDecimal.ONE.subtract(vat.get());
         summa.set(price.get().multiply(ostSumma.multiply(BigDecimal.valueOf(count.get()))));
     }    
-
-
 }

@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
@@ -35,16 +36,32 @@
 		<dependency>
 			<groupId>org.xerial</groupId>
 			<artifactId>sqlite-jdbc</artifactId>
-			<version>3.46.1.3</version>
+			<version>3.49.0.0</version>
 		</dependency>
 
 		<!-- https://mvnrepository.com/artifact/org.flywaydb/flyway-core -->
 		<dependency>
 			<groupId>org.flywaydb</groupId>
 			<artifactId>flyway-core</artifactId>
-			<version>11.0.0</version>
+			<version>9.22.3</version>
 		</dependency>
 
+		<dependency>
+			<groupId>org.jooq</groupId>
+			<artifactId>jooq</artifactId>
+			<version>3.18.5</version>
+		</dependency>
+		<!-- JOOQ Codegen (для генерации классов) -->
+		<dependency>
+			<groupId>org.jooq</groupId>
+			<artifactId>jooq-meta</artifactId>
+			<version>3.18.5</version>
+		</dependency>
+		<dependency>
+			<groupId>org.jooq</groupId>
+			<artifactId>jooq-codegen</artifactId>
+			<version>3.18.5</version>
+		</dependency>
 
 	</dependencies>
 
@@ -57,6 +74,7 @@
 				<configuration>
 					<source>17</source>
 					<target>17</target>
+       				<encoding>UTF-8</encoding>
 				</configuration>
 			</plugin>
 			<plugin>
@@ -68,7 +86,8 @@
 						<!-- Default configuration for running with: mvn clean javafx:run -->
 						<id>default-cli</id>
 						<configuration>
-							<mainClass>org.example.businesspack./org.example.businesspack.BusinessPackApplication
+							<mainClass>
+								org.example.businesspack.BusinessPackApplication
 							</mainClass>
 							<launcher>app</launcher>
 							<jlinkZipName>app</jlinkZipName>
@@ -89,7 +108,59 @@
 				</includes>
 			</resource>
 		</resources>
-
 	</build>
+	<profiles>
+		<profile>
+			<id>generate-jooq-local</id>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.jooq</groupId>
+						<artifactId>jooq-codegen-maven</artifactId>
+						<version>3.18.5</version>
+						<executions>
+							<execution>
+								<id>generate-sources</id>
+								<phase>generate-sources</phase>
+								<goals>
+									<goal>generate</goal>
+								</goals>
+								<configuration>
+									<jdbc>
+										<driver>org.sqlite.JDBC</driver>
+										<url>jdbc:sqlite:src/main/resources/db/businessPackDb.sqlite</url>
+									</jdbc>
+									<generator>
+										<name>org.jooq.codegen.JavaGenerator</name>
+										<database>
+											<name>org.jooq.meta.sqlite.SQLiteDatabase</name>
+											<excludes>flyway_schema_history</excludes>
+										</database>
+										<target>
+											<packageName>org.example.businesspack.bd</packageName>
+											<directory>src/main/java</directory>
+										</target>
+										<strategy>
+											<name>org.jooq.codegen.DefaultGeneratorStrategy</name>
+										</strategy>
+									</generator>
+								</configuration>
+							</execution>
+						</executions>
+					</plugin>
+					<plugin>
+						<groupId>org.flywaydb</groupId>
+						<artifactId>flyway-maven-plugin</artifactId>
+						<version>9.22.3</version>
+						<configuration>
+							<url>jdbc:sqlite:src/main/resources/db/businessPackDb.sqlite</url>
+							<driver>org.sqlite.JDBC</driver>
+							<locations>filesystem:src/main/resources/db/migration</locations>
+						</configuration>
+					</plugin>	
+				</plugins>
+			</build>
+		</profile>
+	</profiles>
 
 </project>
