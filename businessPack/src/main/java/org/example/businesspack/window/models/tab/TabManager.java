@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.example.businesspack.dto.PersonDto;
-import org.example.businesspack.entities.enums.PersonRole;
+import org.example.businesspack.dto.enums.PersonRole;
 import org.example.businesspack.services.impl.PersonServiceImpl;
 import org.example.businesspack.window.models.combo_box.ComboBoxManager;
 import org.example.businesspack.window.models.combo_box.PersonComboBox;

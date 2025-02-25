@@ -3,25 +3,25 @@ package org.example.businesspack.window.models.combo_box;
 import java.util.List;
 import java.util.Optional;
 
-import org.example.businesspack.services.Service;
+import org.example.businesspack.services.PersonService;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.collections.transformation.FilteredList;
 import javafx.scene.control.ComboBox;
+import javafx.scene.input.KeyCode;
 import javafx.util.StringConverter;
 
 public abstract class ComboBoxManager<T> {
 
     protected ComboBox<T> comboBox;
-    protected Service<T> service;
+    protected PersonService service;
 
     protected ObservableList<T> items;
     protected Optional<T> selectedItem;
 
     protected String tabName;
 
-    ComboBoxManager(ComboBox<T> comboBox, Service<T> service, String tabName) {
+    ComboBoxManager(ComboBox<T> comboBox, PersonService service, String tabName) {
         this.comboBox = comboBox;
         this.service = service;
         this.tabName = tabName;
@@ -31,24 +31,24 @@ public abstract class ComboBoxManager<T> {
         items = FXCollections.observableArrayList(get());
 
         comboBox.setConverter(getConverter());
-        var itemsFiltered = new FilteredList<>(items, p -> true);
         comboBox.setItems(items);
 
-        comboBox.getEditor().textProperty().addListener((observable, oldValue, newValue) -> {
-            itemsFiltered.setPredicate(option -> filteredItem(option, newValue));
-
-            if (!newValue.isEmpty() && !items.isEmpty()) {
-                comboBox.show();
+        comboBox.getEditor().setOnKeyPressed(e -> {
+            if (e.getCode() == KeyCode.DOWN) {
+                if (!comboBox.isShowing()) comboBox.show();
+                comboBox.getSelectionModel().selectNext();
+            } else if (e.getCode() == KeyCode.UP) {
+                comboBox.getSelectionModel().selectPrevious();
+            } else if (e.getCode() == KeyCode.ENTER) {
+                comboBox.hide();
             }
-        });
-        
+            });     
         // TODO: добавить обработку перемещения по выпавшим данным
     }
 
     public void updateSelectedItem() {
         selectedItem = Optional.ofNullable(comboBox.getSelectionModel().getSelectedItem());
         updateEnterItem();
-        //comboBox.setItems(items);
     }
 
     protected abstract StringConverter<T> getConverter();

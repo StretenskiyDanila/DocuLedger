@@ -1,5 +1,7 @@
 package org.example.businesspack.window.models.table;
 
+import static org.example.businesspack.bd.Tables.DATA_WORK;
+
 import java.util.List;
 
 import org.example.businesspack.dto.DataWorkDto;
@@ -16,13 +18,13 @@ public class DataWorkTable extends TableManager<DataWorkDto> {
     @Override
     protected void onMouseClicked() {
         DataWorkDto item = new DataWorkDto(tabName);
-        item.setId(service.update(item));
+        item.setIdParameter(service.update(item));
         items.add(item);
     }
 
     @Override
     protected List<DataWorkDto> get() {
-        return service.get(tabName);
+        return service.get(DATA_WORK.TAB.eq(tabName));
     }
 
 }

@@ -1,22 +1,27 @@
 package org.example.businesspack.repositories;
 
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
+import java.util.Collection;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 
-import org.example.businesspack.entities.DataWork;
-import org.example.businesspack.utils.QueryUtils;
+import org.example.businesspack.dto.DataWorkDto;
+import org.jooq.Condition;
+import org.jooq.DSLContext;
+import org.jooq.Field;
+import org.jooq.Name;
+import org.jooq.Record;
 
-public abstract class DataWorkRepository extends TableRepository<DataWork> {
+public interface DataWorkRepository {
 
-    protected void buildPs(DataWork entity, PreparedStatement ps, int count) throws SQLException {
-        QueryUtils.toString(count++, ps, entity.getGroup());
-        QueryUtils.toInt(count++, ps, entity.getCount());
-        QueryUtils.toString(count++, ps, entity.getName());
-        QueryUtils.toBigDecimal(count++, ps, entity.getPrice());
-        QueryUtils.toBigDecimal(count++, ps, entity.getSumma());
-        QueryUtils.toString(count++, ps, entity.getUnitMeas());
-        QueryUtils.toBigDecimal(count++, ps, entity.getVat());
-        QueryUtils.toString(count, ps, entity.getTab());
-    }
+    public abstract Integer save(DSLContext dsl, Collection<? extends Field<?>> columns, Record record);
+
+    public abstract void delete(DSLContext dsl, Condition condition);
+
+    public abstract Integer update(DSLContext dsl, Map<Name, ?> entity, Condition condition);
+
+    public abstract List<DataWorkDto> get(DSLContext dsl, Condition condition);
+
+    public abstract Optional<DataWorkDto> getEntity(DSLContext dsl, Condition condition);
 
 }

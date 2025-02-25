@@ -23,21 +23,21 @@ public class AccountTab extends TabManager<DataWorkDto> {
 
     @Override
     protected void initialize() {
-        tableManager.configureColumn(getColumnById("name"), DataWorkDto::nameProperty, true,
-                new DefaultStringConverter(), (item, newValue) -> item.setName(newValue));
+        tableManager.configureColumn(getColumnById("name"), DataWorkDto::getName, true,
+                new DefaultStringConverter(), (item, newValue) -> item.getName().set(newValue));
         tableManager.configureColumn(getColumnById("count"),
-                dto -> (ObservableValue<Integer>) dto.countProperty().asObject(), true, new IntegerConverter(),
-                (item, newValue) -> item.setCount(newValue));
-        tableManager.configureColumn(getColumnById("vat"), DataWorkDto::vatProperty, true, new BigDecimalConverter(),
-                (item, newValue) -> item.setVat(newValue));
-        tableManager.configureColumn(getColumnById("group"), DataWorkDto::groupProperty, true,
-                new DefaultStringConverter(), (item, newValue) -> item.setGroup(newValue));
-        tableManager.configureColumn(getColumnById("price"), DataWorkDto::priceProperty, true,
-                new BigDecimalConverter(), (item, newValue) -> item.setPrice(newValue));
-        tableManager.configureColumn(getColumnById("summa"), DataWorkDto::summaProperty, false,
-                new BigDecimalConverter(), (item, newValue) -> item.setSumma(newValue));
-        tableManager.configureColumn(getColumnById("unitMeas"), DataWorkDto::unitMeasProperty, true,
-                new DefaultStringConverter(), (item, newValue) -> item.setUnitMeas(newValue));
+                entity -> (ObservableValue<Integer>) entity.getCount().asObject(), true, new IntegerConverter(),
+                (item, newValue) -> item.getCount().set(newValue));
+        tableManager.configureColumn(getColumnById("vat"), DataWorkDto::getVat, true, new BigDecimalConverter(),
+                (item, newValue) -> item.getVat().set(newValue));
+        tableManager.configureColumn(getColumnById("group"), DataWorkDto::getGroup, true,
+                new DefaultStringConverter(), (item, newValue) -> item.getGroup().set(newValue));
+        tableManager.configureColumn(getColumnById("price"), DataWorkDto::getPrice, true,
+                new BigDecimalConverter(), (item, newValue) -> item.getPrice().set(newValue));
+        tableManager.configureColumn(getColumnById("summa"), DataWorkDto::getSumma, false,
+                new BigDecimalConverter(), (item, newValue) -> item.getSumma().set(newValue));
+        tableManager.configureColumn(getColumnById("unitMeas"), DataWorkDto::getUnitMeas, true,
+                new DefaultStringConverter(), (item, newValue) -> item.getUnitMeas().set(newValue));
     }
 
     @Override

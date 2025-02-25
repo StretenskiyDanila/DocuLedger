@@ -1,39 +1,38 @@
 package org.example.businesspack.utils;
 
-import java.sql.Date;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-
-import org.example.businesspack.entities.DataWork;
-import org.example.businesspack.entities.Person;
-import org.example.businesspack.entities.enums.PersonRole;
+import org.example.businesspack.dto.DataWorkDto;
+import org.example.businesspack.dto.PersonDto;
+import org.jooq.DSLContext;
+import org.jooq.Record;
 
 import lombok.experimental.UtilityClass;
+
+import static org.example.businesspack.bd.Tables.DATA_WORK;
+import static org.example.businesspack.bd.Tables.PERSON;;
 
 @UtilityClass
 public class Builder {
 
-    public DataWork buildDataWork(ResultSet resultSet) throws SQLException {
-        return DataWork.builder()
-                .id(resultSet.getLong("id"))
-                .count(resultSet.getInt("count"))
-                .summa(resultSet.getBigDecimal("summa"))
-                .vat(resultSet.getBigDecimal("vat"))
-                .price(resultSet.getBigDecimal("price"))
-                .name(resultSet.getString("name"))
-                .group(resultSet.getString("group"))
-                .unitMeas(resultSet.getString("unit_meas"))
-                .tab(resultSet.getString("tab"))
-                .build();
+	public Record to(DSLContext dsl, DataWorkDto dataWorkDto) {
+        var record = dsl.newRecord(DATA_WORK.NAME, DATA_WORK.UNIT_MEAS, DATA_WORK.COUNT, DATA_WORK.PRICE,
+        DATA_WORK.VAT, DATA_WORK.SUMMA, DATA_WORK.GROUP, DATA_WORK.TAB);
+        record.set(DATA_WORK.NAME, dataWorkDto.getNameParameter());
+        record.set(DATA_WORK.COUNT, dataWorkDto.getCountParameter());
+        record.set(DATA_WORK.GROUP, dataWorkDto.getGroupParameter());
+        record.set(DATA_WORK.PRICE, dataWorkDto.getPriceParameter());
+        record.set(DATA_WORK.SUMMA, dataWorkDto.getSummaParameter());
+        record.set(DATA_WORK.UNIT_MEAS, dataWorkDto.getUnitMeasParameter());
+        record.set(DATA_WORK.VAT, dataWorkDto.getVatParameter());
+        record.set(DATA_WORK.TAB, dataWorkDto.getTab()); 
+        return record;
     }
 
-    public Person buildPerson(ResultSet resultSet) throws SQLException {
-        return Person.builder()
-                .id(resultSet.getLong("id"))
-                .name(resultSet.getString("name"))
-                .role(PersonRole.valueOf(resultSet.getString("role").toUpperCase()))
-                .lastUsed(Date.valueOf(resultSet.getString("last_used")).toLocalDate())
-                .build();
+	public Record to(DSLContext dsl, PersonDto personDto) {
+        var record = dsl.newRecord(PERSON.NAME, PERSON.ROLE, PERSON.TAB);
+        record.set(PERSON.NAME, personDto.getName());
+        record.set(PERSON.ROLE, personDto.getRole().getName());
+        record.set(PERSON.TAB, personDto.getTab());
+        return record;
     }
 
 }

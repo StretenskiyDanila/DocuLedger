@@ -1,10 +1,12 @@
 package org.example.businesspack.window.models.combo_box;
 
+import static org.example.businesspack.bd.Tables.PERSON;
+
 import java.util.List;
 
 import org.example.businesspack.dto.PersonDto;
-import org.example.businesspack.entities.enums.PersonRole;
-import org.example.businesspack.services.Service;
+import org.example.businesspack.dto.enums.PersonRole;
+import org.example.businesspack.services.PersonService;
 
 import javafx.scene.control.ComboBox;
 import javafx.util.StringConverter;
@@ -13,7 +15,7 @@ public class PersonComboBox extends ComboBoxManager<PersonDto> {
 
     private final PersonRole role;
 
-    public PersonComboBox(ComboBox<PersonDto> comboBox, Service<PersonDto> service, PersonRole role, String tabName) {
+    public PersonComboBox(ComboBox<PersonDto> comboBox, PersonService service, PersonRole role, String tabName) {
         super(comboBox, service, tabName);
         this.role = role;
     }
@@ -42,7 +44,8 @@ public class PersonComboBox extends ComboBoxManager<PersonDto> {
 
     @Override
     protected List<PersonDto> get() {
-        return service.get(role.getName(), tabName);
+        return service.get(PERSON.ROLE.eq(role.getName())
+                .and(PERSON.TAB.eq(tabName)));
     }
 
     @Override
@@ -57,7 +60,7 @@ public class PersonComboBox extends ComboBoxManager<PersonDto> {
 
     @Override
     protected boolean filteredItem(PersonDto item, String newValue) {
-        return item.getName().toLowerCase().contains(newValue.toLowerCase());
+        return newValue.isEmpty() || newValue == null ? true : item.getName().toLowerCase().contains(newValue.toLowerCase());
     }
 
 }

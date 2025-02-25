@@ -1,24 +1,31 @@
 package org.example.businesspack.window;
 
-import javafx.event.ActionEvent;
-import javafx.fxml.FXML;
-import javafx.scene.control.*;
-import org.example.businesspack.dto.DataWorkDto;
-import org.example.businesspack.dto.PersonDto;
-import org.example.businesspack.services.Service;
-import org.example.businesspack.services.impl.PersonServiceImpl;
-import org.example.businesspack.window.models.tab.AccountTab;
-import org.example.businesspack.window.models.tab.ActWorksTab;
-import org.example.businesspack.window.models.tab.TabManager;
-
 import java.math.BigDecimal;
 import java.net.URL;
 import java.util.List;
 import java.util.ResourceBundle;
 
+import org.example.businesspack.dto.DataWorkDto;
+import org.example.businesspack.dto.PersonDto;
+import org.example.businesspack.services.PersonService;
+import org.example.businesspack.services.impl.PersonServiceImpl;
+import org.example.businesspack.window.models.tab.AccountTab;
+import org.example.businesspack.window.models.tab.ActWorksTab;
+import org.example.businesspack.window.models.tab.TabManager;
+
+import javafx.event.ActionEvent;
+import javafx.fxml.FXML;
+import javafx.scene.control.Button;
+import javafx.scene.control.ComboBox;
+import javafx.scene.control.DatePicker;
+import javafx.scene.control.Tab;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
+import javafx.scene.control.TextField;
+
 public class MainWindow {
 
-    private final Service<PersonDto> servicePerson = new PersonServiceImpl();
+    private final PersonService servicePerson = new PersonServiceImpl();
 
     private TabManager<DataWorkDto> dataWorkManager;
     private TabManager<DataWorkDto> actWorksManager;
