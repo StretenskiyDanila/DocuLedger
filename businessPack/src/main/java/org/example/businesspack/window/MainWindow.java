@@ -23,7 +23,9 @@ import javafx.scene.control.Tab;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 public class MainWindow {
 
     private final PersonService servicePerson = new PersonServiceImpl();
@@ -93,7 +95,7 @@ public class MainWindow {
 
         }
 
-        System.out.println("Успешное обновление данных");
+        log.debug("Успешное обновление данных");
     }
 
     @FXML

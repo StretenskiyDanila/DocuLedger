@@ -7,7 +7,9 @@ import java.sql.SQLException;
 import org.example.businesspack.configs.ApplicationConfig;
 
 import lombok.Getter;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 public class ConnectionUtils {
 
     @Getter
@@ -22,8 +24,7 @@ public class ConnectionUtils {
         try {
             v = DriverManager.getConnection(URL, USER_NAME, PASSWORD);
         } catch (SQLException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+            log.error("Не удалось получить подлкючение к БД. Error: ", e.getMessage());
         }
         connection = v;
     }

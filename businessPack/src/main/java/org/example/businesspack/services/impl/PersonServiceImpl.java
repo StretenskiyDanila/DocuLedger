@@ -21,8 +21,12 @@ import org.jooq.Field;
 import org.jooq.Name;
 import org.jooq.TableField;
 import org.jooq.impl.DSL;
+
+import lombok.extern.slf4j.Slf4j;
+
 import org.jooq.Record;
 
+@Slf4j
 public class PersonServiceImpl implements PersonService {
 
     private final PersonRepository personRepository = new PersonRepositoryImpl();
@@ -73,6 +77,8 @@ public class PersonServiceImpl implements PersonService {
 
     @Override
     public void delete() {
+        log.info("Удаление старых записей");
+        
         Field<LocalDate> fieldFirstDateMonth = DSL.field("date(CURRENT_DATE, 'start of month')", LocalDate.class);
         Condition conditionDelete = DSL.currentLocalDate().eq(fieldFirstDateMonth)
                 .and(PERSON.USAGE_COUNT.le(1));

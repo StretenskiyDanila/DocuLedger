@@ -17,9 +17,13 @@ import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.scene.control.skin.TableColumnHeader;
 import javafx.scene.input.KeyCode;
 import javafx.util.StringConverter;
+import lombok.Getter;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 public abstract class TableManager<T> {
 
+    @Getter
     private final TableView<T> table;
     protected final DataWorkService service;
 
@@ -83,7 +87,7 @@ public abstract class TableManager<T> {
                 selectedDataWork.ifPresentOrElse(item -> {
                     deleteSelectedRow(item);
                 }, () -> {
-                    System.out.println("No selected row"); // TODO: заменить на обработку
+                    log.warn("No selected row");
                 });
             }
             if (event.getCode() == KeyCode.ESCAPE) {
