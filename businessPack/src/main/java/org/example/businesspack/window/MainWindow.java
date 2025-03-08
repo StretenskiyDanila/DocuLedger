@@ -7,6 +7,7 @@ import java.util.ResourceBundle;
 
 import org.example.businesspack.dto.DataWorkDto;
 import org.example.businesspack.dto.PersonDto;
+import org.example.businesspack.exports.PDFGenerator;
 import org.example.businesspack.services.PersonService;
 import org.example.businesspack.services.impl.PersonServiceImpl;
 import org.example.businesspack.window.models.tab.AccountTab;
@@ -29,6 +30,7 @@ public class MainWindow {
 
     private TabManager<DataWorkDto> dataWorkManager;
     private TabManager<DataWorkDto> actWorksManager;
+    private PDFGenerator pdfGenerator = new PDFGenerator();
 
     @FXML
     private ResourceBundle resources;
@@ -65,7 +67,13 @@ public class MainWindow {
 
     @FXML
     void onExport(ActionEvent event) {
-
+        String fileName = "output.pdf";
+        if (account.isSelected()) {
+            pdfGenerator.generatePdfItext(dataWorkManager, fileName);
+        }
+        else if (actWorks.isSelected()) {
+            pdfGenerator.generatePdfItext(actWorksManager, fileName);
+        }
     }
 
     @FXML
@@ -98,11 +106,10 @@ public class MainWindow {
         servicePerson.delete();
 
         // Инициализация таба Счета
-        dataWorkManager = new AccountTab(account, tableAcc, List.of(producerAcc, consumerAcc));        
+        dataWorkManager = new AccountTab(account, tableAcc, List.of(producerAcc, consumerAcc), dateAcc);        
 
         // Инициализация таба Акты
-        actWorksManager = new ActWorksTab(actWorks, tableAct, List.of(producerAct, consumerAct, passedAct, acceptedAct));
+        actWorksManager = new ActWorksTab(actWorks, tableAct, List.of(producerAct, consumerAct, passedAct, acceptedAct), dateAct);
     }
-
 
 }

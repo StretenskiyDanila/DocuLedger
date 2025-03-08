@@ -17,7 +17,7 @@ public class BusinessPackApplication extends Application {
 	public void start(Stage stage) throws IOException {
 		FXMLLoader fxmlLoader = new FXMLLoader(BusinessPackApplication.class.getResource("main-window.fxml"));
 		Scene scene = new Scene(fxmlLoader.load());
-		stage.setTitle("Hello!");
+		stage.setTitle("BusinessPack");
 		stage.setScene(scene);
 		stage.show();
 		stage.sizeToScene();
