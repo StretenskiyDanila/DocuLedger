@@ -1,0 +1,4 @@
+/.idea
+/.vscode
+/src/main/resources/db/businessPackDb.*
+/target

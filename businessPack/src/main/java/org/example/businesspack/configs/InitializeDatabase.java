@@ -7,7 +7,7 @@ import org.sqlite.SQLiteDataSource;
 
 public class InitializeDatabase {
 
-    private static final String URL = ApplicationConfig.getProperties("db_url");
+    private static final String URL = ApplicationConfig.getProperties("url");
 
     public static final DSLContext dslContext;
 
@@ -16,7 +16,6 @@ public class InitializeDatabase {
         dataSource.setUrl(URL);
 
         dslContext = DSL.using(dataSource, SQLDialect.SQLITE);
-        //FlywayContextProvider.initialize(URL, USER_NAME, PASSWORD);
     }
 
 }

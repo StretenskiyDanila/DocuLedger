@@ -2,11 +2,13 @@ package org.example.businesspack.repositories.impl;
 
 import static org.example.businesspack.bd.Tables.PERSON;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
+import com.sun.jdi.InvocationException;
 import org.example.businesspack.dto.PersonDto;
 import org.example.businesspack.dto.mapper.RecordPersonMapper;
 import org.example.businesspack.repositories.PersonRepository;
@@ -15,6 +17,7 @@ import org.jooq.DSLContext;
 import org.jooq.Field;
 import org.jooq.Name;
 import org.jooq.Record;
+import org.jooq.exception.DataAccessException;
 
 public class PersonRepositoryImpl implements PersonRepository {
 
@@ -36,9 +39,10 @@ public class PersonRepositoryImpl implements PersonRepository {
     // }
 
     @Override
-    public void delete(DSLContext dsl, Condition condition) {
+    public void delete(DSLContext dsl, Condition condition) throws DataAccessException {
         dsl.deleteFrom(PERSON)
-                .where(condition);
+                .where(condition)
+                .execute();
     }
     // "DELETE FROM person " +
     // "WHERE CURRENT_DATE = DATE(CURRENT_DATE, 'start of month') AND usage_count <= 1;"

@@ -10,9 +10,11 @@ import javafx.collections.ObservableList;
 import javafx.scene.control.ComboBox;
 import javafx.scene.input.KeyCode;
 import javafx.util.StringConverter;
+import lombok.Getter;
 
 public abstract class ComboBoxManager<T> {
 
+    @Getter
     protected ComboBox<T> comboBox;
     protected PersonService service;
 

@@ -22,7 +22,7 @@ public class PersonComboBox extends ComboBoxManager<PersonDto> {
 
     @Override
     protected StringConverter<PersonDto> getConverter() {
-        return new StringConverter<PersonDto>() {
+        return new StringConverter<>() {
             @Override
             public String toString(PersonDto person) {
                 return person == null ? null : person.getName();

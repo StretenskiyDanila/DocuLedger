@@ -10,15 +10,15 @@ import org.example.businesspack.window.models.table.converter.IntegerConverter;
 
 import javafx.beans.value.ObservableValue;
 import javafx.scene.control.ComboBox;
+import javafx.scene.control.DatePicker;
 import javafx.scene.control.Tab;
-import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.util.converter.DefaultStringConverter;
 
 public class ActWorksTab extends TabManager<DataWorkDto> {
 
-    public ActWorksTab(Tab tab, TableView<DataWorkDto> tableView, List<ComboBox<PersonDto>> comboBoxs) {
-        super(tab, tableView, new DataWorkTable(tableView, tab.getId()), comboBoxs);
+    public ActWorksTab(Tab tab, TableView<DataWorkDto> tableView, List<ComboBox<PersonDto>> comboBoxs, DatePicker datePicker) {
+        super(tab, new DataWorkTable(tableView, tab.getId()), comboBoxs, datePicker);
     }
 
     @Override
@@ -26,7 +26,7 @@ public class ActWorksTab extends TabManager<DataWorkDto> {
         tableManager.configureColumn(getColumnById("name"), DataWorkDto::getName, true,
                 new DefaultStringConverter(), (item, newValue) -> item.getName().set(newValue));
         tableManager.configureColumn(getColumnById("count"),
-                entity -> (ObservableValue<Integer>) entity.getCount().asObject(), true, new IntegerConverter(),
+                entity -> entity.getCount().asObject(), true, new IntegerConverter(),
                 (item, newValue) -> item.getCount().set(newValue));
         tableManager.configureColumn(getColumnById("vat"), DataWorkDto::getVat, true, new BigDecimalConverter(),
                 (item, newValue) -> item.getVat().set(newValue));
@@ -42,15 +42,6 @@ public class ActWorksTab extends TabManager<DataWorkDto> {
 
     @Override
     public void refresh() {
-    }
-
-    @SuppressWarnings("unchecked")
-    private <P> TableColumn<DataWorkDto, P> getColumnById(String columnId) {
-        return tableView.getColumns().stream()
-                .filter(column -> column.getId() != null && column.getId().equals(columnId))
-                .map(column -> (TableColumn<DataWorkDto, P>) column)
-                .findFirst()
-                .orElseThrow(() -> new IllegalArgumentException("Column with ID " + columnId + " not found"));
     }
 
 }

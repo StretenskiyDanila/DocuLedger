@@ -1,15 +1,17 @@
 package org.example.businesspack.configs;
 
 import lombok.Getter;
+import lombok.extern.slf4j.Slf4j;
 
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.Properties;
 
 @Getter
+@Slf4j
 public class ApplicationConfig {
 
-    private static final String FILE_NAME = "businessPack/src/main/resources/application.properties";
+    private static final String FILE_NAME = "src/main/resources/application.yaml";
     private static final Properties properties = new Properties();
 
     static {
@@ -17,7 +19,7 @@ public class ApplicationConfig {
             properties.load(inputStream);
         }
         catch (IOException e) {
-            e.printStackTrace(); //TODO: поправить на логирование
+            log.error("Не удалось загрузить параметры. Error: ", e.getMessage());
         }
     }
 

@@ -7,6 +7,7 @@ import java.util.ResourceBundle;
 
 import org.example.businesspack.dto.DataWorkDto;
 import org.example.businesspack.dto.PersonDto;
+import org.example.businesspack.exports.PDFGenerator;
 import org.example.businesspack.services.PersonService;
 import org.example.businesspack.services.impl.PersonServiceImpl;
 import org.example.businesspack.window.models.tab.AccountTab;
@@ -22,13 +23,16 @@ import javafx.scene.control.Tab;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 public class MainWindow {
 
     private final PersonService servicePerson = new PersonServiceImpl();
 
     private TabManager<DataWorkDto> dataWorkManager;
     private TabManager<DataWorkDto> actWorksManager;
+    private PDFGenerator pdfGenerator = new PDFGenerator();
 
     @FXML
     private ResourceBundle resources;
@@ -65,7 +69,13 @@ public class MainWindow {
 
     @FXML
     void onExport(ActionEvent event) {
-
+        String fileName = "output.pdf";
+        if (account.isSelected()) {
+            pdfGenerator.generatePdfItext(dataWorkManager, fileName);
+        }
+        else if (actWorks.isSelected()) {
+            pdfGenerator.generatePdfItext(actWorksManager, fileName);
+        }
     }
 
     @FXML
@@ -75,6 +85,7 @@ public class MainWindow {
 
     @FXML
     void onPrint(ActionEvent event) {
+        log.info("Запрос на обновление данных");
         if (account.isSelected()) {
             dataWorkManager.updateSelectedItem();
         }
@@ -85,7 +96,7 @@ public class MainWindow {
 
         }
 
-        System.out.println("Успешное обновление данных");
+        log.info("Успешное обновление данных");
     }
 
     @FXML
@@ -98,11 +109,10 @@ public class MainWindow {
         servicePerson.delete();
 
         // Инициализация таба Счета
-        dataWorkManager = new AccountTab(account, tableAcc, List.of(producerAcc, consumerAcc));        
+        dataWorkManager = new AccountTab(account, tableAcc, List.of(producerAcc, consumerAcc), dateAcc);        
 
         // Инициализация таба Акты
-        actWorksManager = new ActWorksTab(actWorks, tableAct, List.of(producerAct, consumerAct, passedAct, acceptedAct));
+        actWorksManager = new ActWorksTab(actWorks, tableAct, List.of(producerAct, consumerAct, passedAct, acceptedAct), dateAct);
     }
-
 
 }

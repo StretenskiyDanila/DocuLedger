@@ -5,15 +5,13 @@ import java.math.BigDecimal;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 @Builder
 @Getter
 @Setter
 @AllArgsConstructor
+@ToString
 public class DataWorkDto {
     
     private SimpleIntegerProperty id;

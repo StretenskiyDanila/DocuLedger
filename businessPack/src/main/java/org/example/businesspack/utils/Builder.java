@@ -8,7 +8,7 @@ import org.jooq.Record;
 import lombok.experimental.UtilityClass;
 
 import static org.example.businesspack.bd.Tables.DATA_WORK;
-import static org.example.businesspack.bd.Tables.PERSON;;
+import static org.example.businesspack.bd.Tables.PERSON;
 
 @UtilityClass
 public class Builder {
