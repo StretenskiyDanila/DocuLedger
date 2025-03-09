@@ -84,11 +84,9 @@ public abstract class TableManager<T> {
     private void setupKeyboardEvents() {
         table.setOnKeyPressed(event -> {
             if (event.getCode() == KeyCode.DELETE) {
-                selectedDataWork.ifPresentOrElse(item -> {
-                    deleteSelectedRow(item);
-                }, () -> {
-                    log.warn("No selected row");
-                });
+                selectedDataWork.ifPresentOrElse(
+                        this::deleteSelectedRow,
+                        () -> log.warn("No selected row"));
             }
             if (event.getCode() == KeyCode.ESCAPE) {
                 clearSelectedItem();

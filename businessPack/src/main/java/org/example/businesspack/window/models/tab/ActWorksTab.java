@@ -26,7 +26,7 @@ public class ActWorksTab extends TabManager<DataWorkDto> {
         tableManager.configureColumn(getColumnById("name"), DataWorkDto::getName, true,
                 new DefaultStringConverter(), (item, newValue) -> item.getName().set(newValue));
         tableManager.configureColumn(getColumnById("count"),
-                entity -> (ObservableValue<Integer>) entity.getCount().asObject(), true, new IntegerConverter(),
+                entity -> entity.getCount().asObject(), true, new IntegerConverter(),
                 (item, newValue) -> item.getCount().set(newValue));
         tableManager.configureColumn(getColumnById("vat"), DataWorkDto::getVat, true, new BigDecimalConverter(),
                 (item, newValue) -> item.getVat().set(newValue));

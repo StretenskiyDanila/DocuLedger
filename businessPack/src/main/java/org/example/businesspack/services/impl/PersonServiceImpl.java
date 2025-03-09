@@ -20,11 +20,14 @@ import org.jooq.DSLContext;
 import org.jooq.Field;
 import org.jooq.Name;
 import org.jooq.TableField;
+import org.jooq.exception.DataAccessException;
 import org.jooq.impl.DSL;
 
 import lombok.extern.slf4j.Slf4j;
 
 import org.jooq.Record;
+
+import static org.example.businesspack.logs.LogMessage.*;
 
 @Slf4j
 public class PersonServiceImpl implements PersonService {
@@ -37,23 +40,47 @@ public class PersonServiceImpl implements PersonService {
 
     @Override
     public Integer save(PersonDto entity) {
+        String methodName = "save()";
+        log.info(START_METHOD.getMessage(), methodName);
+
         Record record = Builder.to(dsl, entity);
         return personRepository.save(dsl, columns, record);
     }
 
     @Override
     public List<PersonDto> get(Condition condition) {
-        return personRepository.get(dsl, condition);
+        String methodName = "get()";
+        log.info(START_METHOD.getMessage(), methodName);
+        log.debug(REQUEST_PARAMETERS.getMessage(), condition);
+
+        var result = personRepository.get(dsl, condition);
+        log.debug(RESULT_LIST_METHOD.getMessage(), result.stream().limit(5).toList());
+
+        log.info(END_METHOD.getMessage(), methodName);
+        return result;
     }
 
     @Override
     public PersonDto getById(Integer id) {
-        return personRepository.getEntity(dsl, Tables.PERSON.ID.eq(id))
+        String methodName = "getById()";
+        log.info(START_METHOD.getMessage(), methodName);
+        log.debug(REQUEST_PARAMETERS.getMessage(), id);
+
+        var result = personRepository.getEntity(dsl, Tables.PERSON.ID.eq(id))
                 .orElseThrow();
+        log.debug(RESULT_METHOD.getMessage(), result);
+
+        log.info(END_METHOD.getMessage(), methodName);
+        return result;
     }
 
     @Override
     public Integer update(PersonDto entity) {
+        String methodName = "update()";
+        log.info(START_METHOD.getMessage(), methodName);
+        log.debug(REQUEST_PARAMETERS.getMessage(), entity);
+
+        Integer result;
         if (entity.getId() != null) {
             Integer usageCountCurrent = personRepository.getUsageCount(dsl, PERSON.ID.eq(entity.getId()));
             Map<Name, ?> setMap = Map.of(
@@ -62,11 +89,17 @@ public class PersonServiceImpl implements PersonService {
             );
             Condition condition = PERSON.ID.eq(entity.getId());
 
-            return personRepository.update(dsl, setMap, condition);
+            result = personRepository.update(dsl, setMap, condition);
+            log.debug("Since the object exists, we update it.");
         } else {
             Record record = Builder.to(dsl, entity);
-            return personRepository.save(dsl, columns, record);
+            result = personRepository.save(dsl, columns, record);
+            log.debug("Since the object does not exist, we create it.");
         }
+
+        log.debug(RESULT_METHOD.getMessage(), result);
+        log.info(END_METHOD.getMessage(), methodName);
+        return result;
     }
 
     // "UPDATE person " +
@@ -77,19 +110,29 @@ public class PersonServiceImpl implements PersonService {
 
     @Override
     public void delete() {
-        log.info("Deleted old records");
-        
-        Field<LocalDate> fieldFirstDateMonth = DSL.field("date(CURRENT_DATE, 'start of month')", LocalDate.class);
-        Condition conditionDelete = DSL.currentLocalDate().eq(fieldFirstDateMonth)
-                .and(PERSON.USAGE_COUNT.le(1));
+        String methodName = "delete()";
+        log.info(START_METHOD.getMessage(), methodName);
 
-        personRepository.delete(dsl, conditionDelete);
+        try {
+            Field<LocalDate> fieldFirstDateMonth =
+                    DSL.field("date(CURRENT_DATE, 'start of month')", LocalDate.class);
+            Condition conditionDelete =
+                    DSL.currentLocalDate().eq(fieldFirstDateMonth).and(PERSON.USAGE_COUNT.le(1));
 
-        Map<Name, ?> setMap = Map.of(
-                DSL.name("usage_count"), 0,
-                DSL.name("last_used"), LocalDateTime.now());
-        Condition conditionUpdate = DSL.currentLocalDate().eq(fieldFirstDateMonth);
-        personRepository.update(dsl, setMap, conditionUpdate);
+            personRepository.delete(dsl, conditionDelete);
+            log.debug("Deleted old records");
+
+            Map<Name, ?> setMap = Map.of(
+                    DSL.name("usage_count"), 0,
+                    DSL.name("last_used"), LocalDateTime.now());
+            Condition conditionUpdate = DSL.currentLocalDate().eq(fieldFirstDateMonth);
+            personRepository.update(dsl, setMap, conditionUpdate);
+            log.debug("Updated parameter for records");
+        } catch (DataAccessException ex) {
+            log.error(ERROR_CONNECTION.getMessage(), ex.getMessage());
+        }
+
+        log.info(END_METHOD.getMessage(), methodName);
     }
 
     // "UPDATE person " +

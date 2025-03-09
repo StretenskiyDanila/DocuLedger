@@ -17,17 +17,12 @@ import javafx.scene.control.Tab;
 import javafx.scene.control.TableColumn;
 import lombok.Getter;
 
+@Getter
 public abstract class TabManager<T> {
 
     protected final Tab tab;
-
-    @Getter
     protected final List<ComboBoxManager<PersonDto>> comboBoxManagers;
-
-    @Getter
     protected final TableManager<T> tableManager;
-
-    @Getter
     protected final DatePicker dataPicker;
 
     public TabManager(Tab tab, TableManager<T> tableManager, List<ComboBox<PersonDto>> comboBoxs, DatePicker dataPicker) {
@@ -38,16 +33,15 @@ public abstract class TabManager<T> {
         initialize();
     }
 
+    public void updateSelectedItem() {
+        if (tab.isSelected()) {
+            comboBoxManagers.forEach(ComboBoxManager::updateSelectedItem);
+        }
+    }
+
     public abstract void refresh();
 
     protected abstract void initialize();
-
-    public void updateSelectedItem() {
-        if (tab.isSelected()) {
-            comboBoxManagers.stream()
-                    .forEach(ComboBoxManager::updateSelectedItem);
-        }
-    }
 
     protected List<ComboBoxManager<PersonDto>> initializeComboBoxProdCons(List<ComboBox<PersonDto>> comboBoxs) {
         List<ComboBoxManager<PersonDto>> managers = new ArrayList<>(comboBoxs.size());

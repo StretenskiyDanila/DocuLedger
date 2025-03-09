@@ -2,19 +2,15 @@ package org.example.businesspack.dto;
 
 import java.time.LocalDate;
 
+import lombok.*;
 import org.example.businesspack.dto.enums.PersonRole;
-
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 @Builder
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@ToString
 public class PersonDto {
 
     private Integer id;

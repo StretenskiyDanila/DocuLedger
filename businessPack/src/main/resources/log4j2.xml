@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<Configuration status="INFO">
+<Configuration status="DEBUG">
     <Appenders>
         <Console name="Console" target="SYSTEM_OUT">
-            <PatternLayout pattern="[%d{yyyy-MM-dd HH:mm:ss}] [%t] %-5level[%logger{36}]: %msg%n" />
+            <PatternLayout pattern="%d{yyyy-MM-dd HH:mm:ss} [%t] %-5level [%logger{36}]: %msg%n" />
         </Console>
     </Appenders>
 
@@ -10,10 +10,7 @@
         <Logger name="org.jooq" level="off" additivity="false">
             <AppenderRef ref="Console" />
         </Logger>
-        <Logger name="org.example.businesspack.aop.AopLogging" level="info" additivity="false">
-            <AppenderRef ref="Console" />
-        </Logger>
-        <Root level="info">
+        <Root level="debug">
             <AppenderRef ref="Console" />
         </Root>
     </Loggers>

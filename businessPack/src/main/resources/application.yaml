@@ -1,4 +1,2 @@
 db:
-    user: postgres
-    pwd: businessPack
     url: jdbc:sqlite:src/main/resources/db/businessPackDb.sqlite

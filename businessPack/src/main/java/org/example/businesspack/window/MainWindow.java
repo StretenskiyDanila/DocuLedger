@@ -85,6 +85,7 @@ public class MainWindow {
 
     @FXML
     void onPrint(ActionEvent event) {
+        log.info("Запрос на обновление данных");
         if (account.isSelected()) {
             dataWorkManager.updateSelectedItem();
         }
@@ -95,7 +96,7 @@ public class MainWindow {
 
         }
 
-        log.debug("Успешное обновление данных");
+        log.info("Успешное обновление данных");
     }
 
     @FXML

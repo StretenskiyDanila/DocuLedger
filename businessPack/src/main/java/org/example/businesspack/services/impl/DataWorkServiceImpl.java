@@ -1,6 +1,7 @@
 package org.example.businesspack.services.impl;
 
 import static org.example.businesspack.bd.Tables.DATA_WORK;
+import static org.example.businesspack.logs.LogMessage.*;
 
 import java.util.List;
 import java.util.Map;
@@ -20,8 +21,10 @@ import org.jooq.TableField;
 import org.jooq.impl.DSL;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 @RequiredArgsConstructor
+@Slf4j
 public class DataWorkServiceImpl implements DataWorkService {
 
     private final DataWorkRepository accountRepository = new DataWorkRepositoryImpl();
@@ -33,22 +36,48 @@ public class DataWorkServiceImpl implements DataWorkService {
 
     @Override
     public Integer save(DataWorkDto entity) {
+        String methodName = "save()";
+        log.info(START_METHOD.getMessage(), methodName);
+        log.debug(REQUEST_PARAMETERS.getMessage(), entity);
+
         Record record = Builder.to(dsl, entity);
-        return accountRepository.save(dsl, columns, record);
+        Integer result = accountRepository.save(dsl, columns, record);
+        log.debug(RESULT_METHOD.getMessage(), result);
+
+        log.info(END_METHOD.getMessage(), methodName);
+        return result;
     }
 
     @Override
     public List<DataWorkDto> get(Condition condition) {
-        return accountRepository.get(dsl, condition);
+        String methodName = "get()";
+        log.info(START_METHOD.getMessage(), methodName);
+        log.debug(REQUEST_PARAMETERS.getMessage(), condition);
+
+        var result = accountRepository.get(dsl, condition);
+        log.debug(RESULT_LIST_METHOD.getMessage(), result.stream().limit(5).toList());
+
+        log.info(END_METHOD.getMessage(), methodName);
+        return result;
     }
 
     @Override
     public void delete(DataWorkDto entity) {
-        accountRepository.delete(dsl, DATA_WORK.ID.eq(entity.getIdParameter()));
+        String methodName = "delete()";
+        log.info(START_METHOD.getMessage(), methodName);
+        log.debug(REQUEST_PARAMETERS.getMessage(), entity);
+
+        accountRepository.getEntity(dsl, DATA_WORK.ID.eq(entity.getIdParameter()));
+        log.info(END_METHOD.getMessage(), methodName);
     }
 
     @Override
     public Integer update(DataWorkDto entity) {
+        String methodName = "update()";
+        log.info(START_METHOD.getMessage(), methodName);
+        log.debug(REQUEST_PARAMETERS.getMessage(), entity);
+
+        Integer result;
         if (entity.getId() != null) {
             Map<Name, ?> setMap = Map.of(
                 DSL.name("group"), entity.getGroupParameter(),
@@ -60,12 +89,17 @@ public class DataWorkServiceImpl implements DataWorkService {
                 DSL.name("vat"), entity.getVatParameter()
             );
 
-            return accountRepository.update(dsl, setMap, DATA_WORK.ID.eq(entity.getIdParameter()));
+            result = accountRepository.update(dsl, setMap, DATA_WORK.ID.eq(entity.getIdParameter()));
+            log.debug("Since the object exists, we update it.");
         } else {
             Record record = Builder.to(dsl, entity);
-            return accountRepository.save(dsl, columns, record);
+            result = accountRepository.save(dsl, columns, record);
+            log.debug("Since the object does not exist, we create it.");
         }
-    
+
+        log.debug(RESULT_METHOD.getMessage(), result);
+        log.info(END_METHOD.getMessage(), methodName);
+        return result;
     }
     // "UPDATE data_work " +
     // "SET \"group\" = ?, count = ?, name = ?, price = ?, summa = ?, unit_meas = ?, vat = ? " +

@@ -16,7 +16,6 @@ public class InitializeDatabase {
         dataSource.setUrl(URL);
 
         dslContext = DSL.using(dataSource, SQLDialect.SQLITE);
-        //FlywayContextProvider.initialize(URL, USER_NAME, PASSWORD);
     }
 
 }
