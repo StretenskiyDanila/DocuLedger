@@ -7,7 +7,7 @@ import org.sqlite.SQLiteDataSource;
 
 public class InitializeDatabase {
 
-    private static final String URL = ApplicationConfig.getProperties("db_url");
+    private static final String URL = ApplicationConfig.getProperties("url");
 
     public static final DSLContext dslContext;
 

@@ -77,7 +77,7 @@ public class PersonServiceImpl implements PersonService {
 
     @Override
     public void delete() {
-        log.info("Удаление старых записей");
+        log.info("Deleted old records");
         
         Field<LocalDate> fieldFirstDateMonth = DSL.field("date(CURRENT_DATE, 'start of month')", LocalDate.class);
         Condition conditionDelete = DSL.currentLocalDate().eq(fieldFirstDateMonth)

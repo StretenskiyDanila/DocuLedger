@@ -11,7 +11,7 @@ import java.util.Properties;
 @Slf4j
 public class ApplicationConfig {
 
-    private static final String FILE_NAME = "src/main/resources/application.properties";
+    private static final String FILE_NAME = "src/main/resources/application.yaml";
     private static final Properties properties = new Properties();
 
     static {

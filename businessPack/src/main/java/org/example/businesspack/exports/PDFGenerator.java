@@ -8,6 +8,7 @@ import java.util.Collection;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import org.example.businesspack.dto.DataWorkDto;
 import org.example.businesspack.dto.PersonDto;
@@ -50,7 +51,7 @@ public class PDFGenerator {
 		}
 
 		List<ComboBox<PersonDto>> listComboBox = tabManager.getComboBoxManagers().stream()
-				.map(manager -> manager.getComboBox()).toList();
+				.map(manager -> manager.getComboBox()).collect(Collectors.toList());
 		TableView<DataWorkDto> tableView = tabManager.getTableManager().getTable();
 		DatePicker datePicker = tabManager.getDataPicker();
 
@@ -116,7 +117,7 @@ public class PDFGenerator {
 	 */
 	private List<List<String>> extractTableData(TableView<DataWorkDto> tableView) {
 		List<List<String>> tableData = new ArrayList<>();
-		tableData.add(tableView.getColumns().stream().map(column -> column.getText()).toList());
+		tableData.add(tableView.getColumns().stream().map(column -> column.getText()).collect(Collectors.toList()));
 
 		tableView.getItems().forEach(item -> {
 			List<String> row = List.of(item.getNameParameter(), item.getUnitMeasParameter(),
