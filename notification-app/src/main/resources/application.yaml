@@ -1,1 +1,5 @@
-spring.application.name=notification-app
+spring:
+  application:
+    name: notification-app
+server:
+  port: 8081
