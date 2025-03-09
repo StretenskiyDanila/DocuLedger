@@ -6,7 +6,7 @@ import org.springframework.stereotype.Service;
 @Service
 public class NotificationServiceImpl implements NotificationService {
 
-    private final
+    //private final
 
     @Override
     public void addNotification(Notification notification) {
