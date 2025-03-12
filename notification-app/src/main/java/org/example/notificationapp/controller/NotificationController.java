@@ -16,19 +16,12 @@ import org.springframework.web.bind.annotation.RestController;
 public class NotificationController {
 
     private final NotificationService notificationService;
-
-    @PostMapping("/add")
-    public void addNotificationSet(@RequestBody NotificationDto notificationDto) {
-        /*Notification notification = NotificationMapper.toEntity(notificationDto);
-        notificationService.addNotification(notification);*/
-    }
+    private final NotificationMapper notificationMapper;
 
     @PostMapping("/change")
     public void changeNotification(@RequestBody NotificationDto notificationDto) {
-        /*Notification notification = NotificationMapper.toEntity(notificationDto);
-        notificationService.changeNotification(notification);*/
+        Notification notification = notificationMapper.mapToEntity(notificationDto);
+        notificationService.changeNotification(notification);
     }
-
-
 
 }

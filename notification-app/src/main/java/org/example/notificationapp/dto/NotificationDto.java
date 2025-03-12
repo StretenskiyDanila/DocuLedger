@@ -1,9 +1,11 @@
 package org.example.notificationapp.dto;
 
 
-public class NotificationDto {
+public record NotificationDto (
 
-    private Long userId;
-    private String tabName;
+    Long userId,
+    String userName,
+    String tabName,
+    String state
 
-}
+) {}
