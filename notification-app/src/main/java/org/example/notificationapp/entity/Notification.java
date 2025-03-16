@@ -1,4 +1,4 @@
-package org.example.notificationapp.model;
+package org.example.notificationapp.entity;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -15,9 +15,14 @@ import lombok.NoArgsConstructor;
 public class Notification {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
     private Long userId;
 
     private String userName;
+
+    private String userMail;
 
     private String tabName;
 
@@ -25,11 +30,9 @@ public class Notification {
     @Enumerated(value = EnumType.STRING)
     private StateEnum state;
 
-    //TODO: добавить обработку ошибки и подробный вывод связанный с состояниями
     public enum StateEnum {
         RUNNING,
-        STOPPED,
-        FINISHED;
+        FINISHED
     }
 
 }

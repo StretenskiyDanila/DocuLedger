@@ -1,7 +1,9 @@
 create table notification
 (
-    user_id   bigint primary key,
-    user_name varchar(30) not null,
-    tab_name  varchar(30) not null,
-    state     varchar(10) not null
+    id        bigserial      primary key,
+    user_id   bigint                    ,
+    user_name varchar(30)               ,
+    user_mail varchar(50)               ,
+    tab_name  varchar(30)    not null   ,
+    state     varchar(10)    not null
 );

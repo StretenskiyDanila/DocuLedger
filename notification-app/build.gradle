@@ -24,24 +24,26 @@ repositories {
 }
 
 ext {
-    springAopVersion = '6.2.3'
-    springVersion = '3.4.3'
+    springVersion = '6.2.3'
+    springBootVersion = '3.4.3'
     mapstructVersion = '1.5.5.Final'
     liquibaseVersion = '4.31.1'
     h2Version = '2.3.232'
+    lombokMapstructBindingVersion = '0.2.0'
 }
 
 dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-web'
-//    implementation group: 'org.mapstruct', name: 'mapstruct', version: "${mapstructVersion}"
-//    implementation group: 'org.mapstruct', name: 'mapstruct-processor', version: "${mapstructVersion}"
-    implementation group: 'org.springframework', name: 'spring-aop', version: "${springAopVersion}"
-    implementation group: 'org.springframework.data', name: 'spring-data-jpa', version: "${springVersion}"
-    implementation group: 'org.springframework.boot', name: 'spring-boot-starter-data-jpa', version: "${springVersion}"
+    implementation group: 'org.springframework', name: 'spring-aop', version: "${springVersion}"
+    implementation group: 'org.springframework.data', name: 'spring-data-jpa', version: "${springBootVersion}"
+    implementation group: 'org.springframework.boot', name: 'spring-boot-starter-data-jpa', version: "${springBootVersion}"
+    implementation group: 'org.springframework.boot', name: 'spring-boot-starter-mail', version: "${springBootVersion}"
+    implementation group: 'org.springframework', name: 'spring-context-support', version: "${springVersion}"
     implementation group: 'org.liquibase', name: 'liquibase-core', version: "${liquibaseVersion}"
     implementation group: 'com.h2database', name: 'h2', version: "${h2Version}"
     compileOnly  "org.mapstruct:mapstruct:${mapstructVersion}", 'org.projectlombok:lombok'
-    annotationProcessor "org.mapstruct:mapstruct-processor:${mapstructVersion}", 'org.projectlombok:lombok'
+    annotationProcessor "org.mapstruct:mapstruct-processor:${mapstructVersion}", 'org.projectlombok:lombok',
+            "org.projectlombok:lombok-mapstruct-binding:${lombokMapstructBindingVersion}"
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
     //liqubase added

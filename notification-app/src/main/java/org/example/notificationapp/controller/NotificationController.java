@@ -3,7 +3,7 @@ package org.example.notificationapp.controller;
 import lombok.RequiredArgsConstructor;
 import org.example.notificationapp.dto.NotificationDto;
 import org.example.notificationapp.mapper.NotificationMapper;
-import org.example.notificationapp.model.Notification;
+import org.example.notificationapp.entity.Notification;
 import org.example.notificationapp.service.NotificationService;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
