@@ -10,7 +10,8 @@ import java.util.Optional;
 @Repository
 public interface NotificationRepository extends JpaRepository<Notification, Long> {
 
-    Optional<Notification> findByUserId(Long userId);
+    //Optional<Notification> findByUserName(String userName);
+    boolean existsByUserName(String userName);
     void deleteByIdAndTabName(Long id, String tabName);
     List<Notification> findAllByState(Notification.StateEnum state);
     //List<Notification> findAllByStateAndUserMail(Notification.StateEnum state, String userMail);

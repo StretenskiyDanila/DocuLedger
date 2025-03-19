@@ -10,7 +10,9 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.HashMap;
 import java.util.Map;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 @Service
@@ -18,8 +20,15 @@ import java.util.stream.Collectors;
 public class NotificationServiceImpl implements NotificationService {
 
     private final NotificationRepository notificationRepository;
+    private final TelegramService telegramService;
 
     private final JavaMailSender mailSender;
+
+    private final static String NOTIFICATION_BOT_MESSAGE =
+                    """
+                    Добрый времени суток, %s!
+                    Вы не завершили оформление документов: %s
+                    """;
 
     private final static String NOTIFICATION_TEXT =
                     """
@@ -37,6 +46,9 @@ public class NotificationServiceImpl implements NotificationService {
                     """;
     private final static String EMAIL_FROM = "stretensky.danila@yandex.ru";
 
+    private final static Function<Notification, String> keyMapMessage = n -> n.getUserName() + ":" + n.getUserId();
+    private final static Function<Notification, String> keyMapMail =  Notification::getUserMail;
+
     @Override
     public void changeNotification(Notification notification) {
         notificationRepository.save(notification);
@@ -45,39 +57,57 @@ public class NotificationServiceImpl implements NotificationService {
     @Scheduled(cron = "0 27 11 * * *")
     @Transactional
     protected void sendNotification() {
-        Map<String,String> notificationsData = notificationRepository.findAllByState(Notification.StateEnum.RUNNING)
+        Map<String, String> notificationsData = notificationRepository.findAllByState(Notification.StateEnum.RUNNING)
                 .stream()
-                .collect(Collectors.groupingBy(
-                        Notification::getUserMail,
-                        Collectors.mapping(
-                                Notification::getTabName,
-                                Collectors.joining(", "))));
+                .collect(Collectors.toMap(
+                        keyMapMail,
+                        Notification::getTabName,
+                        (oldValue, newValue) -> oldValue + ", " + newValue));
+        notificationsData
+                .forEach((userKey, tabs) -> sendMail(userKey, tabs));
 
-        notificationsData.entrySet()
-                .forEach(this::sendMail);
+        Map<String, String> userNotifications = notificationRepository.findAllByState(Notification.StateEnum.RUNNING)
+                .stream()
+                .collect(Collectors.toMap(
+                        keyMapMessage,
+                        Notification::getTabName,
+                        (oldValue, newValue) -> oldValue + ", " + newValue));
+
+        userNotifications.forEach((userKey, tabs) -> {
+            String[] userInfo = userKey.split(":");
+            sendMessage(userInfo[1], userInfo[0], tabs);
+        });
 
         notificationRepository.findAllByState(Notification.StateEnum.FINISHED)
                 .forEach(this::removingFinishedTasks);
+
     }
 
-    private void removingFinishedTasks(Notification notification) {
-        notificationRepository.deleteByIdAndTabName(notification.getId(), notification.getTabName());
+    private void sendMessage(String userId, String userName, String tabs) {
+        telegramService.sendMessage(
+                userId,
+                String.format(NOTIFICATION_BOT_MESSAGE, userName, tabs)
+        );
     }
 
-    private void sendMail(Map.Entry<String, String> user) {
+    private void sendMail(String mailTo, String tabNames) {
         try {
             MimeMessage message = mailSender.createMimeMessage();
             MimeMessageHelper helper = new MimeMessageHelper(message);
 
             helper.setSubject("Напоминание оформления документов");
             helper.setFrom(EMAIL_FROM);
-            helper.setTo(user.getKey());
+            helper.setTo(mailTo);
 
-            helper.setText(String.format(NOTIFICATION_TEXT, user.getValue(), EMAIL_FROM), true);
+            helper.setText(String.format(NOTIFICATION_TEXT, tabNames, EMAIL_FROM), true);
 
             mailSender.send(message);
         } catch (Exception e) {
             System.out.println("Ошибка отправки почты" + e.getMessage());
         }
+    }
+
+    private void removingFinishedTasks(Notification notification) {
+        notificationRepository.deleteByIdAndTabName(notification.getId(), notification.getTabName());
     }
 }

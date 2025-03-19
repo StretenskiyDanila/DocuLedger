@@ -30,6 +30,7 @@ ext {
     liquibaseVersion = '4.31.1'
     h2Version = '2.3.232'
     lombokMapstructBindingVersion = '0.2.0'
+    telegramBotsVersion = '6.9.7.1'
 }
 
 dependencies {
@@ -40,6 +41,7 @@ dependencies {
     implementation group: 'org.springframework.boot', name: 'spring-boot-starter-mail', version: "${springBootVersion}"
     implementation group: 'org.springframework', name: 'spring-context-support', version: "${springVersion}"
     implementation group: 'org.liquibase', name: 'liquibase-core', version: "${liquibaseVersion}"
+    implementation group: 'org.telegram', name: 'telegrambots', version: "${telegramBotsVersion}"
     implementation group: 'com.h2database', name: 'h2', version: "${h2Version}"
     compileOnly  "org.mapstruct:mapstruct:${mapstructVersion}", 'org.projectlombok:lombok'
     annotationProcessor "org.mapstruct:mapstruct-processor:${mapstructVersion}", 'org.projectlombok:lombok',

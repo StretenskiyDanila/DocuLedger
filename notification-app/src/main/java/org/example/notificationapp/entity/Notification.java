@@ -32,7 +32,8 @@ public class Notification {
 
     public enum StateEnum {
         RUNNING,
-        FINISHED
+        FINISHED,
+        NONE
     }
 
 }
