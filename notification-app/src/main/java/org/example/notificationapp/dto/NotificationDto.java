@@ -5,7 +5,9 @@ public record NotificationDto (
 
     Long userId,
     String userName,
+    String userMail,
     String tabName,
-    String state
+    String state,
+    String channel
 
 ) {}

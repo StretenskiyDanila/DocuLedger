@@ -19,6 +19,8 @@ public class TelegramServiceImpl implements TelegramService {
         telegramBot.executeAsync(new SendMessage(chatId, message));
     }
 
+
+
     @Autowired
     public void setTelegramBot(@Lazy TelegramBot telegramBot) {
         this.telegramBot = telegramBot;

@@ -37,3 +37,12 @@ server:
 bot:
   name: ${BOT_NAME}
   token: ${BOT_TOKEN}
+  template: "Добрый день, %s!\nВы не завершили оформление документов: %s;"
+
+mail:
+  template: |
+    <b>Доброе утро, дорогой пользователь!</b><br>
+    <p>Не забудь завершить заполнение следующих документов: %s</p><br><br>
+    <small>С уважением,</small><br>
+    <small>Команда BusinessPack</small><br>
+    <small><i>Связаться с нами: %s</i></small>

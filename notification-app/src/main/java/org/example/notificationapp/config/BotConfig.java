@@ -10,7 +10,7 @@ import org.telegram.telegrambots.updatesreceivers.DefaultBotSession;
 
 @Configuration
 @Getter
-public class TelegramBotConfig {
+public class BotConfig {
 
     @Value("${bot.name}")
     private String botName;

@@ -5,6 +5,8 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.example.notificationapp.entity.enums.NotificationChannel;
+import org.example.notificationapp.entity.enums.StateEnum;
 
 @Getter
 @AllArgsConstructor
@@ -30,10 +32,8 @@ public class Notification {
     @Enumerated(value = EnumType.STRING)
     private StateEnum state;
 
-    public enum StateEnum {
-        RUNNING,
-        FINISHED,
-        NONE
-    }
+    @Column(name = "channel")
+    @Enumerated(value = EnumType.STRING)
+    private NotificationChannel channel;
 
 }
