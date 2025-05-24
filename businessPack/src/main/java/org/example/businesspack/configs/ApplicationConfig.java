@@ -11,15 +11,17 @@ import java.util.Properties;
 @Slf4j
 public class ApplicationConfig {
 
-    private static final String FILE_NAME = "businessPack/src/main/resources/application.yaml";
+    private static final String FILE_NAME = "src/main/resources/application.yaml";
     private static final Properties properties = new Properties();
+
+    private static final String MESSAGE_ERROR = "Не удалось загрузить параметры. Error: {}";
 
     static {
         try (var inputStream = new FileInputStream(FILE_NAME)) {
             properties.load(inputStream);
         }
         catch (IOException e) {
-            log.error("Не удалось загрузить параметры. Error: ", e.getMessage());
+            log.error(MESSAGE_ERROR, e.getMessage());
         }
     }
 

@@ -5,21 +5,19 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.example.notificationapp.entity.Notification;
 import org.example.notificationapp.entity.enums.NotificationChannel;
-import org.example.notificationapp.entity.enums.StateEnum;
 import org.example.notificationapp.repository.NotificationRepository;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.io.FileSystemResource;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
+import org.telegram.telegrambots.meta.api.methods.send.SendDocument;
+import org.telegram.telegrambots.meta.api.objects.InputFile;
 
-import java.util.EnumMap;
+import java.io.File;
+import java.util.Collections;
 import java.util.List;
-import java.util.Map;
-import java.util.function.Consumer;
-import java.util.function.Function;
-import java.util.stream.Collectors;
+import java.util.Optional;
 
 @Slf4j
 @Service
@@ -27,93 +25,113 @@ import java.util.stream.Collectors;
 public class NotificationServiceImpl implements NotificationService {
 
     private final NotificationRepository notificationRepository;
-    private final TelegramService telegramService;
     private final JavaMailSender mailSender;
 
-    @Value("${bot.template}")
-    private String message_bot;
-
-    @Value("${mail.template}")
-    private String message_mail;
-
-    private static final String EMAIL_FROM = "stretensky.danila@yandex.ru";
-
-    private final Map<NotificationChannel, Function<Notification, String>> channelKeyMap = new EnumMap<>(Map.of(
-            NotificationChannel.MAIL, Notification::getUserMail,
-            NotificationChannel.TELEGRAM, n -> n.getUserName() + ":" + n.getUserId()
-    ));
-
-    private final Map<NotificationChannel, Consumer<Map.Entry<String, String>>> notificationSenders = new EnumMap<>(Map.of(
-            NotificationChannel.MAIL, entry -> sendMail(entry.getKey(), entry.getValue()),
-            NotificationChannel.TELEGRAM, entry -> sendMessage(entry.getKey(), entry.getValue())
-    ));
+    @Value("${mail.address}")
+    private String emailFrom;
 
     @Override
     public void changeNotification(Notification notification) {
+        Notification existingNotification =
+                notificationRepository.findByUserNameAndTabNameAndChannel(notification.getUserName(), notification.getTabName(), notification.getChannel())
+                .or(() -> notificationRepository.findByUserMailAndTabNameAndChannel(notification.getUserMail(), notification.getTabName(), notification.getChannel()))
+                .orElse(notification);
+
+        existingNotification = mergeNotification(existingNotification, notification);
         log.info("Пользователь {} с id {}", notification.getUserName(), notification.getUserId());
-        notificationRepository.save(notification);
+        notificationRepository.save(existingNotification);
     }
 
-    @Scheduled(cron = "30 42 16 * * *")
-    @Transactional
-    protected void sendNotification() {
-        log.info("Отправка уведомлений");
-        Map<Map.Entry<NotificationChannel, String>, String> notificationMap =
-                notificationRepository.findAllByState(StateEnum.RUNNING)
-                        .stream()
-                        .collect(Collectors.toMap(
-                                this::getNotificationKey,
-                                Notification::getTabName,
-                                (oldValue, newValue) -> oldValue + ", " + newValue
-                        ));
+    @Override
+    public void changeNotificationEnable(String findParameter, String parameter, Boolean enable) {
+        List<Notification> notifications = Collections.emptyList();
+        if (findParameter.equals("bot"))
+            notifications = notificationRepository.findAllByUserName(parameter)
+                    .stream()
+                    .peek(notification -> notification.setEnable(enable))
+                    .toList();
+        else if (findParameter.equals("mail"))
+            notifications = notificationRepository.findAllByUserMail(parameter)
+                    .stream()
+                    .peek(notification -> notification.setEnable(enable))
+                    .toList();
 
-        notificationMap.forEach((key, value) ->
-                notificationSenders.getOrDefault(key.getKey(), entry ->
-                                log.warn("Неизвестный канал оповещения: {}", entry.getKey()))
-                        .accept(Map.entry(key.getValue(), value))
-        );
-
-        List<Long> finishedIds = notificationRepository.findAllByState(StateEnum.FINISHED)
-                .stream()
-                .map(Notification::getId)
-                .toList();
-
-        if (!finishedIds.isEmpty()) {
-            notificationRepository.deleteAllById(finishedIds);
+        if (!notifications.isEmpty()) {
+            notificationRepository.saveAll(notifications);
         }
-        log.info("Уведомления отправлены");
     }
 
-    private Map.Entry<NotificationChannel, String> getNotificationKey(Notification notification) {
-        return Map.entry(notification.getChannel(),
-                channelKeyMap.getOrDefault(notification.getChannel(), n -> {
-                    throw new IllegalArgumentException("Неизвестный тип канала оповещения: " + n.getChannel());
-                }).apply(notification));
+    @Override
+    public void deleteChannel(String findParameter, String parameter) {
+        List<Long> ids = Collections.emptyList();
+        if (findParameter.equals("bot"))
+            ids = notificationRepository.findAllByUserNameAndChannel(parameter, NotificationChannel.TELEGRAM)
+                    .stream()
+                    .map(Notification::getId)
+                    .toList();
+        else if (findParameter.equals("mail"))
+            ids = notificationRepository.findAllByUserMailAndChannel(parameter, NotificationChannel.MAIL)
+                    .stream()
+                    .map(Notification::getId)
+                    .toList();
+
+        if (!ids.isEmpty()) {
+            notificationRepository.deleteAllById(ids);
+        }
     }
 
-    private void sendMessage(String userComb, String tabsName) {
-        String[] userInfo = userComb.split(":");
-        String formattedText = String.format(message_bot, userInfo[0], tabsName);
-        telegramService.sendMessage(
-                userInfo[1],
-                formattedText
-        );
+    @Override
+    public SendDocument getFileForBot(String userName, File file) {
+        if (!file.exists()) {
+            throw new IllegalArgumentException("Файл не найден: " + file.getAbsolutePath());
+        }
+
+        Notification notification = notificationRepository.getFirstByUserName(userName)
+                .orElseThrow(() -> new IllegalArgumentException("Пользователь не найден"));
+
+        SendDocument document = new SendDocument();
+        document.setChatId(notification.getUserId());
+        document.setDocument(new InputFile(file, file.getName()));
+
+        return document;
     }
 
-    private void sendMail(String mailTo, String tabsName) {
+    @Override
+    public void sendFileMail(String to, File file) {
         try {
-            String formattedText = String.format(message_mail, tabsName, EMAIL_FROM);
-            MimeMessage message = mailSender.createMimeMessage();
-            MimeMessageHelper helper = new MimeMessageHelper(message);
+            if (!file.exists()) {
+                throw new IllegalArgumentException("Файл не найден: " + file.getAbsolutePath());
+            }
 
-            helper.setSubject("Напоминание оформления документов");
-            helper.setFrom(EMAIL_FROM);
-            helper.setTo(mailTo);
-            helper.setText(formattedText, true);
+            MimeMessage message = mailSender.createMimeMessage();
+            MimeMessageHelper helper = new MimeMessageHelper(message, true);
+
+            helper.setTo(to);
+            helper.setFrom(emailFrom);
+            helper.setSubject("Готовый документ");
+            helper.setText("Ваш пдф-документ во вложении.");
+            helper.addAttachment(file.getName(), new FileSystemResource(file));
 
             mailSender.send(message);
         } catch (Exception e) {
             log.error("Ошибка отправки почты: {}", e.getMessage(), e);
         }
     }
+
+    private Notification mergeNotification(Notification existingNotification, Notification notification) {
+        return Notification.builder()
+                .id(existingNotification.getId())
+                .userId(Optional.ofNullable(existingNotification.getUserId())
+                        .orElse(notification.getUserId()))
+                .userName(Optional.ofNullable(existingNotification.getUserName())
+                        .orElse(notification.getUserName()))
+                .userMail(Optional.ofNullable(existingNotification.getUserMail())
+                        .orElse(notification.getUserMail()))
+                .tabName(existingNotification.getTabName())
+                .state(notification.getState())
+                .channel(existingNotification.getChannel())
+                .enable(notification.getEnable())
+                .build();
+    }
+
 }

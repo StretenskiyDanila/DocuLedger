@@ -3,11 +3,7 @@ package org.example.businesspack.exports;
 
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import org.example.businesspack.dto.DataWorkDto;
 import org.example.businesspack.dto.PersonDto;
@@ -87,6 +83,7 @@ public class PDFGenerator {
 
 			document.close();
 			System.out.println("PDF создан по пути: " + filePath);
+			//return filePath;
 		} catch (IOException | DocumentException e) {
 			e.printStackTrace();
 		}
@@ -136,7 +133,8 @@ public class PDFGenerator {
 	 */
 	private Font getRussianFont(float size, int style) {
 		try {
-			BaseFont baseFont = BaseFont.createFont("src/main/resources/org/example/businesspack/font/TIMES.TTF",
+			String path = Objects.requireNonNull(getClass().getResource("/org/example/businesspack/font/TIMES.TTF")).getPath();
+			BaseFont baseFont = BaseFont.createFont(path,
 					BaseFont.IDENTITY_H, BaseFont.EMBEDDED);
 			return new Font(baseFont, size, style);
 		} catch (DocumentException | IOException e) {

@@ -1,2 +1,2 @@
 db:
-    url: jdbc:sqlite:businessPack/src/main/resources/db/businessPackDb.sqlite
+    url: jdbc:sqlite:src/main/resources/db/businessPackDb.sqlite

@@ -1,27 +1,55 @@
 package org.example.businesspack.repositories;
 
+import org.example.businesspack.dto.DataWorkDto;
+import org.example.businesspack.dto.mapper.RecordDataWorkMapper;
+import org.jooq.Record;
+import org.jooq.*;
+
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
-import org.example.businesspack.dto.DataWorkDto;
-import org.jooq.Condition;
-import org.jooq.DSLContext;
-import org.jooq.Field;
-import org.jooq.Name;
-import org.jooq.Record;
+import static org.example.businesspack.bd.Tables.DATA_WORK;
 
-public interface DataWorkRepository {
+public class DataWorkRepository {
 
-    public abstract Integer save(DSLContext dsl, Collection<? extends Field<?>> columns, Record record);
+    public Integer save(DSLContext dsl, Collection<? extends Field<?>> columns, Record record) {
+        return dsl
+                .insertInto(DATA_WORK, columns)
+                .values(record)
+                .returning(DATA_WORK.ID)
+                .fetchOne()
+                .getId();
+    }
+    
+    public void delete(DSLContext dsl, Condition condition) {
+        dsl.deleteFrom(DATA_WORK)
+                .where(condition)
+                .execute();
+    }
+    
+    public Integer update(DSLContext dsl, Map<Name, ?> parameter, Condition condition) {
+        var fetch = dsl.update(DATA_WORK)
+                .set(parameter)
+                .where(condition)
+                .returningResult(DATA_WORK.ID)
+                .fetchOne();
+        return fetch == null ? null : fetch.getValue(DATA_WORK.ID);
+    }
 
-    public abstract void delete(DSLContext dsl, Condition condition);
+    public List<DataWorkDto> get(DSLContext dsl, Condition condition) {
+        return dsl.selectFrom(DATA_WORK)
+                .where(condition)
+                .fetch()
+                .map(new RecordDataWorkMapper());
+    }
 
-    public abstract Integer update(DSLContext dsl, Map<Name, ?> entity, Condition condition);
-
-    public abstract List<DataWorkDto> get(DSLContext dsl, Condition condition);
-
-    public abstract Optional<DataWorkDto> getEntity(DSLContext dsl, Condition condition);
+    public Optional<DataWorkDto> getEntity(DSLContext dsl, Condition condition) {
+        return Optional.ofNullable(dsl.selectFrom(DATA_WORK)
+                .where(condition)
+                .fetchOne()
+                .into(DataWorkDto.class));
+    }
 
 }

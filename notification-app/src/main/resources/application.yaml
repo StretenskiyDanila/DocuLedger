@@ -1,6 +1,6 @@
 spring:
   config:
-    import: optional:file:notification-app\.env[.properties]
+    import: optional:file:.env[.properties]
   application:
     name: notification-app
   h2:
@@ -31,17 +31,36 @@ spring:
           ssl:
             enable: true
             trust: smtp.yandex.ru
+  servlet:
+    multipart:
+      max-file-size: 100MB
+      max-request-size: 100MB
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health, prometheus  # Открываем endpoint /actuator/prometheus
+  prometheus:
+    metrics:
+      export:
+        enabled: true
+  metrics:
+    tags:
+      application: ${spring.application.name}
+
 server:
   port: 8081
 
 bot:
   name: ${BOT_NAME}
   token: ${BOT_TOKEN}
-  template: "Добрый день, %s!\nВы не завершили оформление документов: %s;"
+  template: "Доброго времени суток, %s!\nВы не завершили оформление документов: %s"
 
 mail:
+  address: "stretensky.danila@yandex.ru"
   template: |
-    <b>Доброе утро, дорогой пользователь!</b><br>
+    <b>Доброго времени суток, дорогой пользователь!</b><br>
     <p>Не забудь завершить заполнение следующих документов: %s</p><br><br>
     <small>С уважением,</small><br>
     <small>Команда BusinessPack</small><br>

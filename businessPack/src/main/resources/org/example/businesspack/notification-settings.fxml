@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Text?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="433.0" prefWidth="358.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.businesspack.window.NotificationSettings">
+   <children>
+      <Button fx:id="okButton" layoutX="79.0" layoutY="384.0" mnemonicParsing="false" text="OK" />
+      <Button fx:id="cancelButton" layoutX="226.0" layoutY="384.0" mnemonicParsing="false" text="Cancel" />
+      <TextField fx:id="telegramAccText" layoutX="37.0" layoutY="200.0" />
+      <TextField fx:id="emailText" layoutX="38.0" layoutY="278.0" />
+      <Text layoutX="203.0" layoutY="217.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Телеграм-аккаунт" />
+      <Text layoutX="203.0" layoutY="295.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Email" />
+      <TextArea editable="false" layoutY="-2.0" prefHeight="162.0" prefWidth="358.0" text="&#10;Для получения напоминаний заполнения документов &#10;нужно заполнить одно или оба поля ниже: имя &#10;телеграмм-аккаунта и/или адрес почты. Выбирая телеграмм-&#10;напоминания необходимо подписаться на нашего бота&#10;@notification_bp_bot - через него приходят напоминания.&#10;При выборе email-почты возможно попадания письма в &#10;спам, перенесите его во входящие.&#10;" />
+      <Text fx:id="incorrectDataAccount" fill="#f70000" layoutX="14.0" layoutY="347.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Для получения уведомлений обязательно нужно заполнить одно из полей" textAlignment="CENTER" visible="false" wrappingWidth="330.93671798706055" />
+      <Text fx:id="warnCorrectEmail" fill="#e41e1e" layoutX="38.0" layoutY="322.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Некорректный email" visible="false" />
+   </children>
+</AnchorPane>

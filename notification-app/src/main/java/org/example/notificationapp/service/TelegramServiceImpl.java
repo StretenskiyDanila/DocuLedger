@@ -1,17 +1,20 @@
 package org.example.notificationapp.service;
 
-import org.example.notificationapp.controller.TelegramBot;
-
+import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Lazy;
+import lombok.extern.slf4j.Slf4j;
+import org.example.notificationapp.controller.TelegramBot;
 import org.springframework.stereotype.Service;
+import org.telegram.telegrambots.meta.api.methods.send.SendDocument;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
+import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
 @Service
+@Slf4j
+@RequiredArgsConstructor
 public class TelegramServiceImpl implements TelegramService {
 
-    private TelegramBot telegramBot;
+    private final TelegramBot telegramBot;
 
     @SneakyThrows
     @Override
@@ -19,11 +22,13 @@ public class TelegramServiceImpl implements TelegramService {
         telegramBot.executeAsync(new SendMessage(chatId, message));
     }
 
-
-
-    @Autowired
-    public void setTelegramBot(@Lazy TelegramBot telegramBot) {
-        this.telegramBot = telegramBot;
+    @Override
+    public void sendFile(SendDocument document) {
+        try {
+            telegramBot.execute(document);
+        } catch (TelegramApiException e) {
+            log.error("Ошибка отправки файла через Telegram. Error: " + e.getMessage());
+        }
     }
 
 }

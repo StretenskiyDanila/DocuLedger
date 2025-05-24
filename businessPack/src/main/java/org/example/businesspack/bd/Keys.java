@@ -5,14 +5,11 @@ package org.example.businesspack.bd;
 
 
 import org.example.businesspack.bd.tables.DataWork;
-import org.example.businesspack.bd.tables.JournalWork;
-import org.example.businesspack.bd.tables.Maintenance;
 import org.example.businesspack.bd.tables.Person;
+import org.example.businesspack.bd.tables.UserData;
 import org.example.businesspack.bd.tables.records.DataWorkRecord;
-import org.example.businesspack.bd.tables.records.JournalWorkRecord;
-import org.example.businesspack.bd.tables.records.MaintenanceRecord;
 import org.example.businesspack.bd.tables.records.PersonRecord;
-import org.jooq.ForeignKey;
+import org.example.businesspack.bd.tables.records.UserDataRecord;
 import org.jooq.TableField;
 import org.jooq.UniqueKey;
 import org.jooq.impl.DSL;
@@ -31,15 +28,6 @@ public class Keys {
     // -------------------------------------------------------------------------
 
     public static final UniqueKey<DataWorkRecord> DATA_WORK__PK_DATA_WORK = Internal.createUniqueKey(DataWork.DATA_WORK, DSL.name("pk_data_work"), new TableField[] { DataWork.DATA_WORK.ID }, true);
-    public static final UniqueKey<JournalWorkRecord> JOURNAL_WORK__PK_JOURNAL_WORK = Internal.createUniqueKey(JournalWork.JOURNAL_WORK, DSL.name("pk_journal_work"), new TableField[] { JournalWork.JOURNAL_WORK.ID }, true);
-    public static final UniqueKey<MaintenanceRecord> MAINTENANCE__PK_MAINTENANCE = Internal.createUniqueKey(Maintenance.MAINTENANCE, DSL.name("pk_maintenance"), new TableField[] { Maintenance.MAINTENANCE.ID }, true);
-    public static final UniqueKey<MaintenanceRecord> MAINTENANCE__UK_MAINTENANCE_73785362 = Internal.createUniqueKey(Maintenance.MAINTENANCE, DSL.name("uk_maintenance_73785362"), new TableField[] { Maintenance.MAINTENANCE.NAME }, true);
     public static final UniqueKey<PersonRecord> PERSON__PK_PERSON = Internal.createUniqueKey(Person.PERSON, DSL.name("pk_person"), new TableField[] { Person.PERSON.ID }, true);
-
-    // -------------------------------------------------------------------------
-    // FOREIGN KEY definitions
-    // -------------------------------------------------------------------------
-
-    public static final ForeignKey<JournalWorkRecord, MaintenanceRecord> JOURNAL_WORK__FK_JOURNAL_WORK_PK_MAINTENANCE = Internal.createForeignKey(JournalWork.JOURNAL_WORK, DSL.name("fk_journal_work_pk_maintenance"), new TableField[] { JournalWork.JOURNAL_WORK.MAINTENANCE_ID }, Keys.MAINTENANCE__PK_MAINTENANCE, new TableField[] { Maintenance.MAINTENANCE.ID }, true);
-    public static final ForeignKey<JournalWorkRecord, PersonRecord> JOURNAL_WORK__FK_JOURNAL_WORK_PK_PERSON = Internal.createForeignKey(JournalWork.JOURNAL_WORK, DSL.name("fk_journal_work_pk_person"), new TableField[] { JournalWork.JOURNAL_WORK.PERSON }, Keys.PERSON__PK_PERSON, new TableField[] { Person.PERSON.ID }, true);
+    public static final UniqueKey<UserDataRecord> USER_DATA__PK_USER_DATA = Internal.createUniqueKey(UserData.USER_DATA, DSL.name("pk_user_data"), new TableField[] { UserData.USER_DATA.ID }, true);
 }

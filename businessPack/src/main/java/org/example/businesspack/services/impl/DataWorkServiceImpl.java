@@ -1,34 +1,31 @@
 package org.example.businesspack.services.impl;
 
-import static org.example.businesspack.bd.Tables.DATA_WORK;
-import static org.example.businesspack.logs.LogMessage.*;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.example.businesspack.bd.tables.records.DataWorkRecord;
+import org.example.businesspack.configs.InitializeDatabase;
+import org.example.businesspack.dto.DataWorkDto;
+import org.example.businesspack.metrics.JavaFxMetrics;
+import org.example.businesspack.repositories.DataWorkRepository;
+import org.example.businesspack.services.DataWorkService;
+import org.example.businesspack.utils.Builder;
+import org.jooq.Record;
+import org.jooq.*;
+import org.jooq.impl.DSL;
 
 import java.util.List;
 import java.util.Map;
 
-import org.example.businesspack.bd.tables.records.DataWorkRecord;
-import org.example.businesspack.configs.InitializeDatabase;
-import org.example.businesspack.dto.DataWorkDto;
-import org.example.businesspack.repositories.DataWorkRepository;
-import org.example.businesspack.repositories.impl.DataWorkRepositoryImpl;
-import org.example.businesspack.services.DataWorkService;
-import org.example.businesspack.utils.Builder;
-import org.jooq.Condition;
-import org.jooq.DSLContext;
-import org.jooq.Name;
-import org.jooq.Record;
-import org.jooq.TableField;
-import org.jooq.impl.DSL;
-
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
+import static org.example.businesspack.bd.Tables.DATA_WORK;
+import static org.example.businesspack.logs.LogMessage.*;
 
 @RequiredArgsConstructor
 @Slf4j
 public class DataWorkServiceImpl implements DataWorkService {
 
-    private final DataWorkRepository accountRepository = new DataWorkRepositoryImpl();
+    private final DataWorkRepository accountRepository = new DataWorkRepository();
     private final DSLContext dsl = InitializeDatabase.dslContext;
+    private final JavaFxMetrics metrics = new JavaFxMetrics();
 
     private final static List<TableField<DataWorkRecord, ?>> columns = List.of(
             DATA_WORK.NAME, DATA_WORK.UNIT_MEAS, DATA_WORK.COUNT, DATA_WORK.PRICE,
@@ -64,16 +61,31 @@ public class DataWorkServiceImpl implements DataWorkService {
     @Override
     public void delete(DataWorkDto entity) {
         String methodName = "delete()";
+        long start = System.currentTimeMillis();
         log.info(START_METHOD.getMessage(), methodName);
         log.debug(REQUEST_PARAMETERS.getMessage(), entity);
 
-        accountRepository.getEntity(dsl, DATA_WORK.ID.eq(entity.getIdParameter()));
+        accountRepository.delete(dsl, DATA_WORK.ID.eq(entity.getIdParameter()));
+
+        metrics.trackOperation("document-element.delete.time", System.currentTimeMillis() - start);
+        metrics.pushMetrics();
+        log.info(END_METHOD.getMessage(), methodName);
+    }
+
+    @Override
+    public void deleteAllByTab(String tabName) {
+        String methodName = "deleteAllByTab()";
+        log.info(START_METHOD.getMessage(), methodName);
+        log.debug(REQUEST_PARAMETERS.getMessage(), tabName);
+
+        accountRepository.delete(dsl, DATA_WORK.TAB.eq(tabName));
         log.info(END_METHOD.getMessage(), methodName);
     }
 
     @Override
     public Integer update(DataWorkDto entity) {
         String methodName = "update()";
+        long start = System.currentTimeMillis();
         log.info(START_METHOD.getMessage(), methodName);
         log.debug(REQUEST_PARAMETERS.getMessage(), entity);
 
@@ -90,6 +102,9 @@ public class DataWorkServiceImpl implements DataWorkService {
             );
 
             result = accountRepository.update(dsl, setMap, DATA_WORK.ID.eq(entity.getIdParameter()));
+
+            metrics.trackOperation("document-element.update.time", System.currentTimeMillis() - start);
+            metrics.pushMetrics();
             log.debug("Since the object exists, we update it.");
         } else {
             Record record = Builder.to(dsl, entity);
@@ -101,10 +116,6 @@ public class DataWorkServiceImpl implements DataWorkService {
         log.info(END_METHOD.getMessage(), methodName);
         return result;
     }
-    // "UPDATE data_work " +
-    // "SET \"group\" = ?, count = ?, name = ?, price = ?, summa = ?, unit_meas = ?, vat = ? " +
-    // "WHERE id = ? " +
-    // "RETURNING id;";
 
     @Override
     public void delete() {

@@ -5,9 +5,9 @@ package org.example.businesspack.bd;
 
 
 import org.example.businesspack.bd.tables.DataWork;
-import org.example.businesspack.bd.tables.JournalWork;
-import org.example.businesspack.bd.tables.Maintenance;
 import org.example.businesspack.bd.tables.Person;
+import org.example.businesspack.bd.tables.TabStatus;
+import org.example.businesspack.bd.tables.UserData;
 
 
 /**
@@ -22,17 +22,17 @@ public class Tables {
     public static final DataWork DATA_WORK = DataWork.DATA_WORK;
 
     /**
-     * The table <code>journal_work</code>.
-     */
-    public static final JournalWork JOURNAL_WORK = JournalWork.JOURNAL_WORK;
-
-    /**
-     * The table <code>maintenance</code>.
-     */
-    public static final Maintenance MAINTENANCE = Maintenance.MAINTENANCE;
-
-    /**
      * The table <code>person</code>.
      */
     public static final Person PERSON = Person.PERSON;
+
+    /**
+     * The table <code>tab_status</code>.
+     */
+    public static final TabStatus TAB_STATUS = TabStatus.TAB_STATUS;
+
+    /**
+     * The table <code>user_data</code>.
+     */
+    public static final UserData USER_DATA = UserData.USER_DATA;
 }

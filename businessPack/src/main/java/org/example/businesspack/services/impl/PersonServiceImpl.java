@@ -1,38 +1,30 @@
 package org.example.businesspack.services.impl;
 
-import static org.example.businesspack.bd.Tables.PERSON;
+import lombok.extern.slf4j.Slf4j;
+import org.example.businesspack.bd.Tables;
+import org.example.businesspack.bd.tables.records.PersonRecord;
+import org.example.businesspack.configs.InitializeDatabase;
+import org.example.businesspack.dto.PersonDto;
+import org.example.businesspack.repositories.PersonRepository;
+import org.example.businesspack.services.PersonService;
+import org.example.businesspack.utils.Builder;
+import org.jooq.Record;
+import org.jooq.*;
+import org.jooq.exception.DataAccessException;
+import org.jooq.impl.DSL;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
 
-import org.example.businesspack.bd.Tables;
-import org.example.businesspack.bd.tables.records.PersonRecord;
-import org.example.businesspack.configs.InitializeDatabase;
-import org.example.businesspack.dto.PersonDto;
-import org.example.businesspack.repositories.PersonRepository;
-import org.example.businesspack.repositories.impl.PersonRepositoryImpl;
-import org.example.businesspack.services.PersonService;
-import org.example.businesspack.utils.Builder;
-import org.jooq.Condition;
-import org.jooq.DSLContext;
-import org.jooq.Field;
-import org.jooq.Name;
-import org.jooq.TableField;
-import org.jooq.exception.DataAccessException;
-import org.jooq.impl.DSL;
-
-import lombok.extern.slf4j.Slf4j;
-
-import org.jooq.Record;
-
+import static org.example.businesspack.bd.Tables.PERSON;
 import static org.example.businesspack.logs.LogMessage.*;
 
 @Slf4j
 public class PersonServiceImpl implements PersonService {
 
-    private final PersonRepository personRepository = new PersonRepositoryImpl();
+    private final PersonRepository personRepository = new PersonRepository();
     private final DSLContext dsl = InitializeDatabase.dslContext;
 
     private final static List<TableField<PersonRecord, ?>> columns = List.of(

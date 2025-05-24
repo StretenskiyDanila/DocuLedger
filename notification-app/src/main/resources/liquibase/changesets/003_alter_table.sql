@@ -1,2 +1,0 @@
-ALTER TABLE notification
-ADD COLUMN channel VARCHAR(30) DEFAULT 'MAIL';

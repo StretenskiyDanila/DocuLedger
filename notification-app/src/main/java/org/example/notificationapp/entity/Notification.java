@@ -1,14 +1,12 @@
 package org.example.notificationapp.entity;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.example.notificationapp.entity.enums.NotificationChannel;
 import org.example.notificationapp.entity.enums.StateEnum;
 
 @Getter
+@Setter
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
@@ -35,5 +33,8 @@ public class Notification {
     @Column(name = "channel")
     @Enumerated(value = EnumType.STRING)
     private NotificationChannel channel;
+
+    @Column(name = "enable")
+    private Boolean enable;
 
 }

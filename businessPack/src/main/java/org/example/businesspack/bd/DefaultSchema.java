@@ -8,9 +8,9 @@ import java.util.Arrays;
 import java.util.List;
 
 import org.example.businesspack.bd.tables.DataWork;
-import org.example.businesspack.bd.tables.JournalWork;
-import org.example.businesspack.bd.tables.Maintenance;
 import org.example.businesspack.bd.tables.Person;
+import org.example.businesspack.bd.tables.TabStatus;
+import org.example.businesspack.bd.tables.UserData;
 import org.jooq.Catalog;
 import org.jooq.Table;
 import org.jooq.impl.SchemaImpl;
@@ -35,19 +35,19 @@ public class DefaultSchema extends SchemaImpl {
     public final DataWork DATA_WORK = DataWork.DATA_WORK;
 
     /**
-     * The table <code>journal_work</code>.
-     */
-    public final JournalWork JOURNAL_WORK = JournalWork.JOURNAL_WORK;
-
-    /**
-     * The table <code>maintenance</code>.
-     */
-    public final Maintenance MAINTENANCE = Maintenance.MAINTENANCE;
-
-    /**
      * The table <code>person</code>.
      */
     public final Person PERSON = Person.PERSON;
+
+    /**
+     * The table <code>tab_status</code>.
+     */
+    public final TabStatus TAB_STATUS = TabStatus.TAB_STATUS;
+
+    /**
+     * The table <code>user_data</code>.
+     */
+    public final UserData USER_DATA = UserData.USER_DATA;
 
     /**
      * No further instances allowed
@@ -66,9 +66,9 @@ public class DefaultSchema extends SchemaImpl {
     public final List<Table<?>> getTables() {
         return Arrays.asList(
             DataWork.DATA_WORK,
-            JournalWork.JOURNAL_WORK,
-            Maintenance.MAINTENANCE,
-            Person.PERSON
+            Person.PERSON,
+            TabStatus.TAB_STATUS,
+            UserData.USER_DATA
         );
     }
 }

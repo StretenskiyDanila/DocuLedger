@@ -77,6 +77,15 @@ public abstract class TableManager<T> {
         }
     }
 
+    public boolean isEmpty() {
+        return table.getItems().isEmpty();
+    }
+
+    public void clear() {
+        table.setItems(FXCollections.emptyObservableList());
+        service.deleteAllByTab(tabName);
+    }
+
     protected abstract List<T> get();
 
     protected abstract void onMouseClicked();

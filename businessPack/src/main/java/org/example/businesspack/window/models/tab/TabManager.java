@@ -1,24 +1,30 @@
 package org.example.businesspack.window.models.tab;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import org.example.businesspack.dto.DataWorkDto;
-import org.example.businesspack.dto.PersonDto;
-import org.example.businesspack.dto.enums.PersonRole;
-import org.example.businesspack.services.impl.PersonServiceImpl;
-import org.example.businesspack.window.models.combo_box.ComboBoxManager;
-import org.example.businesspack.window.models.combo_box.PersonComboBox;
-import org.example.businesspack.window.models.table.TableManager;
-
+import javafx.beans.value.ChangeListener;
+import javafx.collections.ObservableList;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TableColumn;
 import lombok.Getter;
+import org.example.businesspack.dto.DataWorkDto;
+import org.example.businesspack.dto.PersonDto;
+import org.example.businesspack.dto.enums.PersonRole;
+import org.example.businesspack.repositories.TabStatusRepository;
+import org.example.businesspack.request.enums.TabState;
+import org.example.businesspack.services.TabStatusService;
+import org.example.businesspack.services.impl.PersonServiceImpl;
+import org.example.businesspack.window.models.combo_box.ComboBoxManager;
+import org.example.businesspack.window.models.combo_box.PersonComboBox;
+import org.example.businesspack.window.models.table.TableManager;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Getter
 public abstract class TabManager<T> {
+
+    private final TabStatusService tabStatusService = new TabStatusService();
 
     protected final Tab tab;
     protected final List<ComboBoxManager<PersonDto>> comboBoxManagers;
@@ -41,7 +47,31 @@ public abstract class TabManager<T> {
 
     public abstract void refresh();
 
+    public boolean isStatusIdle() {
+        return tabStatusService.getStatus(tab.getId()).equals(TabState.FINISHED);
+    }
+
+    public void setStatus(TabState state) {
+        tabStatusService.update(tab.getId(), state);
+    }
+
     protected abstract void initialize();
+
+    public void setPropertyTab(ChangeListener<Boolean> changeListener) {
+        tab.selectedProperty().addListener(changeListener);
+    }
+
+    public boolean isWorkingTab() {
+        return !(comboBoxManagers.stream().allMatch(ComboBoxManager::isEmpty) &&
+                tableManager.isEmpty() &&
+                dataPicker.getValue() == null);
+    }
+
+    public void clearWorkspace() {
+        comboBoxManagers.forEach(ComboBoxManager::clear);
+        tableManager.clear();
+        dataPicker.setValue(null);
+    }
 
     protected List<ComboBoxManager<PersonDto>> initializeComboBoxProdCons(List<ComboBox<PersonDto>> comboBoxs) {
         List<ComboBoxManager<PersonDto>> managers = new ArrayList<>(comboBoxs.size());

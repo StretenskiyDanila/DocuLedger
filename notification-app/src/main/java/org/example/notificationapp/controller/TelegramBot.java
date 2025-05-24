@@ -46,15 +46,25 @@ public class TelegramBot extends TelegramLongPollingBot {
     @Override
     public void onUpdateReceived(Update update) {
         log.info("Start telegram receive");
-        String userName = update.getCallbackQuery().getFrom().getUserName();
-        Long chatId = update.getCallbackQuery().getMessage().getChatId();
+        String userName;
+        Long chatId;
+        if (update.hasCallbackQuery()) {
+            userName = update.getCallbackQuery().getFrom().getUserName();
+            chatId = update.getCallbackQuery().getMessage().getChatId();
+        } else if (update.hasMessage()) {
+            userName = update.getMessage().getFrom().getUserName();
+            chatId = update.getMessage().getChatId();
+        } else {
+            return;
+        }
 
         Notification notification = Notification.builder()
                 .userName(userName)
                 .userId(chatId)
                 .state(StateEnum.NONE)
-                .channel(NotificationChannel.NONE)
+                .channel(NotificationChannel.TELEGRAM)
                 .tabName(EMPTY_STRING)
+                .enable(false)
                 .build();
         if (!notificationRepository.existsByUserName(userName)) {
             notificationService.changeNotification(notification);

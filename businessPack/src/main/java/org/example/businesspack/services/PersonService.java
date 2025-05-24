@@ -1,9 +1,9 @@
 package org.example.businesspack.services;
 
-import java.util.List;
-
 import org.example.businesspack.dto.PersonDto;
 import org.jooq.Condition;
+
+import java.util.List;
 
 public interface PersonService {
 

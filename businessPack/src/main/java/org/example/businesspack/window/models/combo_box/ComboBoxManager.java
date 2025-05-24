@@ -47,10 +47,19 @@ public abstract class ComboBoxManager<T> {
             });     
         // TODO: добавить обработку перемещения по выпавшим данным
     }
+    // TODO: добавить обработку подобно поисковику
 
     public void updateSelectedItem() {
         selectedItem = Optional.ofNullable(comboBox.getSelectionModel().getSelectedItem());
         updateEnterItem();
+    }
+
+    public boolean isEmpty() {
+        return comboBox.getSelectionModel().isEmpty();
+    }
+
+    public void clear() {
+        comboBox.setSelectionModel(null);
     }
 
     protected abstract StringConverter<T> getConverter();
