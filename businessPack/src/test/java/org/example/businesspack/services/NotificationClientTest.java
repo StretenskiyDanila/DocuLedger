@@ -1,76 +1,48 @@
 package org.example.businesspack.services;
 
-import com.google.gson.Gson;
-import lombok.SneakyThrows;
 import org.example.businesspack.request.NotificationDto;
 import org.example.businesspack.request.enums.ChannelNotification;
 import org.example.businesspack.request.enums.TabState;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 
-import java.net.URI;
-import java.net.URLEncoder;
-import java.net.http.HttpClient;
-import java.net.http.HttpRequest;
-import java.net.http.HttpResponse;
-import java.nio.charset.StandardCharsets;
+import java.nio.file.Path;
 import java.util.stream.Stream;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 
 class NotificationClientTest {
 
-    private static final HttpClient client = HttpClient.newHttpClient();
-    private static final String BASE_URL = "http://localhost:8081/api/v1/notification";
+    private final NotificationClient client = new NotificationClient();
 
-    @SneakyThrows
+    @DisplayName("Проверка корректности отправки запроса на изменение уведомлений")
     @ParameterizedTest
     @MethodSource("provideCorrectNotificationDto")
     void test_changeNotification_withCorrectDto(NotificationDto dto) {
-        String jsonBody = convertDtoToJson(dto);
-        HttpRequest request = HttpRequest.newBuilder()
-                .uri(URI.create(BASE_URL + "/change"))
-                .header("Content-Type", "application/json")
-                .POST(HttpRequest.BodyPublishers.ofString(jsonBody))
-                .build();
-
-        HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
-
-        assertEquals(200, response.statusCode());
-        System.out.println(response.body());
+        assertDoesNotThrow(() -> client.changeNotification(dto));
     }
 
-    @Test
-    void changeNotificationEnable() {
+    @DisplayName("Проверка корректности отправки запроса на включение/отключение уведомлений")
+    @ParameterizedTest
+    @MethodSource("provideChangeNotificationDto")
+    void changeNotificationEnable(String channel, String parameter, Boolean enable) {
+        assertDoesNotThrow(() -> client.changeNotificationEnable(channel, parameter, enable));
     }
 
-    @SneakyThrows
+    @DisplayName("Проверка корректности отправки запроса на удаление уведомлений")
     @ParameterizedTest
     @MethodSource("provideDeleteNotificationDto")
     void test_deleteNotification(String channel, String parameter) {
-        String encodedParameter = URLEncoder.encode(parameter, StandardCharsets.UTF_8);
-        String url = String.format("%s/delete/%s?parameter=%s",
-                BASE_URL, channel, encodedParameter);
-
-        HttpRequest request = HttpRequest.newBuilder()
-                .uri(URI.create(url))
-                .DELETE()
-                .build();
-
-        HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
-
-        assertEquals(200, response.statusCode());
+        assertDoesNotThrow(() -> client.deleteNotification(channel, parameter));
     }
 
-    @Test
-    void uploadFile() {
-    }
-
-    private String convertDtoToJson(NotificationDto dto) {
-        Gson gson = new Gson();
-        return gson.toJson(dto);
+    @DisplayName("Проверка корректности отправки запроса на загрузку файла")
+    @ParameterizedTest
+    @MethodSource("provideUploadFileNotificationDto")
+    void uploadFile(String channel, String parameter, Path filePath) {
+        assertDoesNotThrow(() -> client.uploadFile(channel, parameter, filePath));
     }
 
     private static NotificationDto[] provideCorrectNotificationDto() {
@@ -101,11 +73,23 @@ class NotificationClientTest {
                         .build()};
     }
 
+    private static Stream<Arguments> provideChangeNotificationDto() {
+        return Stream.of(
+                Arguments.of("telegram", "stretenskiy_danila", true),
+                Arguments.of("mail", "stretenskiy_danila@mail.ru", false));
+    }
+
     private static Stream<Arguments> provideDeleteNotificationDto() {
         return Stream.of(
                 Arguments.of(
                 "telegram", "stretenskiy_danila",
                 "mail", "stretenskiy_danila@mail.ru"));
+    }
+
+    private static Stream<Arguments> provideUploadFileNotificationDto() {
+        return Stream.of(
+                Arguments.of("telegram", "stretenskiy_danila", NotificationClientTest.class.getResource("test.pdf")),
+                Arguments.of("mail", "stretenskiy_danila@mail.ru", NotificationClientTest.class.getResource("test.pdf")));
     }
 
 }
